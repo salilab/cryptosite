@@ -1,0 +1,30 @@
+REMARK  ACE                                                         
+ATOM      1 1HH3 ACE     1       1.978   1.010   0.000
+ATOM      2  CH3 ACE     1       1.984   2.100   0.004
+ATOM      3 2HH3 ACE     1       1.454   2.461   0.885
+ATOM      4 3HH3 ACE     1       1.486   2.468  -0.892
+ATOM      5  C   ACE     1       3.417   2.605   0.034
+ATOM      6  O   ACE     1       4.349   1.802   0.099
+ATOM      7  N   GLU     2       3.589   3.929  -0.002
+ATOM      8  H   GLU     2       2.757   4.505  -0.033
+ATOM      9  CA  GLU     2       4.875   4.648  -0.020
+ATOM     10  HA  GLU     2       5.445   4.348   0.860
+ATOM     11  CB  GLU     2       5.692   4.268  -1.279
+ATOM     12 2HB  GLU     2       5.806   3.187  -1.332
+ATOM     13 3HB  GLU     2       5.148   4.589  -2.169
+ATOM     14  CG  GLU     2       7.109   4.862  -1.312
+ATOM     15 2HG  GLU     2       7.076   5.943  -1.400
+ATOM     16 3HG  GLU     2       7.645   4.590  -0.401
+ATOM     17  CD  GLU     2       7.882   4.401  -2.536
+ATOM     18  OE1 GLU     2       7.784   5.071  -3.591
+ATOM     19  OE2 GLU     2       8.620   3.390  -2.443
+ATOM     20  C   GLU     2       4.644   6.180   0.063
+ATOM     21  O   GLU     2       3.514   6.656  -0.072
+ATOM     22  N   NME     3       5.715   6.951   0.268
+ATOM     23  H   NME     3       6.601   6.482   0.398
+ATOM     24  CH3 NME     3       5.777   8.400   0.093
+ATOM     25 1HH3 NME     3       4.778   8.835   0.052
+ATOM     26 2HH3 NME     3       6.324   8.843   0.925
+ATOM     27 3HH3 NME     3       6.302   8.630  -0.835
+TER   
+END   

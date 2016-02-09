@@ -1,0 +1,7 @@
+source /netapp/sali/AMBER/amber11/dat/leap/cmd/oldff/leaprc.ff03
+#loadamberparams /netapp/sali/AMBER/amber11/dat/contrib/heme/frcmod.hemall
+#loadamberprep /netapp/sali/AMBER/amber11/dat/contrib/heme/heme_all.in
+set default PBradii bondi
+trx = loadpdb pm.pdb.B10010002.pdb-A-minimize.pdb
+saveamberparm trx  pm.pdb.B10010002.pdb-A.prmtop pm.pdb.B10010002.pdb-A_rec.crd.1
+quit

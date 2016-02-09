@@ -1,0 +1,308 @@
+
+          -------------------------------------------------------
+          Amber 9  SANDER                              2006
+          -------------------------------------------------------
+
+| Run on 03/19/2008 at 11:24:29
+  [-O]verwriting output
+
+File Assignments:
+|  MDIN: sander.in_backy                                                       
+| MDOUT: VAL.out                                                               
+|INPCRD: VAL.crd                                                               
+|  PARM: VAL.top                                                               
+|RESTRT: VAL.res                                                               
+|  REFC: VAL.crd                                                               
+| MDVEL: mdvel                                                                 
+|  MDEN: mden                                                                  
+| MDCRD: mdcrd                                                                 
+|MDINFO: mdinfo                                                                
+|INPDIP: inpdip                                                                
+|RSTDIP: rstdip                                                                
+
+ 
+ Here is the input file:
+ 
+  minimize structure                                                           
+ &cntrl                                                                        
+   imin=1, maxcyc=100                                                          
+   cut=999.0, igb=2, saltcon=0.1, gbsa=1,                                      
+   ntpr=10, ntx=1, ntb=0, ncyc   = 500,                                        
+   ntr=1,                                                                      
+ &end                                                                          
+GROUP TITLE                                                                    
+10.0                                                                           
+FIND                                                                           
+* * M *                                                                        
+* * S *                                                                        
+* * B *                                                                        
+* * 3 *                                                                        
+* O * *                                                                        
+* O2 * *                                                                       
+* CB * *                                                                       
+SEARCH                                                                         
+RES 1 999                                                                      
+END                                                                            
+END                                                                            
+
+--------------------------------------------------------------------------------
+   1.  RESOURCE   USE: 
+--------------------------------------------------------------------------------
+
+| Flags:                                                                        
+| New format PARM file being parsed.
+| Version =    1.000 Date = 03/19/08 Time = 11:24:29
+ NATOM  =      28 NTYPES =       7 NBONH =      16 MBONA  =      11
+ NTHETH =      34 MTHETA =      14 NPHIH =      56 MPHIA  =      26
+ NHPARM =       0 NPARM  =       0 NNB   =     136 NRES   =       3
+ NBONA  =      11 NTHETA =      14 NPHIA =      26 NUMBND =       8
+ NUMANG =      17 NPTRA  =      23 NATYP =       7 NPHB   =       0
+ IFBOX  =       0 NMXRS  =      16 IFCAP =       0 NEXTRA =       0
+ NCOPY  =       0
+
+ Implicit solvent radii are Bondi radii (bondi)                                                             
+
+|     Memory Use     Allocated
+|     Real                2238
+|     Hollerith            173
+|     Integer            22468
+|     Max Pairs              1
+|     nblistReal             0
+|     nblist Int             0
+|       Total              105 kbytes
+| Duplicated    0 dihedrals
+| Duplicated    0 dihedrals
+
+--------------------------------------------------------------------------------
+   2.  CONTROL  DATA  FOR  THE  RUN
+--------------------------------------------------------------------------------
+
+ACE                                                                             
+
+General flags:
+     imin    =       1, nmropt  =       0
+
+Nature and format of input:
+     ntx     =       1, irest   =       0, ntrx    =       1
+
+Nature and format of output:
+     ntxo    =       1, ntpr    =      10, ntrx    =       1, ntwr    =     500
+     iwrap   =       0, ntwx    =       0, ntwv    =       0, ntwe    =       0
+     ioutfm  =       0, ntwprt  =       0, idecomp =       0, rbornstat=      0
+
+Potential function:
+     ntf     =       1, ntb     =       0, igb     =       2, nsnb    =      25
+     ipol    =       0, gbsa    =       1, iesp    =       0
+     dielc   =   1.00000, cut     = 999.00000, intdiel =   1.00000
+     saltcon =   0.10000, offset  =   0.09000, gbalpha=    0.80000
+     gbbeta  =   0.00000, gbgamma =   2.90912, surften =   0.00500
+     rdt     =   0.00000, rgbmax  =  25.00000
+     alpb  =        0
+     scnb    =   2.00000, scee    =   1.20000
+
+Frozen or restrained atoms:
+     ibelly  =       0, ntr     =       1
+
+Energy minimization:
+     maxcyc  =     100, ncyc    =     500, ntmin   =       1
+     dx0     =   0.01000, drms    =   0.00010
+
+    LOADING THE CONSTRAINED ATOMS AS GROUPS
+
+
+   5.  REFERENCE ATOM COORDINATES
+
+  ACE 
+|  INFO: Old style inpcrd file read
+
+    ----- READING GROUP     1; TITLE:
+ GROUP TITLE                                                                 
+
+     GROUP    1 HAS HARMONIC CONSTRAINTS    10.00000
+      ALL ATOMS THAT MEET 1 OF THE FOLLOWING SPECIFICATIONS WILL BE INCLUDED IN GROUP BELOW
+
+      GRAPH NAME  = *     SYMBOL  = *     TREE SYMBOL  = M     RESIDUE TYPE  = *   
+
+      GRAPH NAME  = *     SYMBOL  = *     TREE SYMBOL  = S     RESIDUE TYPE  = *   
+
+      GRAPH NAME  = *     SYMBOL  = *     TREE SYMBOL  = B     RESIDUE TYPE  = *   
+
+      GRAPH NAME  = *     SYMBOL  = *     TREE SYMBOL  = 3     RESIDUE TYPE  = *   
+
+      GRAPH NAME  = *     SYMBOL  = O     TREE SYMBOL  = *     RESIDUE TYPE  = *   
+
+      GRAPH NAME  = *     SYMBOL  = O2    TREE SYMBOL  = *     RESIDUE TYPE  = *   
+
+      GRAPH NAME  = *     SYMBOL  = CB    TREE SYMBOL  = *     RESIDUE TYPE  = *   
+
+ GRP    1 RES    1 TO     3
+      Number of atoms in this group  =    13
+    ----- END OF GROUP READ -----
+
+--------------------------------------------------------------------------------
+   3.  ATOMIC COORDINATES AND VELOCITIES
+--------------------------------------------------------------------------------
+
+ACE                                                                             
+ begin time read from input coords =     0.000 ps
+
+ Number of triangulated 3-point waters found:        0
+
+--------------------------------------------------------------------------------
+   4.  RESULTS
+--------------------------------------------------------------------------------
+
+
+
+   NSTEP       ENERGY          RMS            GMAX         NAME    NUMBER
+      1       7.6057E+01     1.0291E+02     4.6932E+02     HG23       20
+
+ BOND    =        0.0212  ANGLE   =        0.3622  DIHED      =        7.4926
+ VDWAALS =      108.5352  EEL     =      -68.7888  EGB        =      -15.6519
+ 1-4 VDW =        8.2081  1-4 EEL =       34.2246  RESTRAINT  =        0.0000
+ ESURF   =        1.6536
+
+
+   NSTEP       ENERGY          RMS            GMAX         NAME    NUMBER
+     10       1.6193E+01     3.4993E+01     1.7202E+02     HG23       20
+
+ BOND    =        1.4849  ANGLE   =        1.0878  DIHED      =        7.6581
+ VDWAALS =       46.9111  EEL     =      -69.0617  EGB        =      -15.7982
+ 1-4 VDW =        7.7884  1-4 EEL =       34.4165  RESTRAINT  =        0.0510
+ ESURF   =        1.6553
+ EAMBER  =       16.1423
+
+
+   NSTEP       ENERGY          RMS            GMAX         NAME    NUMBER
+     20      -2.6621E+01     6.5016E+00     3.8958E+01     C          21
+
+ BOND    =        1.2804  ANGLE   =        2.2519  DIHED      =        8.2935
+ VDWAALS =        4.4866  EEL     =      -67.9130  EGB        =      -16.3790
+ 1-4 VDW =        5.0844  1-4 EEL =       33.6542  RESTRAINT  =        0.9507
+ ESURF   =        1.6695
+ EAMBER  =      -27.5715
+
+
+   NSTEP       ENERGY          RMS            GMAX         NAME    NUMBER
+     30      -2.9539E+01     3.2336E+00     1.9077E+01     C          21
+
+ BOND    =        0.9715  ANGLE   =        2.2894  DIHED      =        8.1918
+ VDWAALS =        2.5851  EEL     =      -67.5482  EGB        =      -16.6985
+ 1-4 VDW =        4.5902  1-4 EEL =       33.1699  RESTRAINT  =        1.2338
+ ESURF   =        1.6760
+ EAMBER  =      -30.7728
+
+
+   NSTEP       ENERGY          RMS            GMAX         NAME    NUMBER
+     40      -3.0611E+01     1.3280E+00     4.2914E+00     HG22       19
+
+ BOND    =        0.9698  ANGLE   =        2.1818  DIHED      =        8.1891
+ VDWAALS =        1.7108  EEL     =      -67.3015  EGB        =      -16.8621
+ 1-4 VDW =        4.3906  1-4 EEL =       33.0232  RESTRAINT  =        1.4082
+ ESURF   =        1.6791
+ EAMBER  =      -32.0192
+
+
+   NSTEP       ENERGY          RMS            GMAX         NAME    NUMBER
+     50      -3.1125E+01     1.3342E+00     6.1185E+00     C          21
+
+ BOND    =        1.0189  ANGLE   =        2.2447  DIHED      =        8.2122
+ VDWAALS =        1.1616  EEL     =      -67.1906  EGB        =      -16.9817
+ 1-4 VDW =        4.2699  1-4 EEL =       32.9233  RESTRAINT  =        1.5351
+ ESURF   =        1.6812
+ EAMBER  =      -32.6606
+
+
+   NSTEP       ENERGY          RMS            GMAX         NAME    NUMBER
+     60      -3.1418E+01     6.1659E-01     2.2048E+00     H          24
+
+ BOND    =        1.0167  ANGLE   =        2.2938  DIHED      =        8.2408
+ VDWAALS =        0.8418  EEL     =      -67.1646  EGB        =      -17.0384
+ 1-4 VDW =        4.2004  1-4 EEL =       32.8929  RESTRAINT  =        1.6158
+ ESURF   =        1.6825
+ EAMBER  =      -33.0342
+
+
+   NSTEP       ENERGY          RMS            GMAX         NAME    NUMBER
+     70      -3.1601E+01     4.6391E-01     1.7011E+00     HG22       19
+
+ BOND    =        1.0269  ANGLE   =        2.2878  DIHED      =        8.2697
+ VDWAALS =        0.6372  EEL     =      -67.1521  EGB        =      -17.0868
+ 1-4 VDW =        4.1712  1-4 EEL =       32.8842  RESTRAINT  =        1.6773
+ ESURF   =        1.6833
+ EAMBER  =      -33.2788
+
+
+   NSTEP       ENERGY          RMS            GMAX         NAME    NUMBER
+     80      -3.1738E+01     6.1234E-01     2.8411E+00     C          21
+
+ BOND    =        1.0240  ANGLE   =        2.2866  DIHED      =        8.2987
+ VDWAALS =        0.4717  EEL     =      -67.1612  EGB        =      -17.1217
+ 1-4 VDW =        4.1532  1-4 EEL =       32.8929  RESTRAINT  =        1.7338
+ ESURF   =        1.6838
+ EAMBER  =      -33.4721
+
+
+   NSTEP       ENERGY          RMS            GMAX         NAME    NUMBER
+     90      -3.1814E+01     1.0648E+00     5.8721E+00     C          21
+
+ BOND    =        1.0207  ANGLE   =        2.2910  DIHED      =        8.3203
+ VDWAALS =        0.3629  EEL     =      -67.1783  EGB        =      -17.1448
+ 1-4 VDW =        4.1443  1-4 EEL =       32.9095  RESTRAINT  =        1.7765
+ ESURF   =        1.6842
+ EAMBER  =      -33.5902
+
+
+   NSTEP       ENERGY          RMS            GMAX         NAME    NUMBER
+    100      -3.1888E+01     2.7891E-01     9.3124E-01     HG22       19
+
+ BOND    =        1.0298  ANGLE   =        2.2259  DIHED      =        8.3380
+ VDWAALS =        0.3021  EEL     =      -67.1833  EGB        =      -17.1598
+ 1-4 VDW =        4.1503  1-4 EEL =       32.9155  RESTRAINT  =        1.8095
+ ESURF   =        1.6844
+ EAMBER  =      -33.6974
+
+
+  Maximum number of minimization cycles reached.
+
+
+                    FINAL RESULTS
+
+
+
+   NSTEP       ENERGY          RMS            GMAX         NAME    NUMBER
+    100      -3.1888E+01     2.7891E-01     9.3124E-01     HG22       19
+
+ BOND    =        1.0298  ANGLE   =        2.2259  DIHED      =        8.3380
+ VDWAALS =        0.3021  EEL     =      -67.1833  EGB        =      -17.1598
+ 1-4 VDW =        4.1503  1-4 EEL =       32.9155  RESTRAINT  =        1.8095
+ ESURF   =        1.6844
+ EAMBER  =      -33.6974
+
+--------------------------------------------------------------------------------
+   5.  TIMINGS
+--------------------------------------------------------------------------------
+
+|    Read coords time           0.00 ( 0.91% of Total)
+|    Fast Water setup           0.00 ( 0.01% of Total)
+|                Calc gb radii              0.01 (19.83% of Gen B)
+|                Calc gb diag               0.02 (36.17% of Gen B)
+|                Calc gb off-diag           0.01 (20.95% of Gen B)
+|                Surface area energy        0.01 (22.32% of Gen B)
+|                Other                      0.00 ( 0.73% of Gen B)
+|             Gen Born time              0.05 (99.88% of Nonbo)
+|             IPS excludes               0.00 ( 0.12% of Nonbo)
+|          Nonbond force              0.05 (88.09% of Force)
+|          Bond/Angle/Dihedral        0.01 (11.02% of Force)
+|          Other                      0.00 ( 0.88% of Force)
+|       Force time                 0.06 (100.0% of Runmd)
+|    Runmd Time                 0.06 (50.89% of Total)
+|    Other                      0.06 (48.19% of Total)
+| Total time                 0.12 (99.87% of ALL  )
+
+| Highest rstack allocated:          0
+| Highest istack allocated:          0
+|           Job began  at 11:24:29.638  on 03/19/2008
+|           Setup done at 11:24:29.650  on 03/19/2008
+|           Run   done at 11:24:29.756  on 03/19/2008
+|     wallclock() was called    2008 times

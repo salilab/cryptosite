@@ -1,0 +1,24 @@
+#!/bin/bash
+
+LIST="list"
+INCMOV=40000
+TMSTEP=3.0
+PWD0=`pwd`
+BDIR=${1}/bin
+
+for landscape in `cat ${LIST}`; do
+    for dir in `ls -1d ${landscape}/*`; do
+    if test -d ${dir}; then
+    cd $dir
+
+    if (test ! -e pm.pdb.B10010001.pdb); then continue; fi
+
+    ls -1 pm.pdb.B[1-8]*pdb | awk '{print "'${BDIR}'/get_cofm.sh "$1}' |sh |\
+      awk 'BEGIN{a=0;b=0;c=0}{la=a;lb=b;lc=c;a=$1;b=$2;c=$3}(NR>1){printf "%5.0f%12.6f%9.3f%9.3f%9.3f\n",\
+      NR,sqrt((la-a)^2+(lb-b)^2+(lc-c)^2)/('${INCMOV}'*'${TMSTEP}'),a,b,c}' >velocity.dat
+
+    cd $PWD0
+    fi
+    done
+done
+

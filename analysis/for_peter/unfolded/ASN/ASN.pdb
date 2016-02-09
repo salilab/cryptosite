@@ -1,0 +1,29 @@
+REMARK  ACE                                                         
+ATOM      1 1HH3 ACE     1       1.980   1.010   0.000
+ATOM      2  CH3 ACE     1       1.989   2.100   0.005
+ATOM      3 2HH3 ACE     1       1.458   2.463   0.885
+ATOM      4 3HH3 ACE     1       1.492   2.470  -0.892
+ATOM      5  C   ACE     1       3.422   2.603   0.037
+ATOM      6  O   ACE     1       4.352   1.800   0.113
+ATOM      7  N   ASN     2       3.591   3.927  -0.011
+ATOM      8  H   ASN     2       2.755   4.496  -0.048
+ATOM      9  CA  ASN     2       4.873   4.660  -0.025
+ATOM     10  HA  ASN     2       5.427   4.383   0.874
+ATOM     11  CB  ASN     2       5.712   4.241  -1.261
+ATOM     12 2HB  ASN     2       5.775   3.157  -1.329
+ATOM     13 3HB  ASN     2       5.210   4.591  -2.162
+ATOM     14  CG  ASN     2       7.158   4.743  -1.272
+ATOM     15  OD1 ASN     2       7.699   5.252  -0.297
+ATOM     16  ND2 ASN     2       7.851   4.593  -2.384
+ATOM     17 1HD2 ASN     2       8.806   4.923  -2.415
+ATOM     18 2HD2 ASN     2       7.438   4.132  -3.184
+ATOM     19  C   ASN     2       4.635   6.195   0.020
+ATOM     20  O   ASN     2       3.494   6.661  -0.065
+ATOM     21  N   NME     3       5.704   6.990   0.134
+ATOM     22  H   NME     3       6.598   6.525   0.230
+ATOM     23  CH3 NME     3       5.748   8.441   0.039
+ATOM     24 1HH3 NME     3       4.745   8.868   0.018
+ATOM     25 2HH3 NME     3       6.289   8.842   0.898
+ATOM     26 3HH3 NME     3       6.277   8.728  -0.872
+TER   
+END   

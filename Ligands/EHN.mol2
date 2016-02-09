@@ -1,0 +1,11 @@
+@<TRIPOS>MOLECULE
+EHN.pdb
+ 2 1 0 0 0
+SMALL
+GASTEIGER
+
+@<TRIPOS>ATOM
+      1  C1        65.5810   -4.8250   22.2340 C.1    12  EHN12       0.0000
+      2  C2        66.7160   -4.1750   22.3810 C.1    12  EHN12       0.0000
+@<TRIPOS>BOND
+     1     1     2    3

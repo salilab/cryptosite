@@ -1,0 +1,17 @@
+Input files:
+
+- param.txt:
+  job name
+  email address
+  chain
+
+- input.pdb:
+  input PDB file
+
+- input.seq:
+  input sequence in fasta format or just sequence
+
+
+Run by executing this line:
+
+  /salilab/diva1/home/modeller/modpy.sh python mainer.py

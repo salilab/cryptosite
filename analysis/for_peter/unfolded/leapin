@@ -1,0 +1,5 @@
+source leaprc.ff03
+set default PBradii bondi
+trx = loadpdb TYR/TYR.pdb
+saveamberparm trx  TYR.prmtop TYR_rec.crd.1
+quit

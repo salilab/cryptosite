@@ -1,0 +1,34 @@
+REMARK  ACE                                                         
+ATOM      1 1HH3 ACE     1       1.972   1.002  -0.002
+ATOM      2  CH3 ACE     1       1.970   2.092  -0.002
+ATOM      3 2HH3 ACE     1       1.443   2.453   0.880
+ATOM      4 3HH3 ACE     1       1.465   2.454  -0.897
+ATOM      5  C   ACE     1       3.401   2.605   0.020
+ATOM      6  O   ACE     1       4.334   1.806   0.109
+ATOM      7  N   LEU     2       3.560   3.932  -0.044
+ATOM      8  H   LEU     2       2.721   4.496  -0.091
+ATOM      9  CA  LEU     2       4.841   4.663  -0.023
+ATOM     10  HA  LEU     2       5.356   4.360   0.889
+ATOM     11  CB  LEU     2       5.705   4.266  -1.256
+ATOM     12 2HB  LEU     2       5.798   3.183  -1.307
+ATOM     13 3HB  LEU     2       5.185   4.588  -2.160
+ATOM     14  CG  LEU     2       7.141   4.837  -1.280
+ATOM     15  HG  LEU     2       7.111   5.916  -1.382
+ATOM     16  CD1 LEU     2       7.924   4.470  -0.005
+ATOM     17 1HD1 LEU     2       8.021   3.387   0.074
+ATOM     18 2HD1 LEU     2       8.917   4.918  -0.044
+ATOM     19 3HD1 LEU     2       7.430   4.845   0.889
+ATOM     20  CD2 LEU     2       7.901   4.375  -2.521
+ATOM     21 1HD2 LEU     2       7.355   4.675  -3.417
+ATOM     22 2HD2 LEU     2       8.883   4.849  -2.540
+ATOM     23 3HD2 LEU     2       8.022   3.292  -2.514
+ATOM     24  C   LEU     2       4.617   6.187   0.059
+ATOM     25  O   LEU     2       3.487   6.670  -0.071
+ATOM     26  N   NME     3       5.694   6.961   0.250
+ATOM     27  H   NME     3       6.573   6.483   0.389
+ATOM     28  CH3 NME     3       5.766   8.405   0.086
+ATOM     29 1HH3 NME     3       4.770   8.849   0.046
+ATOM     30 2HH3 NME     3       6.316   8.840   0.922
+ATOM     31 3HH3 NME     3       6.295   8.640  -0.840
+TER   
+END   

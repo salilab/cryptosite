@@ -1,0 +1,29 @@
+REMARK  ACE                                                         
+ATOM      1 1HH3 ACE     1       2.012   0.922   0.019
+ATOM      2  CH3 ACE     1       1.967   2.008  -0.010
+ATOM      3 2HH3 ACE     1       1.454   2.367   0.882
+ATOM      4 3HH3 ACE     1       1.414   2.313  -0.898
+ATOM      5  C   ACE     1       3.377   2.584  -0.058
+ATOM      6  O   ACE     1       4.336   1.805  -0.120
+ATOM      7  N   PRO     2       3.520   3.925  -0.034
+ATOM      8  CD  PRO     2       2.423   4.881  -0.002
+ATOM      9 2HD  PRO     2       2.082   5.003   1.027
+ATOM     10 3HD  PRO     2       1.594   4.574  -0.639
+ATOM     11  CG  PRO     2       3.002   6.191  -0.518
+ATOM     12 2HG  PRO     2       2.535   7.047  -0.027
+ATOM     13 3HG  PRO     2       2.857   6.249  -1.597
+ATOM     14  CB  PRO     2       4.497   6.104  -0.197
+ATOM     15 2HB  PRO     2       4.701   6.653   0.722
+ATOM     16 3HB  PRO     2       5.081   6.525  -1.017
+ATOM     17  CA  PRO     2       4.810   4.609  -0.017
+ATOM     18  HA  PRO     2       5.395   4.272  -0.875
+ATOM     19  C   PRO     2       5.608   4.300   1.274
+ATOM     20  O   PRO     2       5.131   3.586   2.157
+ATOM     21  N   NME     3       6.825   4.841   1.388
+ATOM     22  H   NME     3       7.159   5.441   0.644
+ATOM     23  CH3 NME     3       7.724   4.618   2.525
+ATOM     24 1HH3 NME     3       7.301   3.901   3.230
+ATOM     25 2HH3 NME     3       8.677   4.228   2.166
+ATOM     26 3HH3 NME     3       7.898   5.559   3.049
+TER   
+END   

@@ -1,0 +1,11 @@
+@<TRIPOS>MOLECULE
+NME.pdb
+ 2 1 0 0 0
+SMALL
+GASTEIGER
+
+@<TRIPOS>ATOM
+      1  N         43.6530   -5.1720   13.8360 N.3     2  NME2       -0.1297
+      2  C         44.1280   -6.2950   14.5450 C.3     2  NME2        0.1297
+@<TRIPOS>BOND
+     1     1     2    1

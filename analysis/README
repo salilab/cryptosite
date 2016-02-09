@@ -1,0 +1,84 @@
+
+This directory contains two main scripts: 1) allosmod_analysis.sh and 2) pseudo_correl.sh.  
+First, allosmod_analysis.sh is a script that analyses a set of simulation trajectories.  The 
+script should run on any linux/unix based machine.  To run, you must first specify the path 
+of the analysis script directory (analysis_dir) in allosmod_analysis.sh.  Then make a file 
+"list" that will contain the path(s) of the root simulation directory(s), which contains a 
+set of simulation directories all pertaining to a single landscape (i.e., ~/pred_dE0.12rAS9 
+that contains several simulation directories with identical input files).  Then type 
+allosmod_analysis.sh at the prompt.
+
+If sufficient sampling of the relevant conformational space has been attained (this should be 
+checked manually by plotting the raw data), then you can calculate pseudo correlation.  Specify 
+the path of the analysis script directory (analysis_dir) in pseudo_correl.sh.  Make a "list" 
+file of all relevant root simulation directories.  Then type pseudo_correl.sh at the prompt.
+
+OUTPUTS:
+
+Each simulation directory will contain the following files:
+
+energy.dat - contains the allosmod energy for each structure
+
+p.dat - contains the Boltzmann weighted probability for each structure
+
+velocity.dat - contains the translational velocity of the protein and the center of mass.  
+	     This file is used to assess if trajectories may contain errors.
+
+qioft_PDB_11sc.dat - contains a residue specific Q score referencing structure PDB.  Qi is a 
+		   distance similarity metric in which a score of 1 implies identity to a 
+		   reference structure and a score of 0 implies all contacts are different.  
+		   For more detail refer to Weinkam et. al.  By default the score has an 
+		   11 Angstrom distance cutoff.
+
+qalloft_PDBsc.dat - contains a Q score of the whole structure referencing structure PDB.  This 
+		  Q score is the average of all Qi scores in a given structure.
+
+qiassc.dat - contains delta Qi.  Delta Qi is the Qi score of the second PDB file in the 
+	   simulation input file "list" in reference to the first PDB file in the simulation
+	   input file "list."  This file will only be made if there is more than one minima 
+	   in the energy landscape.  Delta Qi is used to calculated Qi_diff.
+	   
+qidiffoftsc.dat - contains Qi_diff.  Qi_diff is a score comparing the trajectory to two 
+		structures at once: the first and second PDB files in the simulation input file 
+		"list."  A score of 1 implies identity to the first PDB file.  A score of -1 
+		implies identity to the second PDB file.  This file will only be made if there 
+		is more than one minima in the energy landscape.  For more detail refer to Weinkam et. al.
+
+
+The allosmod_analysis.sh script will also output a check of all the simulation directories.  Simulation 
+errors can cause some trajectories to fail, resulting in high energies, high translational velocities, 
+and/or unfolding.  There is no strict rule for what constitutes a failure because systems can vary 
+dramatically so use caution here.  By default, a Qall score below 0.5 (50% contacts) or a translational 
+velocity above 0.0010 will give a warning message.
+
+
+The pseudo_correl.sh script will output:
+
+pjisn_iisp.out - an i (columns) by j (rows) matrix specifying the probability that a residue j is in state n 
+	       if residue i is in state p.  State p implies that the residue has a Qi_diff > 0 and state n 
+	       implies a residue has a Qi_diff < 0.  Likewise, there is a file called pjisn_iisn.out.
+
+pjisn_iisn_o_pjisn_iisp.out - an i (columns) by j (rows) matrix specifying pseudo correlation. Pseudo 
+			    correlation is the ratio of pjisn_iisn over pjisn_iisp.  For more details refer 
+			    to the paper.  Likewise, there is a file called pjisp_iisp_o_pjisp_iisn.out.
+
+
+The get_qi_pdist.sh script will output:
+
+qidiffXXsc.dat - probability distributions of Qi_diff for each residue (first column is Qi_diff, second 
+column is probability, third column is the number of points in the bin). A value greater than 1 implies that the 
+structure in the vicinity of the residue is more similar to the first structure in the list file (input to 
+simulations) than to the second structure in the list file.  This script requires java.
+
+
+The get_prop_of_q.sh script will output:
+
+propqXX.dat - rolling average of local Qi as a function of global Q (first column is Qall, second column is 
+Qi, third column is RMSD of Qi, fourth column is the number of points in the bin).  The script can predict 
+the relative folding stability of regions in the protein under the assumption that folding stability is 
+proportional to the rate of local unfolding.  This script requires java.
+
+
+REFERENCES:
+
+P. Weinkam, J. Pons, A. Sali. (2012) "Structure-based model of allostery predicts coupling between distant sites." Proc Natl Acad Sci U S A.
