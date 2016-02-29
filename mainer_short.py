@@ -17,14 +17,33 @@ paramdata.close()
 chains = params[2].strip().strip(' ').split(',')
 
 # --- get input PDB,input Seq
-os.system('cp input.pdb %s.pdb' % (pdb, ))
+if 'input.pdb' in os.listdir('.'): os.system('cp input.pdb %s.pdb' % (pdb, ))
+else: os.system('cp *.ent %s.pdb' % (pdb, ))
+
+
+
+# --- trim if NMR
+
 
 # --- delete unused chains from pdb + extract PDBChainOrder
 
 PDBChainOrder=[]
 myfile = open('%s.pdb' % pdb,'r')
-file=myfile.readlines()
+data = myfile.read().split('ENDMDL')[0] # trim mulitple models
+file=data.split('\n')
 myfile.close()
+
+
+# --- write seqeunces
+output = open('input.seq','w')
+for chain in chains:
+	querySeq = get_pdb_seq(pdb+'.pdb', chain)
+
+	output.write('>'+chain+'\n'+querySeq+'\n')
+output.close()
+
+
+
 myfile=open('%s.pdb' % pdb,'w')
 for line in file:
         if line[:5]=='ATOM ' or line[:6]=='HETATM' or line[:3]=='TER':
@@ -176,7 +195,7 @@ if 1:
         os.system('cp %s.pdb %s' % (pdb,pdb))
 
         out1 = open('%s/input.dat' % pdb, 'w')
-        out1.write('rAS=1000\nNRUNS=50\nSCRAPP=True\nMDTemp=SCAN')
+        out1.write('rAS=1000\nNRUNS=25\nSCRAPP=True\nMDTemp=SCAN')
         out1.close()
 
         out2 = open('%s/list' % pdb, 'w')
