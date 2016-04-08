@@ -1,4 +1,5 @@
 Dependencies:
+=============
 
 1. blast	- http://blast.ncbi.nlm.nih.gov/Blast.cgi/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download
 2. muscle	- http://www.drive5.com/muscle/
@@ -16,6 +17,7 @@ Dependencies:
 14. PatchDock	- http://bioinfo3d.cs.tau.ac.il/PatchDock/
 
 Input files:
+============
 
 - param.txt:
 
@@ -32,6 +34,13 @@ Input files:
   input sequence in fasta format or just sequence
 
 
-Run by executing this line:
+Usage:
+======
 
+1. Obtain all dependencies (see above).
+2. Modify paths in dependencies/__init__.py
+
+
+Run by executing this line:
+===========================
   python cryptosite.py
