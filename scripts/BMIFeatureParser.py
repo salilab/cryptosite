@@ -1,4 +1,4 @@
-from SiteCrypt import PATH2BIOPYTHON, PATH2FPOCKET, PATH2CONCAVITY
+from dependencies import PATH2BIOPYTHON, PATH2FPOCKET, PATH2CONCAVITY
 
 import os, sys, warnings
 sys.path.append(PATH2BIOPYTHON)

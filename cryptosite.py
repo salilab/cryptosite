@@ -1,5 +1,6 @@
 import sys
 sys.path.append('.')#/modbase1/home/peterc/cryptosite/src/')
+sys.path.append('./scripts/')
 from cleaning import *
 from seqConservation import *
 from HydChrSSE import *
