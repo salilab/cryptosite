@@ -34,42 +34,48 @@ file=data.split('\n')
 myfile.close()
 
 
-# --- write seqeunces
-output = open('input.seq','w')
-for chain in chains:
-	querySeq = get_pdb_seq(pdb+'.pdb', chain)
-
-	output.write('>'+chain+'\n'+querySeq+'\n')
-output.close()
-
 
 
 myfile=open('%s.pdb' % pdb,'w')
 for line in file:
-        if line[:5]=='ATOM ' or line[:6]=='HETATM' or line[:3]=='TER':
+        if line[:5]=='ATOM ' or line[:3]=='TER':
 		if len(line)<60: continue
 		if line[21] in chains:
 			if len(line)>77 and (line[77] =='D' or line[77]=='H'): continue
 			line=line.strip('/n')
-                	myfile.write("%s" % line)
+                	myfile.write("%s\n" % line)
 			if line[21] not in PDBChainOrder:
         			 PDBChainOrder.append(line[21])
 	
 myfile.close()
 
-print 'PDB: ',pdb,'\tCHAIN: ',chains
+
+# --- write seqeunces
+output = open('input.seq','w')
+querySeqs = {}
+for chain in chains:
+        querySeq = get_pdb_seq(pdb+'.pdb', chain)
+        querySeqs[chain] = querySeq
+        output.write('>'+chain+'\n'+querySeq+'\n')
+output.close()
+
+
+
+print 'PDB: ',pdb,'\tCHAIN: ',chains, PDBChainOrder
 # --- start of for loop going through all chains for sequence features
 
 ChainLenghts, SubjectSeqList, QuerySeqList = {},{},{}
 
 for chain in PDBChainOrder: 
-	try: querySeq = get_pdb_seq(pdb+'.pdb', chain)
+	try: querySeq = querySeqs[chain]
 	except KeyError:
 	    print 'CHAIN: ',chain, 'not in the PDB file'
 	    raise
+	print querySeq, querySeqs[chain]
 	ChainLenghts[chain]=(querySeq[0],len(querySeq),querySeq[-1])
 	sbjctSeq = ''
 
+	"""
 	seqFile = open('input.seq', 'r')
 	D = seqFile.read().split('>')[1:]
 	seqFile.close()
@@ -86,7 +92,8 @@ for chain in PDBChainOrder:
 		#print 'SequenceInputError: The subject sequence for chain %s not present in the input file!' % chain
 		#raise
 		sbjctSeq = querySeq
-
+	"""
+	sbjctSeq = querySeq
 	
 	# --- refine the structure (Modeller)
 	strcsq, seqsq = muscleAlign(querySeq, sbjctSeq, pdb, chain)
