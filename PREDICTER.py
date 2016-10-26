@@ -23,7 +23,7 @@ from sklearn.linear_model import LogisticRegression
 from operator import itemgetter
 
 
-MODELPATH = '/netapp/sali/leon/cryptosite/src_multichain/' #'/netapp/sali/peterc/cryptosite/src/scikit-learn-0.11'
+MODELPATH = '/netapp/sali/peterc/cryptosite/src_multichain/'
 
 def get_matrix(inputdata, model='linear'):
 
