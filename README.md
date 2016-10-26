@@ -1,3 +1,10 @@
+CryptoSite is a computational tool for predicting the location of cryptic
+binding sites in proteins and protein complexes.
+
+A [web interface](https://salilab.org/cryptosite/) is also available.
+
+# Usage
+
 Input files:
 
 - param.txt:
