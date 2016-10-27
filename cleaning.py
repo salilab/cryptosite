@@ -29,7 +29,9 @@ def get_pdb_seq(pdb, chain):
         chain = model[chain]
 
         ppb = PPBuilder()
+        print chain
         ss = ppb.build_peptides(chain)
+        print ss
         seq = ''.join([str(i.get_sequence()) for i in ss])
 
         #print [str(i.get_sequence()) for i in ss]
