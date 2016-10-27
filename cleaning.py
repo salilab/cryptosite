@@ -1,4 +1,4 @@
-from SiteCrypt import PATH2MUSCLE, PATH2BIOPYTHON
+from SiteCrypt import PATH2BIOPYTHON
 
 import os, sys, warnings, subprocess
 sys.path.append(PATH2BIOPYTHON)
@@ -54,7 +54,7 @@ def muscleAlign(qSeq, sSeq, pdb, chain):
 	output.close()
 
 	# --- align using Muscle
-        cmd = [PATH2MUSCLE+"muscle", "-in", "sequences.seq", "-out", "alignment.ali"]
+        cmd = ["muscle", "-in", "sequences.seq", "-out", "alignment.ali"]
         print cmd
         prc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
         prc.wait()

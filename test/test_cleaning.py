@@ -25,5 +25,10 @@ ATOM      6  C   TYR B   3      18.511  -1.416  15.632  1.00  6.84           C
             seq = cleaning.get_pdb_seq(fname, 'A')
             self.assertEqual(seq, 'CG')
 
+    def test_muscle_align(self):
+        """Test muscleAlign()"""
+        out = cleaning.muscleAlign('ACGV', 'CG', '1abc', 'A')
+        self.assertEqual(out, ('ACGV', '-CG-'))
+
 if __name__ == '__main__':
     unittest.main()
