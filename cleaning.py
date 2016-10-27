@@ -23,51 +23,41 @@ def get_pdb_seq(pdb, chain):
     '''
     #TODO: implement for a set of chains
 
-    pdbh = open(pdb)
     structure = parser.get_structure("protein", pdb)
-    model = structure[0]
-    chain = model[chain]
 
     ppb = PPBuilder()
-    ss = ppb.build_peptides(chain)
-    seq = ''.join([str(i.get_sequence()) for i in ss])
-
-    #print [str(i.get_sequence()) for i in ss]
-
-    return seq
-
-
+    ss = ppb.build_peptides(structure[0][chain])
+    return ''.join([str(i.get_sequence()) for i in ss])
 
 def muscleAlign(qSeq, sSeq, pdb, chain):
     '''
     Align two sequences and produce Modeller-compatible output
     '''
 
+    # todo: put these files in a temporary directory
     # --- write sequence file
-    output = open('sequences.seq','w')
-    output.write( '>%s%s\n' % (pdb,chain) )
-    output.write( qSeq+'\n' )
-    output.write( '>%s%spdb\n' % (pdb,chain) )
-    output.write( sSeq )
-    output.close()
+    with open('sequences.seq', 'w') as output:
+        output.write('>%s%s\n' % (pdb,chain))
+        output.write(qSeq+'\n')
+        output.write('>%s%spdb\n' % (pdb,chain))
+        output.write(sSeq)
 
     # --- align using Muscle
     cmd = ["muscle", "-in", "sequences.seq", "-out", "alignment.ali"]
     print cmd
-    prc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    prc.wait()
+    subprocess.check_call(cmd)
 
-    data = open('alignment.ali')
-    D = data.read().split('>')
-    data.close()
+    with open('alignment.ali') as data:
+        D = data.read().split('>')
 
     strc = D[1].split('\n')
-    strcid,strcsq = strc[0], ''.join(strc[1:])
+    strcid, strcsq = strc[0], ''.join(strc[1:])
     seq = D[2].split('\n')
-    seqid,seqsq = seq[0], ''.join(seq[1:])
+    seqid, seqsq = seq[0], ''.join(seq[1:])
 
     # --- clean
-    os.system("rm alignment.ali sequences.seq")
+    os.unlink('alignment.ali')
+    os.unlink('sequences.seq')
 
     return (strcsq, seqsq)
 
