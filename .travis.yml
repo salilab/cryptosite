@@ -17,7 +17,7 @@ install:
   - chmod a+x $HOME/bin/mkdssp
   - wget http://downloads.sourceforge.net/project/fpocket/fpocket2.tar.gz
   - tar -xzf fpocket2.tar.gz
-  - (cd fpocket2 && make && cp bin/fpocket $HOME/bin)
+  - (cd fpocket2 && sed -e 's/\$(LFLAGS) \$^/\$^ \$(LFLAGS)/' makefile > makefile.new && mv makefile.new makefile && make bin/fpocket && cp bin/fpocket $HOME/bin)
   - wget https://salilab.org/modeller/9.17/modeller-9.17.tar.gz
   - tar -xzf modeller-9.17.tar.gz
   - echo -e "\n$HOME/modinst" > inst-pre
