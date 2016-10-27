@@ -6,6 +6,11 @@ python:
 cache:
   pip: true
 install:
+  - mkdir -p $HOME/bin
+  - export PATH=$HOME/bin:$PATH
+  - wget http://www.drive5.com/muscle/downloads3.8.31/muscle3.8.31_i86linux64.tar.gz
+  - tar -xvzf muscle3.8.31_i86linux64.tar.gz
+  - mv muscle3.8.31_i86linux64 $HOME/bin/muscle
   - wget https://salilab.org/modeller/9.17/modeller-9.17.tar.gz
   - tar -xzf modeller-9.17.tar.gz
   - echo -e "\n$HOME/modinst" > inst-pre
