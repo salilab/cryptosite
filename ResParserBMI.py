@@ -12,573 +12,573 @@ from Bio import SeqIO
 
 
 def get_chains(pdb, chain, ligand=0):
-	'''
-	Open PDB to get B-factors. Note, that the original PDB file changes here, and becomes
-	PDB.org.pdb
-	'''
+    '''
+    Open PDB to get B-factors. Note, that the original PDB file changes here, and becomes
+    PDB.org.pdb
+    '''
 
-        data = open(pdb+'.pdb')
-        D = data.readlines()
-        data.close()
+    data = open(pdb+'.pdb')
+    D = data.readlines()
+    data.close()
 
-        out = open(pdb+'_'+chain+'_org.pdb','w')
-        lig = ''
-        X, ress, seq = 0, {}, ''
-        for d in D:
-                if 'ATOM'==d[:4]:
-                        if d[21]==chain and d[17:20]!= 'HOH':
-                                res, rsid, icode, bfactor = d[17:20],int(d[22:26]),d[26], float(d[60:66])
-                                if 1:#icode!=' ':
-                                        if (res,rsid,icode) not in ress:
-                                                if len(ress)==0: X=rsid-1
-                                                X+=1
-                                                ress[(res,rsid,icode)] = [X,[bfactor]]
-					else: ress[(res,rsid,icode)][1].append(bfactor)
-                                newrsid = ' '*(4-len(str(X)))+str(X)
-                                newline = d[:22]+newrsid+' '+d[27:]
-                                out.write(newline)
+    out = open(pdb+'_'+chain+'_org.pdb','w')
+    lig = ''
+    X, ress, seq = 0, {}, ''
+    for d in D:
+        if 'ATOM'==d[:4]:
+            if d[21]==chain and d[17:20]!= 'HOH':
+                res, rsid, icode, bfactor = d[17:20],int(d[22:26]),d[26], float(d[60:66])
+                if 1:#icode!=' ':
+                    if (res,rsid,icode) not in ress:
+                        if len(ress)==0: X=rsid-1
+                        X+=1
+                        ress[(res,rsid,icode)] = [X,[bfactor]]
+                    else: ress[(res,rsid,icode)][1].append(bfactor)
+                newrsid = ' '*(4-len(str(X)))+str(X)
+                newline = d[:22]+newrsid+' '+d[27:]
+                out.write(newline)
 
-		elif 'HETATM'==d[:6] or 'TER'==d[:3]:
-                        if d[21]==chain and d[17:20]!= 'HOH':
-                                res, rsid, icode = d[17:20],int(d[22:26]),d[26]
-                                if 1:#icode!=' ':
-                                        if (res,rsid,icode) not in ress:
-                                                if len(ress)==0: X=rsid-1
-                                                #X+=1
-                                                
-                                newrsid = ' '*(4-len(str(X)))+str(X)
-                                newline = d[:22]+newrsid+' '+d[27:]
-                                out.write(newline)
+        elif 'HETATM'==d[:6] or 'TER'==d[:3]:
+            if d[21]==chain and d[17:20]!= 'HOH':
+                res, rsid, icode = d[17:20],int(d[22:26]),d[26]
+                if 1:#icode!=' ':
+                    if (res,rsid,icode) not in ress:
+                        if len(ress)==0: X=rsid-1
+                        #X+=1
 
-                if ligand!=0:
-                        if d[17:20]==ligand and d[21]==chain: lig += d[:16]+' '+d[17:]
-        out.close()
+                newrsid = ' '*(4-len(str(X)))+str(X)
+                newline = d[:22]+newrsid+' '+d[27:]
+                out.write(newline)
 
-        #os.system('mv %s.pdb %s.org.pdb' % (pdb,pdb))
-        #os.system('mv %s_%s_tmp.pdb %s.pdb' % (pdb,chain,pdb))
+        if ligand!=0:
+            if d[17:20]==ligand and d[21]==chain: lig += d[:16]+' '+d[17:]
+    out.close()
 
-	RES = dict([ (i[1],[i,ress[i][1]] ) for i in ress])
-	SEQ = ''
-	for x in xrange(min(RES.keys()),max(RES.keys())+1):
-		if x in RES: SEQ += PDB.Polypeptide.three_to_one(RES[x][0][0])
-		else: SEQ += '-'
-	
-	return RES, SEQ
+    #os.system('mv %s.pdb %s.org.pdb' % (pdb,pdb))
+    #os.system('mv %s_%s_tmp.pdb %s.pdb' % (pdb,chain,pdb))
+
+    RES = dict([ (i[1],[i,ress[i][1]] ) for i in ress])
+    SEQ = ''
+    for x in xrange(min(RES.keys()),max(RES.keys())+1):
+        if x in RES: SEQ += PDB.Polypeptide.three_to_one(RES[x][0][0])
+        else: SEQ += '-'
+
+    return RES, SEQ
 
 
 def get_model(pdb, chain):
-	'''
-	Open PDB model (has a chain identifier at the end), and parse sequence.
-	'''
+    '''
+    Open PDB model (has a chain identifier at the end), and parse sequence.
+    '''
 
-	data = open(pdb+'X.pdb')
-        D = data.readlines()
-        data.close()
+    data = open(pdb+'X.pdb')
+    D = data.readlines()
+    data.close()
 
-        out = open(pdb+'_'+chain+'_mdl.pdb','w')
-        lig = ''
-        X, ress, seq = 0, {}, ''
-        for d in D:
-                if 'ATOM'==d[:4] and d[21]==chain:
-                        if d[17:20]!= 'HOH':
-                                res, rsid, icode, bfactor = d[17:20],int(d[22:26]),d[26], float(d[60:66])
-                                if 1:#icode!=' ':
-                                        if (res,rsid,icode) not in ress:
-                                                if len(ress)==0: X=rsid-1
-                                                X+=1
-                                                ress[(res,rsid,icode)] = [X,[bfactor]]
-					else: ress[(res,rsid,icode)][1].append(bfactor)
-                                newrsid = ' '*(4-len(str(X)))+str(X)
-                                newline = d[:21]+chain+newrsid+' '+d[27:]
-                                out.write(newline)
+    out = open(pdb+'_'+chain+'_mdl.pdb','w')
+    lig = ''
+    X, ress, seq = 0, {}, ''
+    for d in D:
+        if 'ATOM'==d[:4] and d[21]==chain:
+            if d[17:20]!= 'HOH':
+                res, rsid, icode, bfactor = d[17:20],int(d[22:26]),d[26], float(d[60:66])
+                if 1:#icode!=' ':
+                    if (res,rsid,icode) not in ress:
+                        if len(ress)==0: X=rsid-1
+                        X+=1
+                        ress[(res,rsid,icode)] = [X,[bfactor]]
+                    else: ress[(res,rsid,icode)][1].append(bfactor)
+                newrsid = ' '*(4-len(str(X)))+str(X)
+                newline = d[:21]+chain+newrsid+' '+d[27:]
+                out.write(newline)
 
-		elif ('HETATM'==d[:6] or 'TER'==d[:3]) and d[21]==chain:
-                        if d[17:20]!= 'HOH':
-                                res, rsid, icode = d[17:20],int(d[22:26]),d[26]
-                                if 1:#icode!=' ':
-                                        if (res,rsid,icode) not in ress:
-                                                if len(ress)==0: X=rsid-1
-                                                X+=1
-                                                
-                                newrsid = ' '*(4-len(str(X)))+str(X)
-                                newline = d[:21]+chain+newrsid+' '+d[27:]
-                                out.write(newline)
-        out.close()
+        elif ('HETATM'==d[:6] or 'TER'==d[:3]) and d[21]==chain:
+            if d[17:20]!= 'HOH':
+                res, rsid, icode = d[17:20],int(d[22:26]),d[26]
+                if 1:#icode!=' ':
+                    if (res,rsid,icode) not in ress:
+                        if len(ress)==0: X=rsid-1
+                        X+=1
 
-        #os.system('mv %s_%s_tmp.pdb %s%s.pdb' % (pdb,chain,pdb,chain))
+                newrsid = ' '*(4-len(str(X)))+str(X)
+                newline = d[:21]+chain+newrsid+' '+d[27:]
+                out.write(newline)
+    out.close()
 
-	RES = dict([ (i[1],[i,ress[i][1]] ) for i in ress])
-	SEQ = ''
-	for x in xrange(min(RES.keys()),max(RES.keys())+1):
-		if x in RES: SEQ += PDB.Polypeptide.three_to_one(RES[x][0][0])
-		else: SEQ += '-'
-	
-	return RES, SEQ
+    #os.system('mv %s_%s_tmp.pdb %s%s.pdb' % (pdb,chain,pdb,chain))
+
+    RES = dict([ (i[1],[i,ress[i][1]] ) for i in ress])
+    SEQ = ''
+    for x in xrange(min(RES.keys()),max(RES.keys())+1):
+        if x in RES: SEQ += PDB.Polypeptide.three_to_one(RES[x][0][0])
+        else: SEQ += '-'
+
+    return RES, SEQ
 
 
 
 def get_features(fil, seq):
-	'''
-	Map residues in the feat file to the sequence.
-	'''
+    '''
+    Map residues in the feat file to the sequence.
+    '''
 
-	data = open(fil)
-	D = data.readlines()
-	data.close()
+    data = open(fil)
+    D = data.readlines()
+    data.close()
 
-	Selected = {}
-	for d in D:
-		d = d.strip().split('\t')
-		res, resid = d[0][17:20],int(d[0][22:26])
-		if PDB.Polypeptide.three_to_one(res)==seq[resid-1]: Selected[( res, resid, seq[resid-1] )] = 0
-		else: 
-			print "Residues do not match for: ", fil, state
-			print peter
-	return Selected
+    Selected = {}
+    for d in D:
+        d = d.strip().split('\t')
+        res, resid = d[0][17:20],int(d[0][22:26])
+        if PDB.Polypeptide.three_to_one(res)==seq[resid-1]: Selected[( res, resid, seq[resid-1] )] = 0
+        else:
+            print "Residues do not match for: ", fil, state
+            print peter
+    return Selected
 
 
 def match_to_pdb(Sel, pdbres, chainid):
-	'''
-	Match sequence in the PDB file to the real sequence.
-	'''	
+    '''
+    Match sequence in the PDB file to the real sequence.
+    '''
 
-	data = open('alignment.pir')
-	D = data.read().split('>')
-	data.close()
+    data = open('alignment.pir')
+    D = data.read().split('>')
+    data.close()
 
-	mdlali = ''.join(D[2].split('\n')[2:])
-	pdbali = ''.join(D[1].split('\n')[2:])
-	srtd = sorted(pdbres.keys())
-	AllBfactors = sum([i[1] for i in pdbres.values()], [])
-	
-	# - normalize B-factors
-	mu, std = numpy.mean(AllBfactors), numpy.std(AllBfactors)
-	
-	# - match
-	B = {}
-	for s in Sel:
-		if s[2]==mdlali[s[1]-1]: 
-			c = pdbali[:s[1]].count('-')
-			pdbinfo = pdbres[srtd[s[1]-c-1]]
-			
-                        if pdbinfo[0][0]==s[0] and pdbinfo[0][1]+c==s[1]+srtd[0]-1 and pdbali[s[1]-1]!='-':
-                                p = (s[0],s[1], chainid)
-                                B[p] = numpy.mean((numpy.array(pdbinfo[1])-mu)/std)
-                        elif pdbali[s[1]-1]=='-': 
-				# if a gap in the structure use the maximum B-factor + 0.5 STD
-				p = (s[0],s[1],chainid)
-                                B[p] = 0.5*std + (numpy.max(AllBfactors)-mu)/std
-                        else:
-				#if pdbinfo[0][0]==s[0] and pdbinfo[0][1]==s[1] and pdbali[s[1]-1]!='-':
-                                #        p = (s[0],s[1])
-                                #        B[p] = numpy.mean((numpy.array(pdbinfo[1])-mu)/std)
-                                #else:
-                                print "Residues do not match for PDB: "
-                                pass
-                                
-                else:
-                        print "Residues do not match for MODEL: "
-                        pass
-	return B
+    mdlali = ''.join(D[2].split('\n')[2:])
+    pdbali = ''.join(D[1].split('\n')[2:])
+    srtd = sorted(pdbres.keys())
+    AllBfactors = sum([i[1] for i in pdbres.values()], [])
+
+    # - normalize B-factors
+    mu, std = numpy.mean(AllBfactors), numpy.std(AllBfactors)
+
+    # - match
+    B = {}
+    for s in Sel:
+        if s[2]==mdlali[s[1]-1]:
+            c = pdbali[:s[1]].count('-')
+            pdbinfo = pdbres[srtd[s[1]-c-1]]
+
+            if pdbinfo[0][0]==s[0] and pdbinfo[0][1]+c==s[1]+srtd[0]-1 and pdbali[s[1]-1]!='-':
+                p = (s[0],s[1], chainid)
+                B[p] = numpy.mean((numpy.array(pdbinfo[1])-mu)/std)
+            elif pdbali[s[1]-1]=='-':
+                # if a gap in the structure use the maximum B-factor + 0.5 STD
+                p = (s[0],s[1],chainid)
+                B[p] = 0.5*std + (numpy.max(AllBfactors)-mu)/std
+            else:
+                #if pdbinfo[0][0]==s[0] and pdbinfo[0][1]==s[1] and pdbali[s[1]-1]!='-':
+                #        p = (s[0],s[1])
+                #        B[p] = numpy.mean((numpy.array(pdbinfo[1])-mu)/std)
+                #else:
+                print "Residues do not match for PDB: "
+                pass
+
+        else:
+            print "Residues do not match for MODEL: "
+            pass
+    return B
 
 
 def compactness(S):
-	'''
-	Obsolete, due to do a similar packing feature.
-	'''
+    '''
+    Obsolete, due to do a similar packing feature.
+    '''
 
-	if len(S)<=1: return 0.
-	res = S.keys()
-	F = []
-	for i in xrange(len(res)-1):
-		for j in xrange(i+1,len(res)):
-			dist = 1000.
-			for ai in S[res[i]]:
-			
-				for aj in S[res[j]]:
-					ds = numpy.linalg.norm(numpy.array(ai)-numpy.array(aj))
-					if ds < dist: dist = ds
-			F.append(dist)
-	return sum(F)/len(F)
+    if len(S)<=1: return 0.
+    res = S.keys()
+    F = []
+    for i in xrange(len(res)-1):
+        for j in xrange(i+1,len(res)):
+            dist = 1000.
+            for ai in S[res[i]]:
+
+                for aj in S[res[j]]:
+                    ds = numpy.linalg.norm(numpy.array(ai)-numpy.array(aj))
+                    if ds < dist: dist = ds
+            F.append(dist)
+    return sum(F)/len(F)
 
 def res_packing(pdb, res_list, radius=4.):
-	'''
-	Calculate packing of the residues. Packing is defined as number of atoms
-	within a certain distance from all atoms of a given residues, normalized 
-	by number of atoms in that residue.
-	Parameters:
-	  - radius: count atoms within this radius
-	'''
-	
-	data = open('%s.pdb' % pdb)
-	D = data.readlines()
-	data.close()
+    '''
+    Calculate packing of the residues. Packing is defined as number of atoms
+    within a certain distance from all atoms of a given residues, normalized
+    by number of atoms in that residue.
+    Parameters:
+      - radius: count atoms within this radius
+    '''
 
-	RIDs = dict([(i[1],i[0]) for i in res_list.keys()])
+    data = open('%s.pdb' % pdb)
+    D = data.readlines()
+    data.close()
 
-	RRR = {}
-	XYZ = []
-	for d in D:
-                if 'ATOM'==d[:4]:
-                        if d[17:20]!= 'HOH':
-                                res, rsid = d[17:20],int(d[22:26])
-				x,y,z = float(d[30:38]), float(d[38:46]), float(d[46:54])
-				XYZ.append(numpy.array([x,y,z]))
-	XYZ = numpy.array(XYZ)
-	for r in res_list:
-		if r not in RRR: RRR[r]=0
-		ZZZ = []
-		for a in res_list[r]:
-			distances = numpy.sqrt(numpy.sum((XYZ-numpy.array(a))**2,axis=1))
-			ZZZ += list(numpy.argwhere(distances<=radius).transpose()[0])
-			RRR[r] += len(numpy.argwhere(distances<=radius))
-		RRR[r] = len(set(ZZZ))
-	Packing = {}
-	for r in res_list:
-		Packing[r] = RRR[r] / float(len(res_list[r]))
-	return Packing
+    RIDs = dict([(i[1],i[0]) for i in res_list.keys()])
+
+    RRR = {}
+    XYZ = []
+    for d in D:
+        if 'ATOM'==d[:4]:
+            if d[17:20]!= 'HOH':
+                res, rsid = d[17:20],int(d[22:26])
+                x,y,z = float(d[30:38]), float(d[38:46]), float(d[46:54])
+                XYZ.append(numpy.array([x,y,z]))
+    XYZ = numpy.array(XYZ)
+    for r in res_list:
+        if r not in RRR: RRR[r]=0
+        ZZZ = []
+        for a in res_list[r]:
+            distances = numpy.sqrt(numpy.sum((XYZ-numpy.array(a))**2,axis=1))
+            ZZZ += list(numpy.argwhere(distances<=radius).transpose()[0])
+            RRR[r] += len(numpy.argwhere(distances<=radius))
+        RRR[r] = len(set(ZZZ))
+    Packing = {}
+    for r in res_list:
+        Packing[r] = RRR[r] / float(len(res_list[r]))
+    return Packing
 
 def neighborhood(res_list, radius=4.):
-	'''
-	Find structural neighbors of a given residue.
-	Parameters:
-	  - radius: maximum distance of a neighbor
-	'''
-	
-	Graph = {}
-	Idx = {}
-	A = res_list.keys()
+    '''
+    Find structural neighbors of a given residue.
+    Parameters:
+      - radius: maximum distance of a neighbor
+    '''
 
-	x=0
-	XYZ = []	
-	for a in A:
-		Graph[a] = {}
-		for i in res_list[a]:
-			Idx[x] = a
-			x+=1
-			XYZ.append(numpy.array(i))
-	XYZ = numpy.array(XYZ)
-	Dists = spatial.distance.cdist(XYZ,XYZ)
-	
-	C = numpy.argwhere(Dists<=radius)
-	for d in C:
-		i,j = Idx[d[0]], Idx[d[1]]
-		if i!=j: Graph[i][j] = 0
-		
-	return Graph
-	
+    Graph = {}
+    Idx = {}
+    A = res_list.keys()
+
+    x=0
+    XYZ = []
+    for a in A:
+        Graph[a] = {}
+        for i in res_list[a]:
+            Idx[x] = a
+            x+=1
+            XYZ.append(numpy.array(i))
+    XYZ = numpy.array(XYZ)
+    Dists = spatial.distance.cdist(XYZ,XYZ)
+
+    C = numpy.argwhere(Dists<=radius)
+    for d in C:
+        i,j = Idx[d[0]], Idx[d[1]]
+        if i!=j: Graph[i][j] = 0
+
+    return Graph
+
 
 
 def distance_from_surface(all_atoms, surf_atoms):
-	'''
-	Calculate distance of a given residue to the surface.
-	'''
-	#TODO: if I decide to calculate surface using Modeller, then this feature
-	# will change as well
-	
-	XYZs = []
-	Ids = {}
-	xs = 0
-	for r in surf_atoms:
-		for a in surf_atoms[r]:
-			XYZs.append(numpy.array(a))
-			Ids[xs]=r
-			xs+=1
-	XYZs = numpy.array(XYZs)
+    '''
+    Calculate distance of a given residue to the surface.
+    '''
+    #TODO: if I decide to calculate surface using Modeller, then this feature
+    # will change as well
 
-	XYZa = []
-	Ida, xa={},0
-	for r in all_atoms:
-		for a in all_atoms[r]:
-			XYZa.append(numpy.array(a))
-			Ida[xa]=r
-			xa+=1
-	XYZa = numpy.array(XYZa)
+    XYZs = []
+    Ids = {}
+    xs = 0
+    for r in surf_atoms:
+        for a in surf_atoms[r]:
+            XYZs.append(numpy.array(a))
+            Ids[xs]=r
+            xs+=1
+    XYZs = numpy.array(XYZs)
 
-	Dist = spatial.distance.cdist(XYZs,XYZa)
-	Dist2Surf = {}
-	for a in xrange(numpy.shape(Dist)[1]):
-		for s in xrange(numpy.shape(Dist)[0]):
-			if Ida[a] not in Dist2Surf: Dist2Surf[Ida[a]] = Dist[s,a]
-			else: Dist2Surf[Ida[a]] = min([Dist2Surf[Ida[a]], Dist[s,a]])
-	return Dist2Surf
-			
-				
+    XYZa = []
+    Ida, xa={},0
+    for r in all_atoms:
+        for a in all_atoms[r]:
+            XYZa.append(numpy.array(a))
+            Ida[xa]=r
+            xa+=1
+    XYZa = numpy.array(XYZa)
+
+    Dist = spatial.distance.cdist(XYZs,XYZa)
+    Dist2Surf = {}
+    for a in xrange(numpy.shape(Dist)[1]):
+        for s in xrange(numpy.shape(Dist)[0]):
+            if Ida[a] not in Dist2Surf: Dist2Surf[Ida[a]] = Dist[s,a]
+            else: Dist2Surf[Ida[a]] = min([Dist2Surf[Ida[a]], Dist[s,a]])
+    return Dist2Surf
+
+
 
 def charge_density(pdb, res_list, radius=5.):
-	'''
-	Compute charge density in a sphere with a <radius>.
-	'''
+    '''
+    Compute charge density in a sphere with a <radius>.
+    '''
 
-	charge = {'ALA':0,
-		'ARG':1,
-		'ASN':0,
-		'ASP':-1,
-		'CYS':0,
-		'GLN':0,
-		'GLU':-1,
-		'GLY':0,
-		'HIS':0.5,
-		'ILE':0,
-		'LEU':0,
-		'LYS':1,
-		'MET':0,
-		'PHE':0,
-		'PRO':0,
-		'SER':0,
-		'THR':0,
-		'TRP':0,
-		'TYR':0,
-		'VAL':0}
+    charge = {'ALA':0,
+            'ARG':1,
+            'ASN':0,
+            'ASP':-1,
+            'CYS':0,
+            'GLN':0,
+            'GLU':-1,
+            'GLY':0,
+            'HIS':0.5,
+            'ILE':0,
+            'LEU':0,
+            'LYS':1,
+            'MET':0,
+            'PHE':0,
+            'PRO':0,
+            'SER':0,
+            'THR':0,
+            'TRP':0,
+            'TYR':0,
+            'VAL':0}
 
 
-	data = open('%s.pdb' % pdb)
-	D = data.readlines()
-	data.close()
+    data = open('%s.pdb' % pdb)
+    D = data.readlines()
+    data.close()
 
-	XYZ = {}
-	for d in D:
-                if 'ATOM'==d[:4]:
-                        if d[17:20]!= 'HOH':
-                                aid, res, rsid, chainid = d[13:17], d[17:20],int(d[22:26]),d[21]
-                                x,y,z = float(d[30:38]), float(d[38:46]), float(d[46:54])
-				XYZ[(aid, res, rsid, chainid)] = numpy.array([x,y,z])
+    XYZ = {}
+    for d in D:
+        if 'ATOM'==d[:4]:
+            if d[17:20]!= 'HOH':
+                aid, res, rsid, chainid = d[13:17], d[17:20],int(d[22:26]),d[21]
+                x,y,z = float(d[30:38]), float(d[38:46]), float(d[46:54])
+                XYZ[(aid, res, rsid, chainid)] = numpy.array([x,y,z])
 
-	data = open('%s.sas' % pdb)
-	D = data.readlines()
-	data.close()
+    data = open('%s.sas' % pdb)
+    D = data.readlines()
+    data.close()
 
-	SurfRes = {}
-	for d in D:
-                if 'ATOM'==d[:4]:
-                        if d[17:20]!= 'HOH':
-                                aid, res, rsid, chainid = d[13:17], d[17:20],int(d[22:26]),d[21]
-                                if float(d[60:66]) > 2.: SurfRes[(res,rsid, chainid)] = 0
-	for d in D:
-                if 'ATOM'==d[:4]:
-                        if d[17:20]!= 'HOH':
-                                aid, res, rsid, chainid = d[13:17], d[17:20],int(d[22:26]),d[21]
-                                if (res,rsid, chainid) in SurfRes: SurfRes[(res,rsid,chainid)] += float(d[60:66])
+    SurfRes = {}
+    for d in D:
+        if 'ATOM'==d[:4]:
+            if d[17:20]!= 'HOH':
+                aid, res, rsid, chainid = d[13:17], d[17:20],int(d[22:26]),d[21]
+                if float(d[60:66]) > 2.: SurfRes[(res,rsid, chainid)] = 0
+    for d in D:
+        if 'ATOM'==d[:4]:
+            if d[17:20]!= 'HOH':
+                aid, res, rsid, chainid = d[13:17], d[17:20],int(d[22:26]),d[21]
+                if (res,rsid, chainid) in SurfRes: SurfRes[(res,rsid,chainid)] += float(d[60:66])
 
-	CRDS,RS = [],{}
-	i = 0
-	for xyz in XYZ:
-		if (xyz[1],xyz[2],xyz[3]) in SurfRes:
-			CRDS.append(XYZ[xyz])
-			RS[i] = (xyz[1],xyz[2],xyz[3])
-			i+=1
-	CRDS = numpy.array(CRDS)
-	
-	ChargeDensity = {}
-	for r in res_list:
-		contacts = {}
-		for a in res_list[r]:
-			distances = numpy.sqrt(numpy.sum((CRDS-numpy.array(a))**2,axis=1))
-			L = numpy.argwhere(distances<=radius).transpose()[0] 
-			for l in L: contacts[RS[l]] = 0
-		C,S=0.,0.
-		for i in contacts.keys(): 
-			C += charge[i[0]]
-			S += SurfRes[i]
-		if S>0.: ChargeDensity[r] = C/S
-		else: ChargeDensity[r] = 0.
-	return ChargeDensity
-		
+    CRDS,RS = [],{}
+    i = 0
+    for xyz in XYZ:
+        if (xyz[1],xyz[2],xyz[3]) in SurfRes:
+            CRDS.append(XYZ[xyz])
+            RS[i] = (xyz[1],xyz[2],xyz[3])
+            i+=1
+    CRDS = numpy.array(CRDS)
+
+    ChargeDensity = {}
+    for r in res_list:
+        contacts = {}
+        for a in res_list[r]:
+            distances = numpy.sqrt(numpy.sum((CRDS-numpy.array(a))**2,axis=1))
+            L = numpy.argwhere(distances<=radius).transpose()[0]
+            for l in L: contacts[RS[l]] = 0
+        C,S=0.,0.
+        for i in contacts.keys():
+            C += charge[i[0]]
+            S += SurfRes[i]
+        if S>0.: ChargeDensity[r] = C/S
+        else: ChargeDensity[r] = 0.
+    return ChargeDensity
+
 
 def get_patchmap(apo):
-        '''
-        Retrieve PatchMap feature.
-        '''
+    '''
+    Retrieve PatchMap feature.
+    '''
 
-        # read PatchMap output
-        data = open('%s.pdb.ptm' % (apo))
-        D = data.readlines()
-        data.close()
+    # read PatchMap output
+    data = open('%s.pdb.ptm' % (apo))
+    D = data.readlines()
+    data.close()
 
-        Ptm = {}
-        for d in D:
-                d = d.strip().split()
-                if len(d)>0:
-                        if 'X' in d[1]: res, resid, chainid = 'UNK', int(d[2]), d[3]
-                        else: res, resid, chainid = d[1], int(d[2]), d[3]
-                        Ptm[(res,resid,chainid)] = float(d[4])
-        return Ptm
-	
+    Ptm = {}
+    for d in D:
+        d = d.strip().split()
+        if len(d)>0:
+            if 'X' in d[1]: res, resid, chainid = 'UNK', int(d[2]), d[3]
+            else: res, resid, chainid = d[1], int(d[2]), d[3]
+            Ptm[(res,resid,chainid)] = float(d[4])
+    return Ptm
+
 
 # --- APO-HOLO features reader
 def res_parser(fil):
-	'''
-	Parse and gather all BMI features per residue.
-	'''
+    '''
+    Parse and gather all BMI features per residue.
+    '''
 
-	Header = 'ApoID\tRes\tResID\tChainID\t'
-	Header+= '\t'.join(['SAS','PRT','CVX','CNC','SSE','HYD','CHR','SQC','PCK','D2S','PTM']+['NBG','SASn','PRTn','CVXn','CNCn','Un', 'Bn', 'En', 'Gn', 'Hn', 'Sn', 'Tn', 'In','HYDn','CHRn','SQCn','PCKn'])
+    Header = 'ApoID\tRes\tResID\tChainID\t'
+    Header+= '\t'.join(['SAS','PRT','CVX','CNC','SSE','HYD','CHR','SQC','PCK','D2S','PTM']+['NBG','SASn','PRTn','CVXn','CNCn','Un', 'Bn', 'En', 'Gn', 'Hn', 'Sn', 'Tn', 'In','HYDn','CHRn','SQCn','PCKn'])
 
-	# -- output file
-	out = open('%s.bmiftr' % (fil,), 'w')
-	out.write(Header+'\n')
+    # -- output file
+    out = open('%s.bmiftr' % (fil,), 'w')
+    out.write(Header+'\n')
 
-	# -- read the partial feature list
-	apo=fil
+    # -- read the partial feature list
+    apo=fil
 
-	chainfiles = glob.glob(fil[:-1]+'*.feat')
-	Apo = {}
-	for chainfile in chainfiles:
-		
-		chain = chainfile.split('.')[0][-1]
-		data = open(chainfile)
-		Apo[chain] = data.readlines()
-		data.close()
-	
-	# -- APO features
-	APO = {'AllAtoms':{},
-	       'SurfAtoms':{},
-	       'SurfaceArea':{},
-               'Protrusion':{},
-	       'Concavity' : {},
-	       'Convexity' : {},
-               'Rigidity': {},
-	       'SSE': {'-':0, 'B':0, 'E':0, 'G':0, 'H':0, 'S':0, 'T':0, 'I':0},
-	       'Hidrophobicity':{},
-               'Charge':{},
-	       'SeqCon':{},
-	       'PatchMap':{}}
-	
-	# - seq. con. normalization factors
-	chainfiles = glob.glob(fil[:3]+'*.sqc')
-	seqcons = {}
-	for chainfile in chainfiles:
-		chain = chainfile.split('.')[0][-1]
-		data = open(chainfile)	
-		D = [float(i.strip().split()[-1]) for i in data.readlines()]
-		data.close()
-		sc_mean, sc_std = numpy.mean(D), numpy.std(D)
-		seqcons[chain] = (sc_mean, sc_std)
-		D = None
-	
-	RESAPO = {}
+    chainfiles = glob.glob(fil[:-1]+'*.feat')
+    Apo = {}
+    for chainfile in chainfiles:
 
-	# - gather partial features	
-	for chain in Apo:
-		for a in Apo[chain]:
-			a = a.strip()
-			d = a.split()
-			p = (a[17:20], int(a[22:26]), a[21])
-			RESAPO[p] = {}
-			sas,prt,cnc,cvx,sse,hidro,charge,sqc = d[-10:-2]
+        chain = chainfile.split('.')[0][-1]
+        data = open(chainfile)
+        Apo[chain] = data.readlines()
+        data.close()
 
-			if float(sas) >= 2.:
-				if p not in APO['SurfAtoms']: APO['SurfAtoms'][p] = []
-				APO['SurfAtoms'][p].append( (float(a[30:38]), float(a[38:46]), float(a[46:54])) )
+    # -- APO features
+    APO = {'AllAtoms':{},
+           'SurfAtoms':{},
+           'SurfaceArea':{},
+           'Protrusion':{},
+           'Concavity' : {},
+           'Convexity' : {},
+           'Rigidity': {},
+           'SSE': {'-':0, 'B':0, 'E':0, 'G':0, 'H':0, 'S':0, 'T':0, 'I':0},
+           'Hidrophobicity':{},
+           'Charge':{},
+           'SeqCon':{},
+           'PatchMap':{}}
 
-			if float(sas) >= -10.:
-				if p not in APO['AllAtoms']: APO['AllAtoms'][p] = []
-				APO['AllAtoms'][p].append( (float(a[30:38]), float(a[38:46]), float(a[46:54])) )
+    # - seq. con. normalization factors
+    chainfiles = glob.glob(fil[:3]+'*.sqc')
+    seqcons = {}
+    for chainfile in chainfiles:
+        chain = chainfile.split('.')[0][-1]
+        data = open(chainfile)
+        D = [float(i.strip().split()[-1]) for i in data.readlines()]
+        data.close()
+        sc_mean, sc_std = numpy.mean(D), numpy.std(D)
+        seqcons[chain] = (sc_mean, sc_std)
+        D = None
 
-			if p not in APO['SurfaceArea']: APO['SurfaceArea'][p]= [float(sas)]
-			else: APO['SurfaceArea'][p].append( float(sas) )
-		
-			if p not in APO['Protrusion']: APO['Protrusion'][p] = [float(prt)]
-			else: APO['Protrusion'][p].append(float(prt))
+    RESAPO = {}
 
-			if p not in APO['Convexity']: 
-				APO['Concavity'][p] = float(cnc)
-				APO['Convexity'][p] = float(cvx)
-				APO['SSE'][p] = sse
-				APO['Hidrophobicity'][p] = float(hidro)
-				APO['Charge'][p] = float(charge)
-				if seqcons[chain][1]!=0.: APO['SeqCon'][p] = (float(sqc)-seqcons[chain][0])/seqcons[chain][1] 
-				else: APO['SeqCon'][p] = 0.
-				APO['Rigidity'][p] = float(a[60:66]) 
+    # - gather partial features
+    for chain in Apo:
+        for a in Apo[chain]:
+            a = a.strip()
+            d = a.split()
+            p = (a[17:20], int(a[22:26]), a[21])
+            RESAPO[p] = {}
+            sas,prt,cnc,cvx,sse,hidro,charge,sqc = d[-10:-2]
 
-	
-        # evaluate B-factors
-	'''
-	chainfiles = glob.glob(fil[:-1]+'*.sqc')
-        Bapo = {}
-        for chainfile in chainfiles:
+            if float(sas) >= 2.:
+                if p not in APO['SurfAtoms']: APO['SurfAtoms'][p] = []
+                APO['SurfAtoms'][p].append( (float(a[30:38]), float(a[38:46]), float(a[46:54])) )
 
-		apotmp = chainfile.split('.')[0]
-        	pdbres, pdbseq = get_chains(apotmp[:-1], apotmp[-1])
-        	mdlres, mdlseq = get_model(apotmp[:-1], apotmp[-1])
+            if float(sas) >= -10.:
+                if p not in APO['AllAtoms']: APO['AllAtoms'][p] = []
+                APO['AllAtoms'][p].append( (float(a[30:38]), float(a[38:46]), float(a[46:54])) )
 
-		pdbres, pdbseq = get_chains(apotmp[:-1], apotmp[-1])
-        	mdlres, mdlseq = get_model(apotmp[:-1], apotmp[-1])
+            if p not in APO['SurfaceArea']: APO['SurfaceArea'][p]= [float(sas)]
+            else: APO['SurfaceArea'][p].append( float(sas) )
 
-        	Sel = get_features('%s.feat' % (apotmp,), mdlseq)
-        	bapo = match_to_pdb(Sel, pdbres, chain)
-		for b in bapo: Bapo[b] = bapo[b]
-	print Bapo;exit()
-	'''
+            if p not in APO['Protrusion']: APO['Protrusion'][p] = [float(prt)]
+            else: APO['Protrusion'][p].append(float(prt))
 
-	# evaluate packing
-	Packing = res_packing(apo, APO['AllAtoms'])	
+            if p not in APO['Convexity']:
+                APO['Concavity'][p] = float(cnc)
+                APO['Convexity'][p] = float(cvx)
+                APO['SSE'][p] = sse
+                APO['Hidrophobicity'][p] = float(hidro)
+                APO['Charge'][p] = float(charge)
+                if seqcons[chain][1]!=0.: APO['SeqCon'][p] = (float(sqc)-seqcons[chain][0])/seqcons[chain][1]
+                else: APO['SeqCon'][p] = 0.
+                APO['Rigidity'][p] = float(a[60:66])
 
-	# neighborhood
-	Neighbors = neighborhood(APO['AllAtoms'])
 
-	# distance from surface
-	Dist2Surface = distance_from_surface(APO['AllAtoms'], APO['SurfAtoms'])	
+    # evaluate B-factors
+    '''
+    chainfiles = glob.glob(fil[:-1]+'*.sqc')
+    Bapo = {}
+    for chainfile in chainfiles:
 
-	# evaluate charge density
-	ChargeDensity = charge_density(apo, APO['AllAtoms'])
+            apotmp = chainfile.split('.')[0]
+            pdbres, pdbseq = get_chains(apotmp[:-1], apotmp[-1])
+            mdlres, mdlseq = get_model(apotmp[:-1], apotmp[-1])
 
-	# get PatchMap feature
-	PatchMap = get_patchmap(apo)
-	
-	for p in RESAPO.keys():
-		RESAPO[p]['SAS'] = numpy.mean(APO['SurfaceArea'][p])
-		RESAPO[p]['PRT'] = numpy.mean(APO['Protrusion'][p])
-		RESAPO[p]['CVX'] = numpy.mean(APO['Convexity'][p])
-		RESAPO[p]['CNC'] = numpy.mean(APO['Concavity'][p])
-		RESAPO[p]['SSE'] = APO['SSE'][p] if APO['SSE'][p] !='-' else 'U'
-		RESAPO[p]['HYD'] = APO['Hidrophobicity'][p]
-		RESAPO[p]['CHR'] = ChargeDensity[p]
-		RESAPO[p]['SQC'] = APO['SeqCon'][p]
-		RESAPO[p]['PCK'] = Packing[p]
-		RESAPO[p]['D2S'] = Dist2Surface[p]
-		RESAPO[p]['PTM'] = PatchMap[p]
-		#try: RESAPO[p]['BFC'] = Bapo[p]
-		#except KeyError: 
-		#	print 'HERE!!!!', p
-		#	#del RESAPO[p] 
+            pdbres, pdbseq = get_chains(apotmp[:-1], apotmp[-1])
+            mdlres, mdlseq = get_model(apotmp[:-1], apotmp[-1])
 
-	
-	Hdr = ['SAS','PRT','CVX','CNC','SSE','HYD','CHR','SQC','PCK','D2S','PTM']
-	Hdr+= ['NBG','SASn','PRTn','CVXn','CNCn','Un', 'Bn', 'En', 'Gn', 'Hn', 'Sn', 'Tn', 'In','HYDn','CHRn','SQCn','PCKn']
-	# NBG ... number of neighbors
-	
-	for p in RESAPO:
-		Attn = [len(Neighbors[p])**2] + [0.]*16
-		for n in Neighbors[p]:
-			if n not in RESAPO: continue
-			Attn[1] += RESAPO[n]['SAS']
-			Attn[2] += RESAPO[n]['PRT']
-			Attn[3] += RESAPO[n]['CVX']
-			Attn[4] += RESAPO[n]['CNC']
-			
-			if RESAPO[n]['SSE']=='U': Attn[5] += 1
-			if RESAPO[n]['SSE']=='B': Attn[6] += 1
-			if RESAPO[n]['SSE']=='E': Attn[7] += 1
-			if RESAPO[n]['SSE']=='G': Attn[8] += 1
-			if RESAPO[n]['SSE']=='H': Attn[9] += 1
-			if RESAPO[n]['SSE']=='S': Attn[10] += 1
-			if RESAPO[n]['SSE']=='T': Attn[11] += 1
-			if RESAPO[n]['SSE']=='I': Attn[12] += 1
-			
-			Attn[13] += RESAPO[n]['HYD']
-			Attn[14] += RESAPO[n]['CHR']
-			Attn[15] += RESAPO[n]['SQC']
-			Attn[16] += RESAPO[n]['PCK']	
-			#Attn[17] += RESAPO[n]['BFC']		
-			
-		Attn = numpy.array(Attn)/len(Neighbors[p])
+            Sel = get_features('%s.feat' % (apotmp,), mdlseq)
+            bapo = match_to_pdb(Sel, pdbres, chain)
+            for b in bapo: Bapo[b] = bapo[b]
+    print Bapo;exit()
+    '''
 
-		Att = [apo]+list(p)+[RESAPO[p][i] for i in Hdr[:11]]
-		out.write( '\t'.join([str(i) for i in Att+list(Attn)]) + '\n')
-	
-	out.close()
+    # evaluate packing
+    Packing = res_packing(apo, APO['AllAtoms'])
+
+    # neighborhood
+    Neighbors = neighborhood(APO['AllAtoms'])
+
+    # distance from surface
+    Dist2Surface = distance_from_surface(APO['AllAtoms'], APO['SurfAtoms'])
+
+    # evaluate charge density
+    ChargeDensity = charge_density(apo, APO['AllAtoms'])
+
+    # get PatchMap feature
+    PatchMap = get_patchmap(apo)
+
+    for p in RESAPO.keys():
+        RESAPO[p]['SAS'] = numpy.mean(APO['SurfaceArea'][p])
+        RESAPO[p]['PRT'] = numpy.mean(APO['Protrusion'][p])
+        RESAPO[p]['CVX'] = numpy.mean(APO['Convexity'][p])
+        RESAPO[p]['CNC'] = numpy.mean(APO['Concavity'][p])
+        RESAPO[p]['SSE'] = APO['SSE'][p] if APO['SSE'][p] !='-' else 'U'
+        RESAPO[p]['HYD'] = APO['Hidrophobicity'][p]
+        RESAPO[p]['CHR'] = ChargeDensity[p]
+        RESAPO[p]['SQC'] = APO['SeqCon'][p]
+        RESAPO[p]['PCK'] = Packing[p]
+        RESAPO[p]['D2S'] = Dist2Surface[p]
+        RESAPO[p]['PTM'] = PatchMap[p]
+        #try: RESAPO[p]['BFC'] = Bapo[p]
+        #except KeyError:
+        #       print 'HERE!!!!', p
+        #       #del RESAPO[p]
+
+
+    Hdr = ['SAS','PRT','CVX','CNC','SSE','HYD','CHR','SQC','PCK','D2S','PTM']
+    Hdr+= ['NBG','SASn','PRTn','CVXn','CNCn','Un', 'Bn', 'En', 'Gn', 'Hn', 'Sn', 'Tn', 'In','HYDn','CHRn','SQCn','PCKn']
+    # NBG ... number of neighbors
+
+    for p in RESAPO:
+        Attn = [len(Neighbors[p])**2] + [0.]*16
+        for n in Neighbors[p]:
+            if n not in RESAPO: continue
+            Attn[1] += RESAPO[n]['SAS']
+            Attn[2] += RESAPO[n]['PRT']
+            Attn[3] += RESAPO[n]['CVX']
+            Attn[4] += RESAPO[n]['CNC']
+
+            if RESAPO[n]['SSE']=='U': Attn[5] += 1
+            if RESAPO[n]['SSE']=='B': Attn[6] += 1
+            if RESAPO[n]['SSE']=='E': Attn[7] += 1
+            if RESAPO[n]['SSE']=='G': Attn[8] += 1
+            if RESAPO[n]['SSE']=='H': Attn[9] += 1
+            if RESAPO[n]['SSE']=='S': Attn[10] += 1
+            if RESAPO[n]['SSE']=='T': Attn[11] += 1
+            if RESAPO[n]['SSE']=='I': Attn[12] += 1
+
+            Attn[13] += RESAPO[n]['HYD']
+            Attn[14] += RESAPO[n]['CHR']
+            Attn[15] += RESAPO[n]['SQC']
+            Attn[16] += RESAPO[n]['PCK']
+            #Attn[17] += RESAPO[n]['BFC']
+
+        Attn = numpy.array(Attn)/len(Neighbors[p])
+
+        Att = [apo]+list(p)+[RESAPO[p][i] for i in Hdr[:11]]
+        out.write( '\t'.join([str(i) for i in Att+list(Attn)]) + '\n')
+
+    out.close()
 
 if __name__ == '__main__':
-	
-	res_parser('XXXX')
+
+    res_parser('XXXX')

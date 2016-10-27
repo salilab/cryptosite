@@ -38,15 +38,15 @@ myfile.close()
 
 myfile=open('%s.pdb' % pdb,'w')
 for line in file:
-        if line[:5]=='ATOM ' or line[:3]=='TER':
-		if len(line)<60: continue
-		if line[21] in chains:
-			if len(line)>77 and (line[77] =='D' or line[77]=='H'): continue
-			line=line.strip('/n')
-                	myfile.write("%s\n" % line)
-			if line[21] not in PDBChainOrder:
-        			 PDBChainOrder.append(line[21])
-	
+    if line[:5]=='ATOM ' or line[:3]=='TER':
+        if len(line)<60: continue
+        if line[21] in chains:
+            if len(line)>77 and (line[77] =='D' or line[77]=='H'): continue
+            line=line.strip('/n')
+            myfile.write("%s\n" % line)
+            if line[21] not in PDBChainOrder:
+                PDBChainOrder.append(line[21])
+
 myfile.close()
 
 
@@ -54,9 +54,9 @@ myfile.close()
 output = open('input.seq','w')
 querySeqs = {}
 for chain in chains:
-        querySeq = get_pdb_seq(pdb+'.pdb', chain)
-        querySeqs[chain] = querySeq
-        output.write('>'+chain+'\n'+querySeq+'\n')
+    querySeq = get_pdb_seq(pdb+'.pdb', chain)
+    querySeqs[chain] = querySeq
+    output.write('>'+chain+'\n'+querySeq+'\n')
 output.close()
 
 
@@ -66,64 +66,64 @@ print 'PDB: ',pdb,'\tCHAIN: ',chains, PDBChainOrder
 
 ChainLenghts, SubjectSeqList, QuerySeqList = {},{},{}
 
-for chain in PDBChainOrder: 
-	try: querySeq = querySeqs[chain]
-	except KeyError:
-	    print 'CHAIN: ',chain, 'not in the PDB file'
-	    raise
-	print querySeq, querySeqs[chain]
-	ChainLenghts[chain]=(querySeq[0],len(querySeq),querySeq[-1])
-	sbjctSeq = ''
+for chain in PDBChainOrder:
+    try: querySeq = querySeqs[chain]
+    except KeyError:
+        print 'CHAIN: ',chain, 'not in the PDB file'
+        raise
+    print querySeq, querySeqs[chain]
+    ChainLenghts[chain]=(querySeq[0],len(querySeq),querySeq[-1])
+    sbjctSeq = ''
 
-	"""
-	seqFile = open('input.seq', 'r')
-	D = seqFile.read().split('>')[1:]
-	seqFile.close()
+    """
+    seqFile = open('input.seq', 'r')
+    D = seqFile.read().split('>')[1:]
+    seqFile.close()
 
-	if 1:	
-		for d in D:
-			if d.split()[0].strip()==chain:
-				sbjctSeq = ''.join(d.split()[1:])
-        			SubjectSeqList[chain] = sbjctSeq.strip()
-	        		QuerySeqList[chain] = querySeq.strip()
-		sbjctSeq = sbjctSeq.strip()
+    if 1:
+            for d in D:
+                    if d.split()[0].strip()==chain:
+                            sbjctSeq = ''.join(d.split()[1:])
+                            SubjectSeqList[chain] = sbjctSeq.strip()
+                            QuerySeqList[chain] = querySeq.strip()
+            sbjctSeq = sbjctSeq.strip()
 
-	if d.split('\n')[0].strip() == '':
-		#print 'SequenceInputError: The subject sequence for chain %s not present in the input file!' % chain
-		#raise
-		sbjctSeq = querySeq
-	"""
-	sbjctSeq = querySeq
-	
-	# --- refine the structure (Modeller)
-	strcsq, seqsq = muscleAlign(querySeq, sbjctSeq, pdb, chain)
-	SubjectSeqList[chain] = seqsq
-        QuerySeqList[chain] = strcsq
+    if d.split('\n')[0].strip() == '':
+            #print 'SequenceInputError: The subject sequence for chain %s not present in the input file!' % chain
+            #raise
+            sbjctSeq = querySeq
+    """
+    sbjctSeq = querySeq
 
-	# --- extract bioinformatics features
+    # --- refine the structure (Modeller)
+    strcsq, seqsq = muscleAlign(querySeq, sbjctSeq, pdb, chain)
+    SubjectSeqList[chain] = seqsq
+    QuerySeqList[chain] = strcsq
 
-	# -- sequence conservation
+    # --- extract bioinformatics features
 
-	output = open('test.seq','w')
-	output.write('>%s%sq\n' % (pdb, chain) + sbjctSeq)
-	output.close()
- 	run_blast(pdb+chain)
+    # -- sequence conservation
 
-	parse_blast(pdb+chain+'.blast', pdb+chain, sbjctSeq)
+    output = open('test.seq','w')
+    output.write('>%s%sq\n' % (pdb, chain) + sbjctSeq)
+    output.close()
+    run_blast(pdb+chain)
+
+    parse_blast(pdb+chain+'.blast', pdb+chain, sbjctSeq)
 
 
 
 # --- change ali to pir
 out = open('alignment.pir','w')
 
-strcsq = '/'.join([QuerySeqList[chain] for chain in PDBChainOrder]) 
-seqsq ='/'.join([SubjectSeqList[chain] for chain in PDBChainOrder]) 
+strcsq = '/'.join([QuerySeqList[chain] for chain in PDBChainOrder])
+seqsq ='/'.join([SubjectSeqList[chain] for chain in PDBChainOrder])
 out.write('>P1; %s\nstructure:%s:FIRST    :%s:LAST  :%s:: : :\n' % (pdb,pdb,PDBChainOrder[0],PDBChainOrder[-1]))
 out.write(strcsq+'*\n')
 
 out.write('\n>P1; %s_X\nsequence:%s_X:    :%s:  :%s:: : :\n' % (pdb.lower(),pdb.lower(),PDBChainOrder[0],PDBChainOrder[-1]))
 out.write(seqsq+'*\n')
-    
+
 out.close()
 
 
@@ -144,20 +144,20 @@ mchains=map(chr, range(65, 65+len(PDBChainOrder)))
 
 L=0
 for chain in PDBChainOrder:
-	seqdat=open(pdb+chain+'.sqc')
-	sqdat=seqdat.readlines()
-	seqdat.close()
+    seqdat=open(pdb+chain+'.sqc')
+    sqdat=seqdat.readlines()
+    seqdat.close()
 
-	seqdat=open(pdb+'_mdl'+mchains[PDBChainOrder.index(chain)]+'.sqc','w')
-	for sql in sqdat:
-		sql=sql.split()
-		sql[0]=str(int(sql[0])+L)
-		seqdat.write('\t'.join(sql)+'\n')
-	
-        L+=len(SubjectSeqList[chain])
-	seqdat.close()	
-        # -- hydrophobicity, charge, SSEs
-        HydChrSSE(pdb+'_mdl', mchains[PDBChainOrder.index(chain)])
+    seqdat=open(pdb+'_mdl'+mchains[PDBChainOrder.index(chain)]+'.sqc','w')
+    for sql in sqdat:
+        sql=sql.split()
+        sql[0]=str(int(sql[0])+L)
+        seqdat.write('\t'.join(sql)+'\n')
+
+    L+=len(SubjectSeqList[chain])
+    seqdat.close()
+    # -- hydrophobicity, charge, SSEs
+    HydChrSSE(pdb+'_mdl', mchains[PDBChainOrder.index(chain)])
 
 
 # --- calculate PatchMap feature
@@ -169,7 +169,7 @@ gather_features(pdb+'_mdl',mchains)
 
 
 #for chain in PDBChainOrder:
-res_parser(pdb+'_mdl')	
+res_parser(pdb+'_mdl')
 
 
 # --- prepare AllosMod file
@@ -179,35 +179,35 @@ import glob, os
 #P.remove('bla.py')
 
 if 1:
-	f = pdb+'_mdl.bmiftr'
-        data = open(f)
-        F1 = len(data.readlines())
-        data.close()
+    f = pdb+'_mdl.bmiftr'
+    data = open(f)
+    F1 = len(data.readlines())
+    data.close()
 
-        data = open('alignment.pir')
-        S = data.read()
-        D = S.split(':')[-1].replace('\n','')[:-1].replace('-','')
-        P = '>'+S.split('>')[1].replace(pdb,pdb+'.pdb').replace('structure','structureX')
-        data.close()
+    data = open('alignment.pir')
+    S = data.read()
+    D = S.split(':')[-1].replace('\n','')[:-1].replace('-','')
+    P = '>'+S.split('>')[1].replace(pdb,pdb+'.pdb').replace('structure','structureX')
+    data.close()
 
-        #continue
-        os.system('mkdir -p %s' % pdb)
-        out = open('%s/align.ali' % pdb, 'w')
-        out.write( P )
-        out.write(">P1;pm.pdb\n" )
-        out.write("structureX:pm.pdb:1    :%s:%i  :%s::::\n" % (chain,len(D),chain))
-        out.write(D+'*\n')
-        out.close()
+    #continue
+    os.system('mkdir -p %s' % pdb)
+    out = open('%s/align.ali' % pdb, 'w')
+    out.write( P )
+    out.write(">P1;pm.pdb\n" )
+    out.write("structureX:pm.pdb:1    :%s:%i  :%s::::\n" % (chain,len(D),chain))
+    out.write(D+'*\n')
+    out.close()
 
-        os.system('cp %s.pdb %s' % (pdb,pdb))
+    os.system('cp %s.pdb %s' % (pdb,pdb))
 
-        out1 = open('%s/input.dat' % pdb, 'w')
-        out1.write('rAS=1000\nNRUNS=25\nSCRAPP=True\nMDTemp=SCAN')
-        out1.close()
+    out1 = open('%s/input.dat' % pdb, 'w')
+    out1.write('rAS=1000\nNRUNS=25\nSCRAPP=True\nMDTemp=SCAN')
+    out1.close()
 
-        out2 = open('%s/list' % pdb, 'w')
-        out2.write('%s.pdb' % pdb)
-        out2.close()
-	
-	#zip
-	#os.system('zip -r %s.zip %s' % (pdb,pdb))
+    out2 = open('%s/list' % pdb, 'w')
+    out2.write('%s.pdb' % pdb)
+    out2.close()
+
+    #zip
+    #os.system('zip -r %s.zip %s' % (pdb,pdb))

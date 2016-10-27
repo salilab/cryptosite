@@ -9,13 +9,13 @@ Requirements: numpy
 Updated: Sun Jan 23 11:35:53 EST 2005
 
 Calculate Conditional Hydrophobic Accessible Surface Area (CHASA), backbone
-N and O solvation accessiblity and total solvation free energy for polypeptides. 
+N and O solvation accessiblity and total solvation free energy for polypeptides.
 
 Also identify unsatisfied hydrogen bond donors (N) and acceptors (O) in backbone.
 
-This script calculates the accessible surface area (ASA) conditional upon prior 
-solvation of the backbone N and O atoms by placing an oxygen atom proximate to 
-these backbone atoms at acceptable hydrogen bond distance and orientation and 
+This script calculates the accessible surface area (ASA) conditional upon prior
+solvation of the backbone N and O atoms by placing an oxygen atom proximate to
+these backbone atoms at acceptable hydrogen bond distance and orientation and
 then including these solvation "waters" in the ASA calculation.
 
 The CHASA method and calculation of total solvation energy are described in:
@@ -35,7 +35,7 @@ A standard PDB file is the input. The current version does not deal well with
 hydrogens and they should be stripped. (The code deals only with backbone hydrogens
 used in current versions of LINUS).
 
-The N-terminal nitrogen is not solvated and thus the CHASA for some atoms proximate to 
+The N-terminal nitrogen is not solvated and thus the CHASA for some atoms proximate to
 this atom in cartesian space will be incorrect.
 
 Output:
@@ -78,11 +78,11 @@ TER 1424.592  -18.062
 
 where:
 
-	numintHbd = number of internally hydrogen bonded backbone N and O
+        numintHbd = number of internally hydrogen bonded backbone N and O
 
-	numSolv = number of solvation "waters" (max = 5 per backbone polar group)
+        numSolv = number of solvation "waters" (max = 5 per backbone polar group)
 
-	num_nonHbd = number of backbone polar groups not satisfied by hydrogen bonding
+        num_nonHbd = number of backbone polar groups not satisfied by hydrogen bonding
 
         total_bb_polar = number of backbone polar groups in the molecule that should
                          be hydrogen bonded ([2 x Number of residues] -1)
@@ -101,7 +101,7 @@ where:
                     (these are the conditional atoms added prior to ASA calculation)
 
 ------------------------------------------------------------------------
-Much of the code here is modified from the LINUS suite of programs originally 
+Much of the code here is modified from the LINUS suite of programs originally
 written by Raj Srinivasan (http://roselab.jhu.edu/dist/).
 
 The code for calculation of ASA by the method of Shrake and Rupley was ported from
@@ -138,7 +138,7 @@ class Linus:
     Instantiation
 
         An instance is created by calling the class constructor with
-        one argument - name of the pdb file. 
+        one argument - name of the pdb file.
 
     Attributes
 
@@ -179,7 +179,7 @@ class Linus:
 
             ix.  *sidechain_hbond_torsion* - float - minium torsion angle
                  between the sidechain acceptor and the backbone donor and
-                 it's two antecedent atoms ( 'C' of previous residue and 'CA' 
+                 it's two antecedent atoms ( 'C' of previous residue and 'CA'
                  of the residue)
 
             x.   *sidechain_hbond_score* - float - energy of a sidechain
@@ -203,7 +203,7 @@ class Linus:
 
 
         """
-        
+
         pdbfile = os.path.expanduser(pdbfile)
         self.protein = LinusProtein(pdbfile)
         self.hbdpar = default_hbdpar.copy()
@@ -237,8 +237,8 @@ class Linus:
             will raise AttributeError if invalid parameter name is specified
             and TypeError if invalid value for the parameter is supplied
 
-        """    
-        
+        """
+
         for key, value in kw.items():
             if self.hbdpar.has_key(key):
                 vtype = type(self.hbdpar[key])
@@ -269,7 +269,7 @@ class LinusProtein:
 
        o *residue_names* - list - name of each residue in molecule
 
-       o *res_pdb_number* - list - number of each residue in input PDB file 
+       o *res_pdb_number* - list - number of each residue in input PDB file
 
        o *residue_first_atom_indices* - list - index of the the
        first atom of each residue (this is horrendously named)
@@ -315,7 +315,7 @@ class LinusProtein:
 
             New instace of LinusMol
         """
-        
+
         self.filename = os.path.expanduser(filename)
         protein_from_pdb(self)
         nr = self.num_residues
@@ -341,7 +341,7 @@ class LinusProtein:
 
             Returns a reference to the atom.  If an atom with required
             name is not found in the resiude, *ValueError* is raised.
-        """    
+        """
         i1 = self.residue_first_atom_indices[resid]
         i2 = self.residue_first_atom_indices[resid+1]
         for i in range(i1, i2):
@@ -414,7 +414,7 @@ class Atom3d:
         """generate cartesian coordinates for an atom from it's
         internal coordinates"""
 
-        
+
         a2 = self.first_parent
         if a2 is None:
             self.x = self.y = self.z = 0.0
@@ -464,7 +464,7 @@ class Atom3d:
             sine = 1.0/sqrt(1.0 - cosine*cosine)
         else:
             sine = 1.0/sqrt(cosine*cosine - 1.0)
-            
+
         u3x = sine * (u1y*u2z - u1z*u2y)
         u3y = sine * (u1z*u2x - u1x*u2z)
         u3z = sine * (u1x*u2y - u1y*u2x)
@@ -486,12 +486,12 @@ class Atom3d:
         self.tp_torsion_tmp = self.tp_torsion
 
 
-# RESIDUES - description of residues known to LINUS.  Each residue is 
+# RESIDUES - description of residues known to LINUS.  Each residue is
 # described as a tuple.  The items in tuple are themselves tuples describing
 # each atom in the residue.  The fields of the tuple are:
 
 #  0. name of atom
-#  1, 2, 3 - first second and third parent of the atom.  The parents 
+#  1, 2, 3 - first second and third parent of the atom.  The parents
 #            are described as a tuple of two values - offset and name.
 #            The legal values for offset are 0 or -1. A value of 0
 #            means that the parent for the atom is in the same residue
@@ -502,7 +502,7 @@ class Atom3d:
 #      calculations
 #  6 - is 1 if atom is a hydrogen bond donor and 0 otherwise
 #  7 - is 1 if atom is a hydrogen bond acceptor and 0 otherwise
-#  8 - number of bonds separating atom from its own backbone amide 
+#  8 - number of bonds separating atom from its own backbone amide
 #      nitrogen
 #  9 - number of bonds separating atom from the backbone amide nitrogen
 #      of the succeeding residue
@@ -828,7 +828,7 @@ OmeAtoms = {
 }
 
 ChiAtoms = {
-    'ARG': (' CG ', ' CD ', ' NE ', ' CZ '), 
+    'ARG': (' CG ', ' CD ', ' NE ', ' CZ '),
     'ASN': (' CG ', ' OD1'),
     'ASP': (' CG ', ' OD1'),
     'CYS': (' SG ',),
@@ -1043,7 +1043,7 @@ def protein_from_pdb(p):
     Result
 
         None
-    """    
+    """
     if p.filename[-3:] == '.gz':
         data = gzip.GzipFile(p.filename, 'rb').readlines()
     else:
@@ -1057,7 +1057,7 @@ def protein_from_pdb(p):
     nfstr = 'Unable to find atom %s in residue %i, deleting from molecule...'
     current_res = None
     aname_seen = []
-    
+
     for line in data:
         if line[:4] == 'ATOM':
             na = na + 1
@@ -1080,7 +1080,7 @@ def protein_from_pdb(p):
                 start = na
                 end = len(a)
             aname = line[12:16]
-            if aname == ' OXT': 
+            if aname == ' OXT':
                 na = na -1
                 continue
             aname_seen.append(aname)
@@ -1118,7 +1118,7 @@ def protein_from_pdb(p):
             atom = get_atom_with_name(a, f[i], f[i+1],
                                       atom_record[0])
             if not atom: continue
-            
+
             fp, fpname = atom_record[1]
             fp = fp + i
 
@@ -1152,8 +1152,8 @@ def protein_from_pdb(p):
     p.psi_atoms = [None]*nr
     p.omega_atoms = [None]*nr
     p.chi_atoms = [None]*nr
-    
-            
+
+
     for i in range(p.num_residues):
         name = r[i]
         try:
@@ -1190,7 +1190,7 @@ def protein_from_pdb(p):
             for atomname in chiatom:
                 chis = chis + (get_atom_with_name(a, start, end, atomname),)
             p.chi_atoms[i] = chis
-            
+
 def angle(a1, a2, a3):
     """Angle in degrees between 3 atoms"""
     x1 = a1.x - a2.x
@@ -1206,7 +1206,7 @@ def angle(a1, a2, a3):
                                            (x2**2.0 + y2**2.0 + z2**2.0))
     except ZeroDivisionError:
         return -999.999
-    
+
     try:
         return acos(ang)*RADIANS_TO_DEGREES
     except ValueError:
@@ -1309,13 +1309,13 @@ def print_hbs_chasa(fil, mol, flags, probe=1.4, ndiv=3,
     residue_names = mol.residue_names
     minres, maxres = get_res_extents(mol)
 
-  
+
     use_ext = 0
     ext_coords = None
 
     use_data = 1
     data = numpy.zeros(len(atoms), 'd')
-  
+
     if ext_atoms:
         ext_coords = []
         map(lambda x: map(lambda y: ext_coords.append(y), x), ext_atoms)
@@ -1351,7 +1351,7 @@ def print_hbs_chasa(fil, mol, flags, probe=1.4, ndiv=3,
                     p_solv_nrg = p_solv_nrg - (Gamma_p *(solv_list[i][0][2]))
                 elif solv_list[i][0][2] < 0:
                     p_solv_nrg = p_solv_nrg + 1.0
-    
+
                 write(pdbfmt % (j+1, atom.name, rname, residue_num, atom.x, atom.y,
                             atom.z, solv_list[i][0][2],data[j]))
             elif atom.name == ' O  ':
@@ -1362,7 +1362,7 @@ def print_hbs_chasa(fil, mol, flags, probe=1.4, ndiv=3,
                         p_solv_nrg = p_solv_nrg - (Gamma_hb_oxy)
                 elif solv_list[i][1][2] < 0:
                     p_solv_nrg = p_solv_nrg + 1.0
-    
+
                 write(pdbfmt % (j+1, atom.name, rname, residue_num, atom.x, atom.y,
                             atom.z, solv_list[i][1][2],data[j]))
             else:
@@ -1404,7 +1404,7 @@ def find_neighbors(atoms, coords, flags, probe, ext_rad,
 
     a = atoms[k]
     arad = a.radius + probe + probe
-    
+
     for i in range(0,k):
         if not (flags[i]): continue
         b = atoms[i]
@@ -1416,10 +1416,10 @@ def find_neighbors(atoms, coords, flags, probe, ext_rad,
     for i in range(k+1,numatm):
         if not (flags[i]): continue
         b = atoms[i]
-        d = a.distance(b)   
+        d = a.distance(b)
         if d < (arad + b.radius):
 #           print 'found neighbor ',atoms[i].name
-            nghlst.append(i)    
+            nghlst.append(i)
 
     numngh = len(nghlst)
     if not numext: return numngh
@@ -1442,8 +1442,8 @@ def find_neighbors(atoms, coords, flags, probe, ext_rad,
 def tri_buried(atoms, coords, tx, ty, tz, probe, ext_rad,
                          nghlst, numngh, nghstrt):
     """
-     This function determines whether one of the radial points of an atom 
-    is bured by steric contacts with other solvated radii.  tx, ty, tz    
+     This function determines whether one of the radial points of an atom
+    is bured by steric contacts with other solvated radii.  tx, ty, tz
     are points on the solvated radii of the atom in question, i.e.
     r = atom radius + solvent radius.  This function checks whether
     any of the other solvated atoms collide with this particular point.
@@ -1504,16 +1504,16 @@ def tri_buried(atoms, coords, tx, ty, tz, probe, ext_rad,
 def asa_evaluate(atoms, data, ext_coords, flags, probe,
                         ext_radius, use_data, use_ext, ndiv):
     """
-    Given a list of atoms and a numpy array of flags, for each atom,   
-    this function determines the accessible surface area for each atom    
+    Given a list of atoms and a numpy array of flags, for each atom,
+    this function determines the accessible surface area for each atom
     according to the flags given.  If use_data is true, then the ASA for
     each flagged atom will be stored in data (a numpy array if it used).
-    If use_ext is nonzero, coords is assumed to hold a list of use_ext 
+    If use_ext is nonzero, coords is assumed to hold a list of use_ext
     atom coordinates to include in the calculation. ext_rad is the radius
     of external water atoms in coords.  probe is the probe water radius,
     and triangles and ndiv both specify the precision of the calculation.
     To cite this algorithm, use
-   
+
     Shrake, A., and J. A. Rupley.  "Environment and Exposure to Solvent of
       Protein Atoms.  Lysozyme and Insulin."  J. Mol. Bio. 79 (1973): 351-
       371.
@@ -1532,11 +1532,11 @@ def asa_evaluate(atoms, data, ext_coords, flags, probe,
     atot = 0.0
     for k in range(len(atoms)):
         nghlst = []
-        if not (flags[k]): 
+        if not (flags[k]):
             continue
         a = atoms[k]
-       
-        numngh = find_neighbors(atoms, ext_coords, flags, probe, ext_radius,  
+
+        numngh = find_neighbors(atoms, ext_coords, flags, probe, ext_radius,
                  k, numatm, numext,nghlst)
         nghstrt = 0
         nts = 0
@@ -1552,10 +1552,10 @@ def asa_evaluate(atoms, data, ext_coords, flags, probe,
                          nghlst, numngh, nghstrt)
             if not buried:
                 nts = nts + 1
-        area = nts * triarea * r * r 
+        area = nts * triarea * r * r
         if use_data:
             data[k] = area
-        
+
         if (flags[k] & CONTRIB):
             atot += area
 
@@ -1563,7 +1563,7 @@ def asa_evaluate(atoms, data, ext_coords, flags, probe,
 
 def make_hbond_list(p, wmin, wmax, hbparms):
     """
-    Make list of all possible hydrogen bonding atom pairs. 
+    Make list of all possible hydrogen bonding atom pairs.
     """
 
     fai = p.residue_first_atom_indices
@@ -1605,7 +1605,7 @@ def make_hbond_list(p, wmin, wmax, hbparms):
                                 acps.append((acp, acp1, hbdist, hbdmax, hbdtor, hbenes))
                             else:
                                 acps.append((acp, acp1, hbdist, hbdmax, hbdtor, hbenel))
-    
+
                     pos = i+j
                     if pos < maxres:
                         if hbparms['use_hbond']:
@@ -1617,7 +1617,7 @@ def make_hbond_list(p, wmin, wmax, hbparms):
                                 acps.append((acp, acp1, hbdist, hbdmax, hbdtor, hbenes))
                             else:
                                 acps.append((acp, acp1, hbdist, hbdmax, hbdtor, hbenel))
-    
+
                 # look for sidechain acceptors with wmin = 0, so GLU can Hbond itself,etc
                 wmin = 0
                 for j in range(wmin, wmax):
@@ -1630,7 +1630,7 @@ def make_hbond_list(p, wmin, wmax, hbparms):
                                 for acp,acp1, in scatoms:
                                     acps.append((acp,acp1, shbdis, shbdmax, shbtor,
                                                  shbene))
-    
+
                     pos = i+j
                     if pos < maxres:
                         if hbparms['use_sidechain_hbond']:
@@ -1640,7 +1640,7 @@ def make_hbond_list(p, wmin, wmax, hbparms):
                                 for acp,acp1, in scatoms:
                                     acps.append((acp, acp1,shbdis, shbdmax, shbtor,
                                                  shbene))
-    
+
                 hblist.append(((donor, da1, da2), tuple(acps)))
 
             # for ARG NH1 or NH2 as the donor
@@ -1798,7 +1798,7 @@ def make_hbond_list(p, wmin, wmax, hbparms):
                 hblist.append(((donor, da1, da2), tuple(acps)))
 
             # for GLN OE1 as the donor
-            if rn[i] == 'GLN':  
+            if rn[i] == 'GLN':
                 donor = get_atom_named(atoms, ' OE1', start, end)
                 da1 = get_atom_named(atoms, ' CD ', start, end)
                 da2 = get_atom_named(atoms, ' CG ', start, end)
@@ -1817,14 +1817,14 @@ def make_hbond_list(p, wmin, wmax, hbparms):
                     if pos < maxres:
                         if hbparms['use_sidechain_hbond']:
                             acp = get_atom_named(atoms, ' O  ', fai[pos],
-                                                fai[pos+1])    
+                                                fai[pos+1])
                             acp1 = get_atom_named(atoms, ' C  ', fai[pos],
                                              fai[pos+1])
                             acps.append((acp, acp1, shbdis, shbdmax, shbtor,shbene))
                 hblist.append(((donor, da1, da2), tuple(acps)))
 
             # for GLN NE2 as the donor
-            if rn[i] == 'GLN':  
+            if rn[i] == 'GLN':
                 donor = get_atom_named(atoms, ' NE2', start, end)
                 da1 = get_atom_named(atoms, ' CD ', start, end)
                 da2 = get_atom_named(atoms, ' CG ', start, end)
@@ -1979,7 +1979,7 @@ def make_hbond_list(p, wmin, wmax, hbparms):
                             acps.append((acp, acp1, shbdis, shbdmax, shbtor,shbene))
                 hblist.append(((donor, da1, da2), tuple(acps)))
 
-            # for SER OG as the donor  
+            # for SER OG as the donor
             if rn[i] == 'SER':
                 donor = get_atom_named(atoms, ' OG ', start, end)
                 da1 = get_atom_named(atoms, ' CB ', start, end)
@@ -1995,7 +1995,7 @@ def make_hbond_list(p, wmin, wmax, hbparms):
                                              fai[pos+1])
                             acps.append((acp, acp1, shbdis, shbdmax, shbtor,shbene))
 
-                    pos = i+j      
+                    pos = i+j
                     if pos < maxres:
                         if hbparms['use_sidechain_hbond']:
                             acp = get_atom_named(atoms, ' O  ', fai[pos],
@@ -2029,7 +2029,7 @@ def make_hbond_list(p, wmin, wmax, hbparms):
                             acp1 = get_atom_named(atoms, ' C  ', fai[pos],
                                              fai[pos+1])
                             acps.append((acp, acp1, shbdis, shbdmax, shbtor,shbene))
-                hblist.append(((donor, da1, da2), tuple(acps)))      
+                hblist.append(((donor, da1, da2), tuple(acps)))
 
             # for TYR OH as the donor
             if rn[i] == 'TYR':
@@ -2155,7 +2155,7 @@ def make_asa_list(mol, hphob=1, hphil=0, hydrogens=0):
     atoms = mol.atoms
     fai = mol.residue_first_atom_indices
     flags = [0]*len(atoms)
-   
+
     minres, maxres = get_res_extents(mol)
 
     for r in xrange(minres, maxres):
@@ -2204,7 +2204,7 @@ def angle(a1, a2, a3):
     """Angle in degrees between 3 atoms"""
     x1 = a1.x - a2.x
     y1 = a1.y - a2.y
-    z1 = a1.z - a2.z      
+    z1 = a1.z - a2.z
 
     x2 = a3.x - a2.x
     y2 = a3.y - a2.y
@@ -2297,7 +2297,7 @@ def get_atom_named(atoms, atom_name, start, end):
         if atom.name == atom_name:
             return atom
 
-def get_scacceptor(atoms, start, end, res): 
+def get_scacceptor(atoms, start, end, res):
     scatoms = []
     for arec in RESIDUES[res]:
         if arec[7] and arec[0] <> ' O  ':
@@ -2305,7 +2305,7 @@ def get_scacceptor(atoms, start, end, res):
             try:
                 acp1 = acp.first_parent
                 scatoms.append((acp,acp1))
-            except AttributeError: pass 
+            except AttributeError: pass
     return scatoms
 
 def make_hbtab_loos(p, hblist, ANGLE=angle,
@@ -2314,7 +2314,7 @@ def make_hbtab_loos(p, hblist, ANGLE=angle,
     for dlist, alist in hblist:
         d1, da1, da2 = dlist
         try: Close = d1.close
-	except AttributeError: continue
+        except AttributeError: continue
 
         for acp, acp1, hbd, hbdmax, hbtors, hbene in alist:
             # for sidechains relax orientation of donor
@@ -2329,14 +2329,14 @@ def make_hbtab_loos(p, hblist, ANGLE=angle,
 #                       print dist, d1.name, p.res_pdb_number[d1.resnum], acp.name, \
 #                             p.res_pdb_number[acp.resnum]
                         hbtab_loos.append((d1, acp, dist))
-            elif (acp.name == ' OG ' or acp.name == ' OG1' or 
-                acp.name == ' OH ' or 
+            elif (acp.name == ' OG ' or acp.name == ' OG1' or
+                acp.name == ' OH ' or
                 acp.name == ' ND1' or acp.name == ' ND2' or acp.name == ' OD2' or
                 acp.name == ' SG ' or acp.name == ' NE2' or acp.name == ' OE2' or
                 acp.name == ' NE1' or acp.name == ' OE1' or acp.name == ' OD1'):
                 if Close(acp, hbdmax):
                     if ANGLE(d1, acp, acp1) > 90.0:
-                        dist = d1.distance(acp)   
+                        dist = d1.distance(acp)
 #                       print dist, d1.name, p.res_pdb_number[d1.resnum], acp.name, \
 #                             p.res_pdb_number[acp.resnum]
                         hbtab_loos.append((d1, acp, dist))
@@ -2363,18 +2363,18 @@ def _ishbonded_loos(p,atom, hbtab_loos,numint_loos):
     """
     rn = p.residue_names
     for rec in hbtab_loos:
-	try:
-		d1, acp, dist = rec
-		if (atom.resnum==d1.resnum and \
-		    rn[atom.resnum]==rn[d1.resnum] and \
-		    atom.name==d1.name):
-		    numint_loos = numint_loos + 1
-		    return 1,numint_loos
-		elif (atom.resnum==acp.resnum and \
-		    rn[atom.resnum]==rn[acp.resnum] and \
-		    atom.name==acp.name):
-		    numint_loos = numint_loos + 1
-		    return 1,numint_loos
+        try:
+            d1, acp, dist = rec
+            if (atom.resnum==d1.resnum and \
+                rn[atom.resnum]==rn[d1.resnum] and \
+                atom.name==d1.name):
+                numint_loos = numint_loos + 1
+                return 1,numint_loos
+            elif (atom.resnum==acp.resnum and \
+                rn[atom.resnum]==rn[acp.resnum] and \
+                atom.name==acp.name):
+                numint_loos = numint_loos + 1
+                return 1,numint_loos
         except AttributeError: continue
     return 0,numint_loos
 
@@ -2396,8 +2396,8 @@ def mk_o2_solv(prot,atoms,start,end,acp,sp,tp,numvirt,
     #define a new single list zmatrix index
     ozmindx = [0,0,0]
 
-    #use the O as the first parent     
-    ozmindx[0] = acp      
+    #use the O as the first parent
+    ozmindx[0] = acp
 
     #use the C (same res) as the second parent
     ozmindx[1] = sp
@@ -2405,7 +2405,7 @@ def mk_o2_solv(prot,atoms,start,end,acp,sp,tp,numvirt,
     #use the CA (same res) as the third parent
     ozmindx[2] = tp
 
-    #coords of the first parent, second and third    
+    #coords of the first parent, second and third
     coordsfp = acp.coords()
     coordssp = sp.coords()
     coordstp = tp.coords()
@@ -2422,14 +2422,14 @@ def mk_o2_solv(prot,atoms,start,end,acp,sp,tp,numvirt,
     gotone = 0
     scale = 0.9
     for atom in atoms:
-        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'): 
+        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'):
             atm_crds = atom.coords()
             atm_rad = scale * atom.radius
             if atom.name == ' H  ':
-                # NH radius is 0.9, and H--O dist is 1.95
-                # and H won't bump its own water of hydration
+            # NH radius is 0.9, and H--O dist is 1.95
+            # and H won't bump its own water of hydration
                 hsd = 1.94
-            else:      
+            else:
                 hsd = (ext_rad + atm_rad)
 
             if _close(owat2_crds, atm_crds, hsd):
@@ -2452,7 +2452,7 @@ def mk_o2_solv(prot,atoms,start,end,acp,sp,tp,numvirt,
         xx2,yy2,zz2 = owat2_crds
         format16 = 'ATOM    900  O   HOH   921    %8.3f%8.3f%8.3f%6.2f%6.2f\n'
         watpdb.write(format16 % (xx2,yy2,zz2, 0.0, 0.0))
-        
+
     #If the 180 worked bail out and go to NH
 #   if isbump < 1 :
 #       return numvirt
@@ -2467,15 +2467,15 @@ def mk_o2_solv(prot,atoms,start,end,acp,sp,tp,numvirt,
     # check for bumps of virt water with other atoms
     isbump = 0
     for atom in atoms:
-        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'): 
+        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'):
             atm_crds = atom.coords()
             atm_rad = scale * atom.radius
             if atom.name == ' H  ':
-                # NH radius is 0.9, and H--O dist is 1.95        
-                # and H won't bump its own water of hydration        
+                # NH radius is 0.9, and H--O dist is 1.95
+                # and H won't bump its own water of hydration
                 hsd = 1.94
-            else:        
-                hsd = (ext_rad + atm_rad)        
+            else:
+                hsd = (ext_rad + atm_rad)
 
             if _close(owat1_crds, atm_crds, hsd):
                 #here only need the first instance of a bump
@@ -2489,7 +2489,7 @@ def mk_o2_solv(prot,atoms,start,end,acp,sp,tp,numvirt,
         format15 = 'ATOM    900  O   HOH   922    %8.3f%8.3f%8.3f%6.2f%6.2f\n'
         if watpdb and (tryall or not gotone):
             watpdb.write(format15 % (xx1,yy1,zz1, 0.0, 50.0))
-            
+
         if gotone == 0:
             wat_coord.append((xx1,yy1,zz1))
             gotone = 1
@@ -2512,15 +2512,15 @@ def mk_o2_solv(prot,atoms,start,end,acp,sp,tp,numvirt,
     # check for bumps of virt water with other atoms
     isbump = 0
     for atom in atoms:
-        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'): 
+        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'):
             atm_crds = atom.coords()
             atm_rad = scale * atom.radius
             if atom.name == ' H  ':
-                # NH radius is 0.9, and H--O dist is 1.95        
-                # and H won't bump its own water of hydration        
+                # NH radius is 0.9, and H--O dist is 1.95
+                # and H won't bump its own water of hydration
                 hsd = 1.94
-            else:        
-                hsd = (ext_rad + atm_rad)        
+            else:
+                hsd = (ext_rad + atm_rad)
 
             if _close(owat3_crds, atm_crds, hsd):
                 #here only need the first instance of a bump
@@ -2534,7 +2534,7 @@ def mk_o2_solv(prot,atoms,start,end,acp,sp,tp,numvirt,
         format17 = 'ATOM    900  O   HOH   923    %8.3f%8.3f%8.3f%6.2f%6.2f\n'
         if watpdb and (tryall or not gotone):
             watpdb.write(format17 % (xx3,yy3,zz3, 0.0, 50.0))
-        
+
         if gotone == 0:
             wat_coord.append((xx3,yy3,zz3))
             gotone = 1
@@ -2558,15 +2558,15 @@ def mk_o2_solv(prot,atoms,start,end,acp,sp,tp,numvirt,
     # check for bumps of virt water with other atoms
     isbump = 0
     for atom in atoms:
-        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'): 
+        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'):
             atm_crds = atom.coords()
             atm_rad = scale * atom.radius
             if atom.name == ' H  ':
-                # NH radius is 0.9, and H--O dist is 1.95        
-                # and H won't bump its own water of hydration        
+                # NH radius is 0.9, and H--O dist is 1.95
+                # and H won't bump its own water of hydration
                 hsd = 1.94
-            else:        
-                hsd = (ext_rad + atm_rad)        
+            else:
+                hsd = (ext_rad + atm_rad)
 
             if _close(owat4_crds, atm_crds, hsd):
                 #here only need the first instance of a bump
@@ -2604,15 +2604,15 @@ def mk_o2_solv(prot,atoms,start,end,acp,sp,tp,numvirt,
     # check for bumps of virt water with other atoms
     isbump = 0
     for atom in atoms:
-        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'): 
+        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'):
             atm_crds = atom.coords()
             atm_rad = scale * atom.radius
             if atom.name == ' H  ':
-                # NH radius is 0.9, and H--O dist is 1.95        
-                # and H won't bump its own water of hydration        
+                # NH radius is 0.9, and H--O dist is 1.95
+                # and H won't bump its own water of hydration
                 hsd = 1.94
-            else:        
-                hsd = (ext_rad + atm_rad)        
+            else:
+                hsd = (ext_rad + atm_rad)
 
             if _close(owat5_crds, atm_crds, hsd):
                 #here only need the first instance of a bump
@@ -2626,7 +2626,7 @@ def mk_o2_solv(prot,atoms,start,end,acp,sp,tp,numvirt,
         format17 = 'ATOM    900  O   HOH   925    %8.3f%8.3f%8.3f%6.2f%6.2f\n'
         if watpdb and (tryall or not gotone):
             watpdb.write(format17 % (xx5,yy5,zz5, 0.0, 50.0))
-        
+
         if gotone == 0:
             wat_coord.append((xx5,yy5,zz5))
             gotone = 1
@@ -2634,17 +2634,17 @@ def mk_o2_solv(prot,atoms,start,end,acp,sp,tp,numvirt,
         xx5,yy5,zz5 = owat5_crds
         format17 = 'ATOM    900  O   HOH   925    %8.3f%8.3f%8.3f%6.2f%6.2f\n'
         watpdb.write(format17 % (xx5,yy5,zz5, 0.0, 0.0))
-        
+
     return numvirt,wat_coord
 
 def mk_nh_solv(prot,atoms,start,end,donor,sp,tp,numvirt,
                tryall=0, watpdb=None, ext_rad=1.25):
     wat_coord = []
     #define a new single list zmatrix index
-    nzmindx = [0,0,0]        
+    nzmindx = [0,0,0]
 
     #use the N as the first parent
-    nzmindx[0] = donor      
+    nzmindx[0] = donor
 
     #use the CA as the second parent
     nzmindx[1] = sp
@@ -2668,15 +2668,15 @@ def mk_nh_solv(prot,atoms,start,end,donor,sp,tp,numvirt,
     gotone = 0
     scale = 0.9
     for atom in atoms:
-        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'): 
+        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'):
             atm_crds = atom.coords()
             atm_rad = scale * atom.radius
             if atom.name == ' H  ':
-                # NH radius is 0.9, and H--O dist is 1.95        
-                # and H won't bump its own water of hydration        
+                # NH radius is 0.9, and H--O dist is 1.95
+                # and H won't bump its own water of hydration
                 hsd = 1.94
-            else:        
-                hsd = (ext_rad + atm_rad)        
+            else:
+                hsd = (ext_rad + atm_rad)
 
             if _close(nwat_crds, atm_crds, hsd):
                 #here only need the first instance of a bump
@@ -2690,7 +2690,7 @@ def mk_nh_solv(prot,atoms,start,end,donor,sp,tp,numvirt,
         format14 = 'ATOM    900  O   HOH   910    %8.3f%8.3f%8.3f%6.2f%6.2f\n'
         if watpdb and (tryall or not gotone):
             watpdb.write(format14 % (xx,yy,zz, 0.0, 50.0))
-            
+
         if gotone == 0:
             wat_coord.append((xx,yy,zz))
             gotone = 1
@@ -2791,7 +2791,7 @@ def mk_nh_solv(prot,atoms,start,end,donor,sp,tp,numvirt,
         xx,yy,zz = nwat_crds
         format14 = 'ATOM    900  O   HOH   910    %8.3f%8.3f%8.3f%6.2f%6.2f\n'
         watpdb.write(format14 % (xx,yy,zz, 0.0, 0.0))
-        
+
 #       return numvirt
 
     #define the distance, angle, and torsion for right side
@@ -2884,7 +2884,7 @@ def mk_nh_solv(prot,atoms,start,end,donor,sp,tp,numvirt,
         xx,yy,zz = nwat_crds
         format14 = 'ATOM    900  O   HOH   910    %8.3f%8.3f%8.3f%6.2f%6.2f\n'
         watpdb.write(format14 % (xx,yy,zz, 0.0, 0.0))
-        
+
 #       return numvirt
 
     return numvirt,wat_coord
@@ -2901,7 +2901,7 @@ def mk_amid_solv(prot,atoms,start,end,donor,sp,tp,numvirt,
     #use the C (prev res) as the second parent
     nzmindx[1] = sp
 
-    #use the O (prev res) as the third parent          
+    #use the O (prev res) as the third parent
     nzmindx[2] = tp
 
     #define the distance, angle, and torsion
@@ -2910,8 +2910,8 @@ def mk_amid_solv(prot,atoms,start,end,donor,sp,tp,numvirt,
     #coords of the first parent, second and third
     coordsfp = donor.coords()
     coordssp = sp.coords()
-    coordstp = tp.coords() 
-   
+    coordstp = tp.coords()
+
     nwat_crds = []
     nwat_crds = ztox(coordsfp, coordssp, coordstp, nzmvalu, nzmindx)
 
@@ -2923,11 +2923,11 @@ def mk_amid_solv(prot,atoms,start,end,donor,sp,tp,numvirt,
             atm_crds = atom.coords()
             atm_rad = scale * atom.radius
             if atom.name == ' H  ':
-                # NH radius is 0.9, and H--O dist is 1.95        
-                # and H won't bump its own water of hydration        
+                # NH radius is 0.9, and H--O dist is 1.95
+                # and H won't bump its own water of hydration
                 hsd = 1.94
-            else:        
-                hsd = (ext_rad + atm_rad)        
+            else:
+                hsd = (ext_rad + atm_rad)
 
             if _close(nwat_crds, atm_crds, hsd):
                 #here only need the first instance of a bump
@@ -2944,7 +2944,7 @@ def mk_amid_solv(prot,atoms,start,end,donor,sp,tp,numvirt,
         xx,yy,zz = nwat_crds
         format14 = 'ATOM    900  O   HOH   911    %8.3f%8.3f%8.3f%6.2f%6.2f\n'
         watpdb.write(format14 % (xx,yy,zz, 0.0, 0.0))
-        
+
 
     return numvirt,wat_coord
 
@@ -2953,7 +2953,7 @@ def mk_oh_solv(prot,atoms,start,end,acp,sp,tp,numvirt,tryall=0,watpdb=None,ext_r
     #define a new single list zmatrix index
     ozmindx = [0,0,0]
 
-    #use the O as the first parent 
+    #use the O as the first parent
     ozmindx[0] = acp
 
     #use the C (same res) as the second parent
@@ -2978,15 +2978,15 @@ def mk_oh_solv(prot,atoms,start,end,acp,sp,tp,numvirt,tryall=0,watpdb=None,ext_r
     isbump = 0
     scale = 0.9
     for atom in atoms:
-        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'): 
+        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'):
             atm_crds = atom.coords()
             atm_rad = scale * atom.radius
             if atom.name == ' H  ':
-                # NH radius is 0.9, and H--O dist is 1.95        
-                # and H won't bump its own water of hydration        
+                # NH radius is 0.9, and H--O dist is 1.95
+                # and H won't bump its own water of hydration
                 hsd = 1.94
-            else:        
-                hsd = (ext_rad + atm_rad)        
+            else:
+                hsd = (ext_rad + atm_rad)
 
             if _close(owat1_crds, atm_crds, hsd):
                 #here only need the first instance of a bump
@@ -3004,7 +3004,7 @@ def mk_oh_solv(prot,atoms,start,end,acp,sp,tp,numvirt,tryall=0,watpdb=None,ext_r
         xx1,yy1,zz1 = owat1_crds
         format15 = 'ATOM    900  O   HOH   922    %8.3f%8.3f%8.3f%6.2f%6.2f\n'
         watpdb.write(format15 % (xx1,yy1,zz1, 0.0, 0.0))
-        
+
     #If this worked bail out and go to NH
     if isbump < 1 and not tryall:
         return numvirt,wat_coord
@@ -3019,23 +3019,23 @@ def mk_oh_solv(prot,atoms,start,end,acp,sp,tp,numvirt,tryall=0,watpdb=None,ext_r
     # check for bumps of virt water with other atoms
     isbump = 0
     for atom in atoms:
-        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'): 
+        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'):
             atm_crds = atom.coords()
             atm_rad = scale * atom.radius
             if atom.name == ' H  ':
-                # NH radius is 0.9, and H--O dist is 1.95        
-                # and H won't bump its own water of hydration        
+                # NH radius is 0.9, and H--O dist is 1.95
+                # and H won't bump its own water of hydration
                 hsd = 1.94
-            else:        
-                hsd = (ext_rad + atm_rad)        
+            else:
+                hsd = (ext_rad + atm_rad)
 
             if _close(owat3_crds, atm_crds, hsd):
                 #here only need the first instance of a bump
                 isbump = 1
                 break
 
-    # if no bump write out virtual water   
-    if not isbump:  
+    # if no bump write out virtual water
+    if not isbump:
         numvirt = numvirt + 1
         xx3,yy3,zz3 = owat3_crds
         format17 = 'ATOM    900  O   HOH   923    %8.3f%8.3f%8.3f%6.2f%6.2f\n'
@@ -3045,7 +3045,7 @@ def mk_oh_solv(prot,atoms,start,end,acp,sp,tp,numvirt,tryall=0,watpdb=None,ext_r
         xx3,yy3,zz3 = owat3_crds
         format17 = 'ATOM    900  O   HOH   923    %8.3f%8.3f%8.3f%6.2f%6.2f\n'
         watpdb.write(format17 % (xx3,yy3,zz3, 0.0, 0.0))
- 
+
     #If this worked bail out and go to NH
     if isbump < 1 and not tryall:
         return numvirt,wat_coord
@@ -3060,23 +3060,23 @@ def mk_oh_solv(prot,atoms,start,end,acp,sp,tp,numvirt,tryall=0,watpdb=None,ext_r
     # check for bumps of virt water with other atoms
     isbump = 0
     for atom in atoms:
-        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'): 
+        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'):
             atm_crds = atom.coords()
             atm_rad = scale * atom.radius
             if atom.name == ' H  ':
-                # NH radius is 0.9, and H--O dist is 1.95        
-                # and H won't bump its own water of hydration        
+                # NH radius is 0.9, and H--O dist is 1.95
+                # and H won't bump its own water of hydration
                 hsd = 1.94
-            else:        
-                hsd = (ext_rad + atm_rad)        
+            else:
+                hsd = (ext_rad + atm_rad)
 
             if _close(owat4_crds, atm_crds, hsd):
                 #here only need the first instance of a bump
                 isbump = 1
                 break
 
-    # if no bump write out virtual water   
-    if not isbump:  
+    # if no bump write out virtual water
+    if not isbump:
         numvirt = numvirt + 1
         xx4,yy4,zz4 = owat4_crds
         format17 = 'ATOM    900  O   HOH   924    %8.3f%8.3f%8.3f%6.2f%6.2f\n'
@@ -3086,7 +3086,7 @@ def mk_oh_solv(prot,atoms,start,end,acp,sp,tp,numvirt,tryall=0,watpdb=None,ext_r
         xx4,yy4,zz4 = owat4_crds
         format17 = 'ATOM    900  O   HOH   924    %8.3f%8.3f%8.3f%6.2f%6.2f\n'
         watpdb.write(format17 % (xx4,yy4,zz4, 0.0, 0.0))
-        
+
     #If this worked bail out and go to NH
     if isbump < 1 and not tryall :
         return numvirt,wat_coord
@@ -3101,23 +3101,23 @@ def mk_oh_solv(prot,atoms,start,end,acp,sp,tp,numvirt,tryall=0,watpdb=None,ext_r
     # check for bumps of virt water with other atoms
     isbump = 0
     for atom in atoms:
-        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'): 
+        if (prot.residue_names[atom.resnum] != 'NME') and (prot.residue_names[atom.resnum] != 'ACE'):
             atm_crds = atom.coords()
             atm_rad = scale * atom.radius
             if atom.name == ' H  ':
-                # NH radius is 0.9, and H--O dist is 1.95        
-                # and H won't bump its own water of hydration        
+                # NH radius is 0.9, and H--O dist is 1.95
+                # and H won't bump its own water of hydration
                 hsd = 1.94
-            else:        
-                hsd = (ext_rad + atm_rad)        
+            else:
+                hsd = (ext_rad + atm_rad)
 
             if _close(owat5_crds, atm_crds, hsd):
                 #here only need the first instance of a bump
                 isbump = 1
                 break
 
-    # if no bump write out virtual water   
-    if not isbump:  
+    # if no bump write out virtual water
+    if not isbump:
         numvirt = numvirt + 1
         xx5,yy5,zz5 = owat5_crds
         format17 = 'ATOM    900  O   HOH   925    %8.3f%8.3f%8.3f%6.2f%6.2f\n'
@@ -3134,7 +3134,7 @@ def mk_virt_bb_cntmult_loosHbd(prot,hblist,tryall=0,watpdb=None,ext_rad=1.25):
     """
     Places oxygen in hydrogen bonding orientation to all donors and acceptors.
     Goes thru polypeptide and calls,
-		mk_o2_solv, mk_nh_solv, mk_oh_solv, mk_amid_solv
+                mk_o2_solv, mk_nh_solv, mk_oh_solv, mk_amid_solv
     as appropriate.
     """
 
@@ -3195,25 +3195,25 @@ def mk_virt_bb_cntmult_loosHbd(prot,hblist,tryall=0,watpdb=None,ext_rad=1.25):
 
 #               print prot.res_pdb_number[acp.resnum], prot.residue_names[acp.resnum] \
 #                    , acp.name
- 
+
     #construct a virtual water along the NH axis at 2.95 from the N
     for i in range(minres,maxres):
         if rn[i] <> 'PRO':
             if not ((i == 0) and (minres == 0)):
                 start = fai[i]
                 end = fai[i+1]
-                prev = fai[i-1]      
+                prev = fai[i-1]
                 donor = get_atom_named(atoms, ' N  ', start, end)
                 sp = get_atom_named(atoms, ' CA ', start, end)
                 tp = get_atom_named(atoms, ' C  ', prev, start)
-    
+
                 bbtot = bbtot + 1
                 numposs = numposs + 1
-    
+
                 hbond, numint_loos = _ishbonded_loos(prot, donor, hbtab_loos,numint_loos)
                 if hbond:
                     numbb = numbb + 1
-    
+
                 if not hbond:
                     old_numvirt_loos = numvirt_loos
                     numvirt_loos,wcoord = mk_nh_solv(prot,atoms,start,end,donor,sp,tp, \
@@ -3224,7 +3224,7 @@ def mk_virt_bb_cntmult_loosHbd(prot,hblist,tryall=0,watpdb=None,ext_rad=1.25):
                         numbb = numbb + 1
                         num_solv = numvirt_loos - old_numvirt_loos
                         cntmult_list[i][0][2] = num_solv
-    
+
                     else:
                         cntmult_list[i][0][2] = -1
 #                   print prot.res_pdb_number[donor.resnum], prot.residue_names[donor.resnum] \
@@ -3297,8 +3297,8 @@ def mk_virt_bb_cntmult_loosHbd(prot,hblist,tryall=0,watpdb=None,ext_rad=1.25):
                 if len(wcoord) > 0:
                     wat_list.append(wcoord[0])
 
-        if rn[i] == 'ASP':   
-            start = fai[i] 
+        if rn[i] == 'ASP':
+            start = fai[i]
             end = fai[i+1]
 
             #construct virtual waters at 2.95 from the O
@@ -3333,8 +3333,8 @@ def mk_virt_bb_cntmult_loosHbd(prot,hblist,tryall=0,watpdb=None,ext_rad=1.25):
                 if len(wcoord) > 0:
                     wat_list.append(wcoord[0])
 
-        if rn[i] == 'GLN':   
-            start = fai[i] 
+        if rn[i] == 'GLN':
+            start = fai[i]
             end = fai[i+1]
 
             #construct virtual waters at 2.95 from the O
@@ -3402,7 +3402,7 @@ def mk_virt_bb_cntmult_loosHbd(prot,hblist,tryall=0,watpdb=None,ext_rad=1.25):
                 if len(wcoord) > 0:
                     wat_list.append(wcoord[0])
 
-        if rn[i] == 'HIS':  
+        if rn[i] == 'HIS':
             start = fai[i]
             end = fai[i+1]
 
@@ -3513,486 +3513,486 @@ def mk_virt_bb_cntmult_loosHbd(prot,hblist,tryall=0,watpdb=None,ext_rad=1.25):
 # There are 960 points.
 
 triangles = [
-	[ 0.142065,  0.276550,  0.950441], [-0.010435,  0.180640,  0.983494],
-	[ 0.093860,  0.192683,  0.976762], [ 0.148649,  0.117947,  0.981831],
-	[-0.164403,  0.075573,  0.983494], [-0.309310, -0.031464,  0.950441],
-	[-0.213641, -0.017153,  0.976762], [-0.164023, -0.095418,  0.981831],
-	[-0.061830,  0.090608,  0.993965], [-0.061717, -0.080548,  0.994838],
-	[-0.008704,  0.012755,  0.999881], [ 0.097504,  0.028104,  0.994838],
-	[-0.010177, -0.156740,  0.987587], [ 0.144419, -0.211636,  0.966620],
-	[ 0.095021, -0.139247,  0.985688], [ 0.149663, -0.047667,  0.987587],
-	[ 0.659784, -0.031464,  0.750796], [ 0.539741,  0.075573,  0.838432],
-	[ 0.582308, -0.017153,  0.812787], [ 0.538734, -0.095418,  0.837055],
-	[ 0.398310,  0.180640,  0.899288], [ 0.245163,  0.276550,  0.929201],
-	[ 0.299846,  0.192683,  0.934326], [ 0.251522,  0.117947,  0.960638],
-	[ 0.449659,  0.090608,  0.888593], [ 0.303643,  0.028104,  0.952371],
-	[ 0.403196,  0.012755,  0.915025], [ 0.449900, -0.080548,  0.889439],
-	[ 0.252866, -0.047667,  0.966326], [ 0.249395, -0.211636,  0.944993],
-	[ 0.302308, -0.139247,  0.942985], [ 0.399691, -0.156740,  0.903150],
-	[-0.348009,  0.509982,  0.786643], [-0.364005,  0.361769,  0.858268],
-	[-0.306882,  0.449713,  0.838798], [-0.204165,  0.470843,  0.858268],
-	[-0.368013,  0.203516,  0.907275], [-0.360619,  0.043725,  0.931688],
-	[-0.316346,  0.133354,  0.939224], [-0.215792,  0.150880,  0.964712],
-	[-0.317683,  0.294553,  0.901286], [-0.164646,  0.241277,  0.956387],
-	[-0.214764,  0.314722,  0.924568], [-0.158462,  0.403205,  0.901286],
-	[-0.061824,  0.255946,  0.964712], [ 0.090756,  0.351740,  0.931688],
-	[-0.008845,  0.343190,  0.939224], [-0.055341,  0.416881,  0.907275],
-	[-0.211240, -0.625845,  0.750796], [-0.107557, -0.536442,  0.837055],
-	[-0.196321, -0.548484,  0.812787], [-0.267147, -0.475041,  0.838432],
-	[ 0.000236, -0.429325,  0.903150], [ 0.106147, -0.309387,  0.944993],
-	[ 0.019450, -0.332267,  0.942985], [-0.047802, -0.252840,  0.966326],
-	[-0.089017, -0.448301,  0.889439], [-0.136870, -0.272499,  0.952371],
-	[-0.158871, -0.370796,  0.915025], [-0.248305, -0.385678,  0.888593],
-	[-0.201528, -0.191210,  0.960638], [-0.346897, -0.127467,  0.929201],
-	[-0.288738, -0.208962,  0.934326], [-0.313420, -0.305039,  0.899288],
-	[ 0.699503,  0.043725,  0.713291], [ 0.696646,  0.203516,  0.687943],
-	[ 0.661814,  0.133354,  0.737712], [ 0.579521,  0.150880,  0.800868],
-	[ 0.673594,  0.361769,  0.644511], [ 0.630591,  0.509983,  0.585041],
-	[ 0.613427,  0.449713,  0.649204], [ 0.526769,  0.470843,  0.707687],
-	[ 0.648047,  0.294553,  0.702334], [ 0.501791,  0.403205,  0.765266],
-	[ 0.562711,  0.314722,  0.764400], [ 0.529250,  0.241277,  0.813437],
-	[ 0.409434,  0.416881,  0.811526], [ 0.284882,  0.351740,  0.891696],
-	[ 0.379351,  0.343190,  0.859252], [ 0.438090,  0.255946,  0.861724],
-	[ 0.276003, -0.309387,  0.910001], [ 0.356751, -0.429325,  0.829704],
-	[ 0.354847, -0.332267,  0.873889], [ 0.425849, -0.252840,  0.868749],
-	[ 0.429643, -0.536442,  0.726386], [ 0.490790, -0.625845,  0.606170],
-	[ 0.501588, -0.548484,  0.669010], [ 0.576783, -0.475041,  0.664573],
-	[ 0.433318, -0.448301,  0.781832], [ 0.579301, -0.385678,  0.718097],
-	[ 0.507597, -0.370796,  0.777725], [ 0.502148, -0.272499,  0.820727],
-	[ 0.643341, -0.305039,  0.702184], [ 0.685915, -0.127466,  0.716431],
-	[ 0.634517, -0.208961,  0.744126], [ 0.564808, -0.191210,  0.802764],
-	[-0.445452,  0.498942,  0.743391], [-0.584618,  0.427737,  0.689393],
-	[-0.499292,  0.427913,  0.753391], [-0.459801,  0.350916,  0.815746],
-	[-0.707664,  0.342972,  0.617723], [-0.808789,  0.249821,  0.532399],
-	[-0.747671,  0.259481,  0.611275], [-0.715434,  0.181892,  0.674589],
-	[-0.633362,  0.349398,  0.690488], [-0.639427,  0.187484,  0.745642],
-	[-0.597104,  0.271403,  0.754856], [-0.509028,  0.272874,  0.816352],
-	[-0.595202,  0.107892,  0.796300], [-0.456318,  0.032883,  0.889209],
-	[-0.507548,  0.111690,  0.854353], [-0.463503,  0.192697,  0.864889],
-	[ 0.135742,  0.436900,  0.889209], [ 0.116528,  0.593572,  0.796300],
-	[ 0.081035,  0.513335,  0.854354], [-0.010454,  0.501854,  0.864889],
-	[ 0.091454,  0.732507,  0.674589], [ 0.062235,  0.844202,  0.532399],
-	[ 0.030958,  0.790812,  0.611275], [-0.061373,  0.783997,  0.617723],
-	[ 0.058537,  0.663770,  0.745643], [-0.094445,  0.717151,  0.690488],
-	[-0.035036,  0.654954,  0.754856], [-0.068516,  0.573476,  0.816352],
-	[-0.185164,  0.700322,  0.689393], [-0.302204,  0.596693,  0.743391],
-	[-0.216434,  0.620933,  0.753391], [-0.159133,  0.556089,  0.815746],
-	[-0.131372, -0.685178,  0.716431], [ 0.049500, -0.710273,  0.702184],
-	[-0.036748, -0.667028,  0.744125], [-0.027863, -0.595645,  0.802764],
-	[ 0.232067, -0.710273,  0.664573], [ 0.403843, -0.685178,  0.606170],
-	[ 0.327870, -0.667028,  0.669010], [ 0.342885, -0.595645,  0.726386],
-	[ 0.147936, -0.680038,  0.718097], [ 0.259470, -0.566933,  0.781832],
-	[ 0.160220, -0.607844,  0.777725], [ 0.070675, -0.566933,  0.820726],
-	[ 0.269715, -0.488718,  0.829704], [ 0.187471, -0.369801,  0.910001],
-	[ 0.180031, -0.451560,  0.873889], [ 0.080186, -0.488718,  0.868749],
-	[-0.431392, -0.137040,  0.891696], [-0.537458, -0.229271,  0.811526],
-	[-0.457871, -0.228124,  0.859251], [-0.398047, -0.314627,  0.861724],
-	[-0.630483, -0.318858,  0.707687], [-0.704780, -0.401265,  0.585040],
-	[-0.642400, -0.407254,  0.649204], [-0.582445, -0.495343,  0.644511],
-	[-0.558394, -0.320257,  0.765266], [-0.510541, -0.496059,  0.702334],
-	[-0.498210, -0.409243,  0.764399], [-0.417621, -0.404861,  0.813437],
-	[-0.443487, -0.574503,  0.687943], [-0.295735, -0.635419,  0.713291],
-	[-0.365455, -0.567647,  0.737712], [-0.351773, -0.484629,  0.800869],
-	[ 0.953363,  0.249821,  0.169376], [ 0.894196,  0.342972,  0.287722],
-	[ 0.928397,  0.259481,  0.265986], [ 0.923809,  0.181892,  0.336886],
-	[ 0.809496,  0.427738,  0.402190], [ 0.703004,  0.498942,  0.506796],
-	[ 0.756413,  0.427913,  0.494702], [ 0.744783,  0.350916,  0.567588],
-	[ 0.854704,  0.349398,  0.383930], [ 0.790242,  0.272874,  0.548687],
-	[ 0.846840,  0.271403,  0.457387], [ 0.882075,  0.187484,  0.432196],
-	[ 0.767608,  0.192697,  0.611266], [ 0.770620,  0.032883,  0.636446],
-	[ 0.803902,  0.111690,  0.584180], [ 0.861473,  0.107892,  0.496208],
-	[ 0.153263,  0.844202,  0.513647], [ 0.182623,  0.732507,  0.655807],
-	[ 0.213168,  0.790812,  0.573738], [ 0.300529,  0.783997,  0.543167],
-	[ 0.207697,  0.593572,  0.777518], [ 0.226770,  0.436900,  0.870456],
-	[ 0.263245,  0.513335,  0.816816], [ 0.351449,  0.501854,  0.790333],
-	[ 0.240944,  0.663770,  0.708065], [ 0.385598,  0.573477,  0.722799],
-	[ 0.330539,  0.654954,  0.679543], [ 0.359669,  0.717152,  0.596935],
-	[ 0.468598,  0.556089,  0.686426], [ 0.571420,  0.596694,  0.563414],
-	[ 0.496587,  0.620933,  0.606501], [ 0.442567,  0.700323,  0.560073],
-	[ 0.878628, -0.401265,  0.258841], [ 0.858857, -0.318858,  0.400866],
-	[ 0.846689, -0.407254,  0.342435], [ 0.789760, -0.495343,  0.361821],
-	[ 0.814449, -0.229271,  0.533018], [ 0.748706, -0.137040,  0.648582],
-	[ 0.760206, -0.228124,  0.608314], [ 0.706230, -0.314627,  0.634231],
-	[ 0.815396, -0.320257,  0.482250], [ 0.705126, -0.404861,  0.582139],
-	[ 0.759771, -0.409243,  0.505241], [ 0.746566, -0.496059,  0.443356],
-	[ 0.639671, -0.484629,  0.596620], [ 0.553582, -0.635419,  0.538322],
-	[ 0.627277, -0.567647,  0.533199], [ 0.679284, -0.574503,  0.456640],
-	[-0.589414,  0.770371,  0.243147], [-0.691910,  0.643752,  0.326871],
-	[-0.616865,  0.717414,  0.323721], [-0.560020,  0.727500,  0.396384],
-	[-0.771571,  0.492950,  0.402092], [-0.822949,  0.328280,  0.463667],
-	[-0.775962,  0.416237,  0.473952], [-0.721793,  0.421259,  0.549141],
-	[-0.709675,  0.576731,  0.404650], [-0.661673,  0.506272,  0.553062],
-	[-0.653675,  0.584862,  0.480256], [-0.579294,  0.662218,  0.475274],
-	[-0.598792,  0.506276,  0.620591], [-0.459869,  0.578830,  0.673406],
-	[-0.527761,  0.585660,  0.615200], [-0.516093,  0.662828,  0.542501],
-	[-0.763951, -0.314554,  0.563414], [-0.688655, -0.233611,  0.686426],
-	[-0.759240, -0.236034,  0.606500], [-0.813471, -0.156790,  0.560073],
-	[-0.595443, -0.144298,  0.790333], [-0.489504, -0.051880,  0.870456],
-	[-0.573977, -0.057979,  0.816816], [-0.628440,  0.022998,  0.777518],
-	[-0.674586, -0.149986,  0.722799], [-0.705928,  0.017632,  0.708064],
-	[-0.730382, -0.069011,  0.679543], [-0.798919, -0.073461,  0.596935],
-	[-0.748672,  0.096998,  0.655807], [-0.841976,  0.165058,  0.513646],
-	[-0.814100,  0.089811,  0.573738], [-0.839603,  0.005978,  0.543167],
-	[-0.502466,  0.829703,  0.243147], [-0.473263,  0.786703,  0.396384],
-	[-0.443147,  0.835958,  0.323721], [-0.347195,  0.878983,  0.326871],
-	[-0.429056,  0.722221,  0.542501], [-0.371337,  0.639244,  0.673406],
-	[-0.352945,  0.704953,  0.615200], [-0.253129,  0.742154,  0.620591],
-	[-0.405447,  0.780851,  0.475274], [-0.230200,  0.800706,  0.553062],
-	[-0.306298,  0.821910,  0.480256], [-0.278310,  0.871092,  0.404650],
-	[-0.129121,  0.825694,  0.549142], [-0.005662,  0.885991,  0.463667],
-	[-0.104696,  0.874305,  0.473952], [-0.177730,  0.898184,  0.402092],
-	[ 0.053324, -0.964447,  0.258841], [ 0.173326, -0.915993,  0.361821],
-	[ 0.070546, -0.936889,  0.342435], [-0.016203, -0.915993,  0.400866],
-	[ 0.287315, -0.841980,  0.456640], [ 0.389865, -0.747138,  0.538322],
-	[ 0.299891, -0.791053,  0.533199], [ 0.218068, -0.772328,  0.596620],
-	[ 0.189740, -0.876033,  0.443356], [ 0.119927, -0.804197,  0.582139],
-	[ 0.104085, -0.856678,  0.505241], [ 0.000945, -0.876033,  0.482250],
-	[ 0.035501, -0.772328,  0.634231], [-0.145350, -0.747137,  0.648582],
-	[-0.064727, -0.791053,  0.608314], [-0.083434, -0.841980,  0.533018],
-	[-0.580197, -0.796670,  0.169376], [-0.506169, -0.793915,  0.336886],
-	[-0.580090, -0.769900,  0.265986], [-0.645367, -0.707614,  0.287722],
-	[-0.414536, -0.762848,  0.496208], [-0.311566, -0.705594,  0.636446],
-	[-0.397084, -0.707854,  0.584180], [-0.459283, -0.644525,  0.611266],
-	[-0.496161, -0.753015,  0.432196], [-0.542194, -0.636371,  0.548687],
-	[-0.561458, -0.689610,  0.457387], [-0.636953, -0.668498,  0.383929],
-	[-0.598292, -0.565589,  0.567588], [-0.720899, -0.472719,  0.506796],
-	[-0.674230, -0.548348,  0.494701], [-0.693419, -0.597841,  0.402189],
-	[ 0.939203,  0.328280,  0.100644], [ 0.867672,  0.492950,  0.064390],
-	[ 0.900107,  0.416238,  0.128663], [ 0.880067,  0.421259,  0.219140],
-	[ 0.764766,  0.643752,  0.026779], [ 0.637523,  0.770371, -0.009616],
-	[ 0.694586,  0.717414,  0.053548], [ 0.671090,  0.727501,  0.142762],
-	[ 0.811827,  0.576732,  0.091203], [ 0.719976,  0.662218,  0.207610],
-	[ 0.790269,  0.584862,  0.182787], [ 0.826393,  0.506272,  0.246504],
-	[ 0.688492,  0.662828,  0.294343], [ 0.688586,  0.578830,  0.436812],
-	[ 0.727944,  0.585660,  0.356510], [ 0.795322,  0.506276,  0.333388],
-	[ 0.793692, -0.051880,  0.606104], [ 0.859336, -0.144298,  0.490632],
-	[ 0.850086, -0.057979,  0.523443], [ 0.884581,  0.022998,  0.465819],
-	[ 0.903889, -0.233611,  0.358344], [ 0.924434, -0.314554,  0.215588],
-	[ 0.937136, -0.236034,  0.257028], [ 0.968602, -0.156790,  0.192946],
-	[ 0.905342, -0.149985,  0.397316], [ 0.969804, -0.073461,  0.232558],
-	[ 0.939499, -0.069011,  0.335529], [ 0.928308,  0.017632,  0.371394],
-	[ 0.985924,  0.005978,  0.167088], [ 0.976435,  0.165058,  0.139033],
-	[ 0.974580,  0.089811,  0.205249], [ 0.946917,  0.096998,  0.306496],
-	[ 0.607263,  0.639244,  0.471804], [ 0.608542,  0.722222,  0.328744],
-	[ 0.567363,  0.704953,  0.425606], [ 0.477805,  0.742154,  0.470010],
-	[ 0.591397,  0.786703,  0.177053], [ 0.557655,  0.829704,  0.024750],
-	[ 0.535013,  0.835958,  0.122209], [ 0.448119,  0.878983,  0.163028],
-	[ 0.560284,  0.780851,  0.276323], [ 0.415585,  0.871092,  0.261700],
-	[ 0.471177,  0.821910,  0.320087], [ 0.430052,  0.800706,  0.417043],
-	[ 0.322184,  0.898184,  0.299105], [ 0.188464,  0.885991,  0.423675],
-	[ 0.283499,  0.874305,  0.393979], [ 0.335654,  0.825695,  0.453393],
-	[ 0.537751, -0.705594,  0.461477], [ 0.576908, -0.762848,  0.291960],
-	[ 0.595647, -0.707854,  0.379666], [ 0.663487, -0.644525,  0.379963],
-	[ 0.598108, -0.793915,  0.109393], [ 0.599900, -0.796670, -0.073737],
-	[ 0.637987, -0.769900,  0.015049], [ 0.706539, -0.707614,  0.009214],
-	[ 0.626586, -0.753014,  0.200898], [ 0.736836, -0.668498,  0.100914],
-	[ 0.696523, -0.689610,  0.198229], [ 0.714913, -0.636371,  0.289709],
-	[ 0.795922, -0.597841,  0.095369], [ 0.862509, -0.472719,  0.180596],
-	[ 0.814860, -0.548347,  0.187932], [ 0.773913, -0.565589,  0.284898],
-	[-0.635102,  0.754881,  0.163708], [-0.741664,  0.665917,  0.080560],
-	[-0.708318,  0.686408,  0.164710], [-0.737669,  0.628238,  0.247309],
-	[-0.831159,  0.556009, -0.005306], [-0.898352,  0.430169, -0.088985],
-	[-0.885636,  0.464328, -0.007038], [-0.913858,  0.399457,  0.072784],
-	[-0.807220,  0.584943,  0.078979], [-0.889599,  0.428997,  0.156767],
-	[-0.837161,  0.522654,  0.161227], [-0.801228,  0.545692,  0.245467],
-	[-0.903436,  0.359676,  0.233317], [-0.868637,  0.312790,  0.384229],
-	[-0.867415,  0.385231,  0.314941], [-0.817330,  0.477436,  0.322531],
-	[-0.893722,  0.147515,  0.423675], [-0.953826,  0.027443,  0.299105],
-	[-0.917487,  0.054759,  0.393979], [-0.891236, -0.011527,  0.453392],
-	[-0.981859, -0.096824,  0.163028], [-0.975905, -0.216788,  0.024750],
-	[-0.973474, -0.193423,  0.122209], [-0.948166, -0.263883,  0.177053],
-	[-0.962650, -0.069407,  0.261700], [-0.931373, -0.237045,  0.276323],
-	[-0.937120, -0.139103,  0.320087], [-0.902383, -0.108539,  0.417042],
-	[-0.894372, -0.303357,  0.328744], [-0.816640, -0.332417,  0.471803],
-	[-0.863280, -0.271307,  0.425606], [-0.865270, -0.174351,  0.470010],
-	[ 0.025419,  0.922888,  0.384229], [-0.005554,  0.972385,  0.233317],
-	[-0.042483,  0.948160,  0.314941], [-0.146601,  0.935137,  0.322531],
-	[-0.038797,  0.996593,  0.072784], [-0.073048,  0.993351, -0.088985],
-	[-0.109492,  0.993963, -0.007038], [-0.214725,  0.976660, -0.005306],
-	[-0.075148,  0.984772,  0.156767], [-0.250395,  0.964917,  0.078979],
-	[-0.181476,  0.970089,  0.161227], [-0.216030,  0.945028,  0.245467],
-	[-0.349695,  0.933393,  0.080560], [-0.471386,  0.866600,  0.163708],
-	[-0.380933,  0.909814,  0.164710], [-0.316066,  0.915937,  0.247309],
-	[ 0.125737, -0.975487,  0.180596], [ 0.266524, -0.959098,  0.095369],
-	[ 0.213532, -0.958689,  0.187932], [ 0.244515, -0.926847,  0.284898],
-	[ 0.401328, -0.915888,  0.009214], [ 0.523132, -0.849056, -0.073737],
-	[ 0.484320, -0.874762,  0.015049], [ 0.521220, -0.846382,  0.109393],
-	[ 0.353858, -0.929839,  0.100914], [ 0.472752, -0.857989,  0.200898],
-	[ 0.388214, -0.899997,  0.198229], [ 0.331935, -0.897712,  0.289709],
-	[ 0.500020, -0.815316,  0.291960], [ 0.460982, -0.757980,  0.461477],
-	[ 0.441980, -0.812716,  0.379666], [ 0.358276, -0.852799,  0.379963],
-	[-0.241049, -0.757980,  0.606104], [-0.343909, -0.815316,  0.465819],
-	[-0.255929, -0.812716,  0.523443], [-0.178924, -0.852799,  0.490632],
-	[-0.435542, -0.846382,  0.306496], [-0.509680, -0.849056,  0.139033],
-	[-0.438935, -0.874762,  0.205249], [-0.365007, -0.915888,  0.167088],
-	[-0.354854, -0.857989,  0.371394], [-0.285159, -0.929839,  0.232558],
-	[-0.278254, -0.899997,  0.335529], [-0.190400, -0.897712,  0.397316],
-	[-0.207127, -0.959099,  0.192946], [-0.044118, -0.975487,  0.215588],
-	[-0.121865, -0.958690,  0.257028], [-0.112000, -0.926847,  0.358344],
-	[-0.790032, -0.430169,  0.436811], [-0.868215, -0.399457,  0.294343],
-	[-0.810741, -0.464328,  0.356510], [-0.761384, -0.556010,  0.333388],
-	[-0.922091, -0.359676,  0.142762], [-0.949774, -0.312790, -0.009616],
-	[-0.921265, -0.385231,  0.053548], [-0.878258, -0.477436,  0.026779],
-	[-0.879125, -0.428997,  0.207610], [-0.833008, -0.545692,  0.091203],
-	[-0.832720, -0.522654,  0.182787], [-0.772708, -0.584943,  0.246504],
-	[-0.775352, -0.628238,  0.064390], [-0.648094, -0.754881,  0.100644],
-	[-0.715744, -0.686408,  0.128662], [-0.713115, -0.665917,  0.219140],
-	[ 0.790032,  0.430169, -0.436811], [ 0.761384,  0.556010, -0.333388],
-	[ 0.810741,  0.464328, -0.356510], [ 0.868215,  0.399457, -0.294343],
-	[ 0.713115,  0.665917, -0.219140], [ 0.648094,  0.754881, -0.100644],
-	[ 0.715744,  0.686408, -0.128662], [ 0.775352,  0.628238, -0.064390],
-	[ 0.772708,  0.584943, -0.246504], [ 0.833008,  0.545692, -0.091203],
-	[ 0.832720,  0.522654, -0.182787], [ 0.879125,  0.428997, -0.207610],
-	[ 0.878258,  0.477436, -0.026779], [ 0.949774,  0.312790,  0.009616],
-	[ 0.921265,  0.385231, -0.053548], [ 0.922091,  0.359676, -0.142762],
-	[ 0.906224, -0.216788, -0.362990], [ 0.966347, -0.096824, -0.238325],
-	[ 0.942512, -0.193423, -0.272506], [ 0.940940, -0.263883, -0.212124],
-	[ 0.994380,  0.027443, -0.102248], [ 0.988407,  0.147515,  0.035935],
-	[ 0.998499,  0.054760, -0.000736], [ 0.997870, -0.011527,  0.064215],
-	[ 0.987702, -0.069407, -0.140095], [ 0.993741, -0.108539,  0.026419],
-	[ 0.987329, -0.139103, -0.076371], [ 0.964751, -0.237045, -0.114300],
-	[ 0.980585, -0.174351,  0.089743], [ 0.936624, -0.332417,  0.110612],
-	[ 0.961207, -0.271307,  0.049741], [ 0.951483, -0.303357, -0.051523],
-	[ 0.031928,  0.993351, -0.110612], [ 0.064406,  0.996593,  0.051523],
-	[ 0.097795,  0.993963, -0.049741], [ 0.195143,  0.976660, -0.089743],
-	[ 0.097319,  0.972385,  0.212125], [ 0.128517,  0.922888,  0.362990],
-	[ 0.163503,  0.948160,  0.272506], [ 0.262143,  0.935137,  0.238325],
-	[ 0.130991,  0.984773,  0.114300], [ 0.295459,  0.945028,  0.140095],
-	[ 0.230424,  0.970089,  0.076371], [ 0.261222,  0.964917, -0.026419],
-	[ 0.388078,  0.915937,  0.102248], [ 0.497708,  0.866600, -0.035935],
-	[ 0.415016,  0.909814,  0.000736], [ 0.353062,  0.933394, -0.064215],
-	[ 0.868637, -0.312790, -0.384229], [ 0.903436, -0.359676, -0.233317],
-	[ 0.867415, -0.385231, -0.314941], [ 0.817330, -0.477436, -0.322531],
-	[ 0.913858, -0.399457, -0.072784], [ 0.898352, -0.430169,  0.088985],
-	[ 0.885636, -0.464328,  0.007038], [ 0.831159, -0.556009,  0.005306],
-	[ 0.889599, -0.428997, -0.156767], [ 0.807220, -0.584943, -0.078979],
-	[ 0.837161, -0.522654, -0.161227], [ 0.801228, -0.545692, -0.245467],
-	[ 0.741664, -0.665917, -0.080560], [ 0.635102, -0.754881, -0.163708],
-	[ 0.708318, -0.686408, -0.164710], [ 0.737669, -0.628238, -0.247309],
-	[-0.537751,  0.705594, -0.461477], [-0.663487,  0.644525, -0.379963],
-	[-0.595647,  0.707854, -0.379666], [-0.576908,  0.762848, -0.291960],
-	[-0.773913,  0.565589, -0.284898], [-0.862509,  0.472719, -0.180596],
-	[-0.814860,  0.548347, -0.187932], [-0.795922,  0.597841, -0.095369],
-	[-0.714913,  0.636371, -0.289709], [-0.736836,  0.668498, -0.100914],
-	[-0.696523,  0.689610, -0.198229], [-0.626586,  0.753014, -0.200898],
-	[-0.706539,  0.707614, -0.009214], [-0.599900,  0.796670,  0.073737],
-	[-0.637987,  0.769900, -0.015049], [-0.598108,  0.793915, -0.109393],
-	[-0.988407, -0.147515, -0.035935], [-0.994380, -0.027443,  0.102248],
-	[-0.998499, -0.054760,  0.000736], [-0.997870,  0.011527, -0.064215],
-	[-0.966347,  0.096824,  0.238325], [-0.906224,  0.216788,  0.362990],
-	[-0.942512,  0.193423,  0.272506], [-0.940940,  0.263883,  0.212124],
-	[-0.987702,  0.069407,  0.140095], [-0.964751,  0.237045,  0.114300],
-	[-0.987329,  0.139103,  0.076371], [-0.993741,  0.108539, -0.026419],
-	[-0.951483,  0.303357,  0.051523], [-0.936624,  0.332417, -0.110612],
-	[-0.961207,  0.271307, -0.049741], [-0.980585,  0.174351, -0.089743],
-	[-0.460982,  0.757980, -0.461477], [-0.500020,  0.815316, -0.291960],
-	[-0.441980,  0.812716, -0.379666], [-0.358276,  0.852799, -0.379963],
-	[-0.521220,  0.846382, -0.109393], [-0.523132,  0.849056,  0.073737],
-	[-0.484320,  0.874762, -0.015049], [-0.401328,  0.915888, -0.009214],
-	[-0.472752,  0.857989, -0.200898], [-0.353858,  0.929839, -0.100914],
-	[-0.388214,  0.899997, -0.198229], [-0.331935,  0.897712, -0.289709],
-	[-0.266524,  0.959098, -0.095369], [-0.125737,  0.975487, -0.180596],
-	[-0.213532,  0.958689, -0.187932], [-0.244515,  0.926847, -0.284898],
-	[-0.025419, -0.922888, -0.384229], [ 0.146601, -0.935137, -0.322531],
-	[ 0.042483, -0.948160, -0.314941], [ 0.005554, -0.972385, -0.233317],
-	[ 0.316066, -0.915937, -0.247309], [ 0.471386, -0.866600, -0.163708],
-	[ 0.380933, -0.909814, -0.164710], [ 0.349695, -0.933393, -0.080560],
-	[ 0.216030, -0.945028, -0.245467], [ 0.250395, -0.964917, -0.078979],
-	[ 0.181476, -0.970089, -0.161227], [ 0.075148, -0.984772, -0.156767],
-	[ 0.214725, -0.976660,  0.005306], [ 0.073048, -0.993351,  0.088985],
-	[ 0.109492, -0.993963,  0.007038], [ 0.038797, -0.996593, -0.072784],
-	[-0.128517, -0.922888, -0.362990], [-0.097319, -0.972385, -0.212125],
-	[-0.163503, -0.948160, -0.272506], [-0.262143, -0.935137, -0.238325],
-	[-0.064406, -0.996593, -0.051523], [-0.031928, -0.993351,  0.110612],
-	[-0.097795, -0.993963,  0.049741], [-0.195143, -0.976660,  0.089743],
-	[-0.130991, -0.984773, -0.114300], [-0.261222, -0.964917,  0.026419],
-	[-0.230424, -0.970089, -0.076371], [-0.295459, -0.945028, -0.140095],
-	[-0.353062, -0.933394,  0.064215], [-0.497708, -0.866600,  0.035935],
-	[-0.415016, -0.909814, -0.000736], [-0.388078, -0.915937, -0.102248],
-	[-0.688586, -0.578830, -0.436812], [-0.688492, -0.662828, -0.294343],
-	[-0.727944, -0.585660, -0.356510], [-0.795322, -0.506276, -0.333388],
-	[-0.671090, -0.727501, -0.142762], [-0.637523, -0.770371,  0.009616],
-	[-0.694586, -0.717414, -0.053548], [-0.764766, -0.643752, -0.026779],
-	[-0.719976, -0.662218, -0.207610], [-0.811827, -0.576732, -0.091203],
-	[-0.790269, -0.584862, -0.182787], [-0.826393, -0.506272, -0.246504],
-	[-0.867672, -0.492950, -0.064390], [-0.939203, -0.328280, -0.100644],
-	[-0.900107, -0.416238, -0.128663], [-0.880067, -0.421259, -0.219140],
-	[ 0.720899,  0.472719, -0.506796], [ 0.598292,  0.565589, -0.567588],
-	[ 0.674230,  0.548348, -0.494701], [ 0.693419,  0.597841, -0.402189],
-	[ 0.459283,  0.644525, -0.611266], [ 0.311566,  0.705594, -0.636446],
-	[ 0.397084,  0.707854, -0.584180], [ 0.414536,  0.762848, -0.496208],
-	[ 0.542194,  0.636371, -0.548687], [ 0.496161,  0.753015, -0.432196],
-	[ 0.561458,  0.689610, -0.457387], [ 0.636953,  0.668498, -0.383929],
-	[ 0.506169,  0.793915, -0.336886], [ 0.580197,  0.796670, -0.169376],
-	[ 0.580090,  0.769900, -0.265986], [ 0.645367,  0.707614, -0.287722],
-	[ 0.975905,  0.216788, -0.024750], [ 0.981859,  0.096824, -0.163028],
-	[ 0.973474,  0.193423, -0.122209], [ 0.948166,  0.263883, -0.177053],
-	[ 0.953826, -0.027443, -0.299105], [ 0.893722, -0.147515, -0.423675],
-	[ 0.917487, -0.054759, -0.393979], [ 0.891236,  0.011527, -0.453392],
-	[ 0.962650,  0.069407, -0.261700], [ 0.902383,  0.108539, -0.417042],
-	[ 0.937120,  0.139103, -0.320087], [ 0.931373,  0.237045, -0.276323],
-	[ 0.865270,  0.174351, -0.470010], [ 0.816640,  0.332417, -0.471803],
-	[ 0.863280,  0.271307, -0.425606], [ 0.894372,  0.303357, -0.328744],
-	[ 0.509680,  0.849056, -0.139033], [ 0.435542,  0.846382, -0.306496],
-	[ 0.438935,  0.874762, -0.205249], [ 0.365007,  0.915888, -0.167088],
-	[ 0.343909,  0.815316, -0.465819], [ 0.241049,  0.757980, -0.606104],
-	[ 0.255929,  0.812716, -0.523443], [ 0.178924,  0.852799, -0.490632],
-	[ 0.354854,  0.857989, -0.371394], [ 0.190400,  0.897712, -0.397316],
-	[ 0.278254,  0.899997, -0.335529], [ 0.285159,  0.929839, -0.232558],
-	[ 0.112000,  0.926847, -0.358344], [ 0.044118,  0.975487, -0.215588],
-	[ 0.121865,  0.958690, -0.257028], [ 0.207127,  0.959099, -0.192946],
-	[ 0.589414, -0.770371, -0.243147], [ 0.560020, -0.727500, -0.396384],
-	[ 0.616865, -0.717414, -0.323721], [ 0.691910, -0.643752, -0.326871],
-	[ 0.516093, -0.662828, -0.542501], [ 0.459869, -0.578830, -0.673406],
-	[ 0.527761, -0.585660, -0.615200], [ 0.598792, -0.506276, -0.620591],
-	[ 0.579294, -0.662218, -0.475274], [ 0.661673, -0.506272, -0.553062],
-	[ 0.653675, -0.584862, -0.480256], [ 0.709675, -0.576731, -0.404650],
-	[ 0.721793, -0.421259, -0.549141], [ 0.822949, -0.328280, -0.463667],
-	[ 0.775962, -0.416237, -0.473952], [ 0.771571, -0.492950, -0.402092],
-	[-0.553582,  0.635419, -0.538322], [-0.639671,  0.484629, -0.596620],
-	[-0.627277,  0.567647, -0.533199], [-0.679284,  0.574503, -0.456640],
-	[-0.706230,  0.314627, -0.634231], [-0.748706,  0.137040, -0.648582],
-	[-0.760206,  0.228124, -0.608314], [-0.814449,  0.229271, -0.533018],
-	[-0.705126,  0.404861, -0.582139], [-0.815396,  0.320257, -0.482250],
-	[-0.759771,  0.409243, -0.505241], [-0.746566,  0.496059, -0.443356],
-	[-0.858857,  0.318858, -0.400866], [-0.878628,  0.401265, -0.258841],
-	[-0.846689,  0.407254, -0.342435], [-0.789760,  0.495343, -0.361821],
-	[-0.924434,  0.314554, -0.215588], [-0.903889,  0.233611, -0.358344],
-	[-0.937136,  0.236034, -0.257028], [-0.968602,  0.156790, -0.192946],
-	[-0.859336,  0.144298, -0.490632], [-0.793692,  0.051880, -0.606104],
-	[-0.850086,  0.057979, -0.523443], [-0.884581, -0.022998, -0.465819],
-	[-0.905342,  0.149985, -0.397316], [-0.928308, -0.017632, -0.371394],
-	[-0.939499,  0.069011, -0.335529], [-0.969804,  0.073461, -0.232558],
-	[-0.946917, -0.096998, -0.306496], [-0.976435, -0.165058, -0.139033],
-	[-0.974580, -0.089811, -0.205249], [-0.985924, -0.005978, -0.167088],
-	[-0.053324,  0.964447, -0.258841], [ 0.016203,  0.915993, -0.400866],
-	[-0.070546,  0.936889, -0.342435], [-0.173326,  0.915993, -0.361821],
-	[ 0.083434,  0.841980, -0.533018], [ 0.145350,  0.747137, -0.648582],
-	[ 0.064727,  0.791053, -0.608314], [-0.035501,  0.772328, -0.634231],
-	[-0.000945,  0.876033, -0.482250], [-0.119927,  0.804197, -0.582139],
-	[-0.104085,  0.856678, -0.505241], [-0.189740,  0.876033, -0.443356],
-	[-0.218068,  0.772328, -0.596620], [-0.389865,  0.747138, -0.538322],
-	[-0.299891,  0.791053, -0.533199], [-0.287315,  0.841980, -0.456640],
-	[ 0.005662, -0.885991, -0.463667], [ 0.129121, -0.825694, -0.549142],
-	[ 0.104696, -0.874305, -0.473952], [ 0.177730, -0.898184, -0.402092],
-	[ 0.253129, -0.742154, -0.620591], [ 0.371337, -0.639244, -0.673406],
-	[ 0.352945, -0.704953, -0.615200], [ 0.429056, -0.722221, -0.542501],
-	[ 0.230200, -0.800706, -0.553062], [ 0.405447, -0.780851, -0.475274],
-	[ 0.306298, -0.821910, -0.480256], [ 0.278310, -0.871092, -0.404650],
-	[ 0.473263, -0.786703, -0.396384], [ 0.502466, -0.829703, -0.243147],
-	[ 0.443147, -0.835958, -0.323721], [ 0.347195, -0.878983, -0.326871],
-	[-0.557655, -0.829704, -0.024750], [-0.591397, -0.786703, -0.177053],
-	[-0.535013, -0.835958, -0.122209], [-0.448119, -0.878983, -0.163028],
-	[-0.608542, -0.722222, -0.328744], [-0.607263, -0.639244, -0.471804],
-	[-0.567363, -0.704953, -0.425606], [-0.477805, -0.742154, -0.470010],
-	[-0.560284, -0.780851, -0.276323], [-0.430052, -0.800706, -0.417043],
-	[-0.471177, -0.821910, -0.320087], [-0.415585, -0.871092, -0.261700],
-	[-0.335654, -0.825695, -0.453393], [-0.188464, -0.885991, -0.423675],
-	[-0.283499, -0.874305, -0.393979], [-0.322184, -0.898184, -0.299105],
-	[-0.953363, -0.249821, -0.169376], [-0.923809, -0.181892, -0.336886],
-	[-0.928397, -0.259481, -0.265986], [-0.894196, -0.342972, -0.287722],
-	[-0.861473, -0.107892, -0.496208], [-0.770620, -0.032883, -0.636446],
-	[-0.803902, -0.111690, -0.584180], [-0.767608, -0.192697, -0.611266],
-	[-0.882075, -0.187484, -0.432196], [-0.790242, -0.272874, -0.548687],
-	[-0.846840, -0.271403, -0.457387], [-0.854704, -0.349398, -0.383930],
-	[-0.744783, -0.350916, -0.567588], [-0.703004, -0.498942, -0.506796],
-	[-0.756413, -0.427913, -0.494702], [-0.809496, -0.427738, -0.402190],
-	[ 0.431392,  0.137040, -0.891696], [ 0.398047,  0.314627, -0.861724],
-	[ 0.457871,  0.228124, -0.859251], [ 0.537458,  0.229271, -0.811526],
-	[ 0.351773,  0.484629, -0.800869], [ 0.295735,  0.635419, -0.713291],
-	[ 0.365455,  0.567647, -0.737712], [ 0.443487,  0.574503, -0.687943],
-	[ 0.417621,  0.404861, -0.813437], [ 0.510541,  0.496059, -0.702334],
-	[ 0.498210,  0.409243, -0.764399], [ 0.558394,  0.320257, -0.765266],
-	[ 0.582445,  0.495343, -0.644511], [ 0.704780,  0.401265, -0.585040],
-	[ 0.642400,  0.407254, -0.649204], [ 0.630483,  0.318858, -0.707687],
-	[ 0.489504,  0.051880, -0.870456], [ 0.595443,  0.144298, -0.790333],
-	[ 0.573977,  0.057979, -0.816816], [ 0.628440, -0.022998, -0.777518],
-	[ 0.688655,  0.233611, -0.686426], [ 0.763951,  0.314554, -0.563414],
-	[ 0.759240,  0.236034, -0.606500], [ 0.813471,  0.156790, -0.560073],
-	[ 0.674586,  0.149986, -0.722799], [ 0.798919,  0.073461, -0.596935],
-	[ 0.730382,  0.069011, -0.679543], [ 0.705928, -0.017632, -0.708064],
-	[ 0.839603, -0.005978, -0.543167], [ 0.841976, -0.165058, -0.513646],
-	[ 0.814100, -0.089811, -0.573738], [ 0.748672, -0.096998, -0.655807],
-	[ 0.456318, -0.032883, -0.889209], [ 0.595202, -0.107892, -0.796300],
-	[ 0.507548, -0.111690, -0.854353], [ 0.463503, -0.192697, -0.864889],
-	[ 0.715434, -0.181892, -0.674589], [ 0.808789, -0.249821, -0.532399],
-	[ 0.747671, -0.259481, -0.611275], [ 0.707664, -0.342972, -0.617723],
-	[ 0.639427, -0.187484, -0.745642], [ 0.633362, -0.349398, -0.690488],
-	[ 0.597104, -0.271403, -0.754856], [ 0.509028, -0.272874, -0.816352],
-	[ 0.584618, -0.427737, -0.689393], [ 0.445452, -0.498942, -0.743391],
-	[ 0.499292, -0.427913, -0.753391], [ 0.459801, -0.350916, -0.815746],
-	[-0.276003,  0.309387, -0.910001], [-0.425849,  0.252840, -0.868749],
-	[-0.354847,  0.332267, -0.873889], [-0.356751,  0.429325, -0.829704],
-	[-0.564808,  0.191210, -0.802764], [-0.685915,  0.127466, -0.716431],
-	[-0.634517,  0.208961, -0.744126], [-0.643341,  0.305039, -0.702184],
-	[-0.502148,  0.272499, -0.820727], [-0.579301,  0.385678, -0.718097],
-	[-0.507597,  0.370796, -0.777725], [-0.433318,  0.448301, -0.781832],
-	[-0.576783,  0.475041, -0.664573], [-0.490790,  0.625845, -0.606170],
-	[-0.501588,  0.548484, -0.669010], [-0.429643,  0.536442, -0.726386],
-	[-0.187471,  0.369801, -0.910001], [-0.269715,  0.488718, -0.829704],
-	[-0.180031,  0.451560, -0.873889], [-0.080186,  0.488718, -0.868749],
-	[-0.342885,  0.595645, -0.726386], [-0.403843,  0.685178, -0.606170],
-	[-0.327870,  0.667028, -0.669010], [-0.232067,  0.710273, -0.664573],
-	[-0.259470,  0.566933, -0.781832], [-0.147936,  0.680038, -0.718097],
-	[-0.160220,  0.607844, -0.777725], [-0.070675,  0.566933, -0.820726],
-	[-0.049500,  0.710273, -0.702184], [ 0.131372,  0.685178, -0.716431],
-	[ 0.036748,  0.667028, -0.744125], [ 0.027863,  0.595645, -0.802764],
-	[-0.135742, -0.436900, -0.889209], [ 0.010454, -0.501854, -0.864889],
-	[-0.081035, -0.513335, -0.854354], [-0.116528, -0.593572, -0.796300],
-	[ 0.159133, -0.556089, -0.815746], [ 0.302204, -0.596693, -0.743391],
-	[ 0.216434, -0.620933, -0.753391], [ 0.185164, -0.700322, -0.689393],
-	[ 0.068516, -0.573476, -0.816352], [ 0.094445, -0.717151, -0.690488],
-	[ 0.035036, -0.654954, -0.754856], [-0.058537, -0.663770, -0.745643],
-	[ 0.061373, -0.783997, -0.617723], [-0.062235, -0.844202, -0.532399],
-	[-0.030958, -0.790812, -0.611275], [-0.091454, -0.732507, -0.674589],
-	[-0.226770, -0.436900, -0.870456], [-0.207697, -0.593572, -0.777518],
-	[-0.263245, -0.513335, -0.816816], [-0.351449, -0.501854, -0.790333],
-	[-0.182623, -0.732507, -0.655807], [-0.153263, -0.844202, -0.513647],
-	[-0.213168, -0.790812, -0.573738], [-0.300529, -0.783997, -0.543167],
-	[-0.240944, -0.663770, -0.708065], [-0.359669, -0.717152, -0.596935],
-	[-0.330539, -0.654954, -0.679543], [-0.385598, -0.573477, -0.722799],
-	[-0.442567, -0.700323, -0.560073], [-0.571420, -0.596694, -0.563414],
-	[-0.496587, -0.620933, -0.606501], [-0.468598, -0.556089, -0.686426],
-	[-0.284882, -0.351740, -0.891696], [-0.409434, -0.416881, -0.811526],
-	[-0.379351, -0.343190, -0.859252], [-0.438090, -0.255946, -0.861724],
-	[-0.526769, -0.470843, -0.707687], [-0.630591, -0.509983, -0.585041],
-	[-0.613427, -0.449713, -0.649204], [-0.673594, -0.361769, -0.644511],
-	[-0.501791, -0.403205, -0.765266], [-0.648047, -0.294553, -0.702334],
-	[-0.562711, -0.314722, -0.764400], [-0.529250, -0.241277, -0.813437],
-	[-0.696646, -0.203516, -0.687943], [-0.699503, -0.043725, -0.713291],
-	[-0.661814, -0.133354, -0.737712], [-0.579521, -0.150880, -0.800868],
-	[ 0.346897,  0.127467, -0.929201], [ 0.201528,  0.191210, -0.960638],
-	[ 0.288738,  0.208962, -0.934326], [ 0.313420,  0.305039, -0.899288],
-	[ 0.047802,  0.252840, -0.966326], [-0.106147,  0.309387, -0.944993],
-	[-0.019450,  0.332267, -0.942985], [-0.000236,  0.429325, -0.903150],
-	[ 0.136870,  0.272499, -0.952371], [ 0.089017,  0.448301, -0.889439],
-	[ 0.158871,  0.370796, -0.915025], [ 0.248305,  0.385678, -0.888593],
-	[ 0.107557,  0.536442, -0.837055], [ 0.211240,  0.625845, -0.750796],
-	[ 0.196321,  0.548484, -0.812787], [ 0.267147,  0.475041, -0.838432],
-	[ 0.348009, -0.509982, -0.786643], [ 0.204165, -0.470843, -0.858268],
-	[ 0.306882, -0.449713, -0.838798], [ 0.364005, -0.361769, -0.858268],
-	[ 0.055341, -0.416881, -0.907275], [-0.090756, -0.351740, -0.931688],
-	[ 0.008845, -0.343190, -0.939224], [ 0.061824, -0.255946, -0.964712],
-	[ 0.158462, -0.403205, -0.901286], [ 0.164646, -0.241277, -0.956387],
-	[ 0.214764, -0.314722, -0.924568], [ 0.317683, -0.294553, -0.901286],
-	[ 0.215792, -0.150880, -0.964712], [ 0.360619, -0.043725, -0.931688],
-	[ 0.316346, -0.133354, -0.939224], [ 0.368013, -0.203516, -0.907275],
-	[-0.249395,  0.211636, -0.944993], [-0.252866,  0.047667, -0.966326],
-	[-0.302308,  0.139247, -0.942985], [-0.399691,  0.156740, -0.903150],
-	[-0.251522, -0.117947, -0.960638], [-0.245163, -0.276550, -0.929201],
-	[-0.299846, -0.192683, -0.934326], [-0.398310, -0.180640, -0.899288],
-	[-0.303643, -0.028104, -0.952371], [-0.449659, -0.090608, -0.888593],
-	[-0.403196, -0.012755, -0.915025], [-0.449900,  0.080548, -0.889439],
-	[-0.539741, -0.075573, -0.838432], [-0.659784,  0.031464, -0.750796],
-	[-0.582308,  0.017153, -0.812787], [-0.538734,  0.095418, -0.837055],
-	[-0.142065, -0.276550, -0.950441], [-0.148649, -0.117947, -0.981831],
-	[-0.093860, -0.192683, -0.976762], [ 0.010435, -0.180640, -0.983494],
-	[-0.149663,  0.047667, -0.987587], [-0.144419,  0.211636, -0.966620],
-	[-0.095021,  0.139247, -0.985688], [ 0.010177,  0.156740, -0.987587],
-	[-0.097504, -0.028104, -0.994838], [ 0.061717,  0.080548, -0.994838],
-	[ 0.008704, -0.012755, -0.999881], [ 0.061830, -0.090608, -0.993965],
-	[ 0.164023,  0.095418, -0.981831], [ 0.309310,  0.031464, -0.950441],
-	[ 0.213641,  0.017153, -0.976762], [ 0.164403, -0.075573, -0.983494]
+        [ 0.142065,  0.276550,  0.950441], [-0.010435,  0.180640,  0.983494],
+        [ 0.093860,  0.192683,  0.976762], [ 0.148649,  0.117947,  0.981831],
+        [-0.164403,  0.075573,  0.983494], [-0.309310, -0.031464,  0.950441],
+        [-0.213641, -0.017153,  0.976762], [-0.164023, -0.095418,  0.981831],
+        [-0.061830,  0.090608,  0.993965], [-0.061717, -0.080548,  0.994838],
+        [-0.008704,  0.012755,  0.999881], [ 0.097504,  0.028104,  0.994838],
+        [-0.010177, -0.156740,  0.987587], [ 0.144419, -0.211636,  0.966620],
+        [ 0.095021, -0.139247,  0.985688], [ 0.149663, -0.047667,  0.987587],
+        [ 0.659784, -0.031464,  0.750796], [ 0.539741,  0.075573,  0.838432],
+        [ 0.582308, -0.017153,  0.812787], [ 0.538734, -0.095418,  0.837055],
+        [ 0.398310,  0.180640,  0.899288], [ 0.245163,  0.276550,  0.929201],
+        [ 0.299846,  0.192683,  0.934326], [ 0.251522,  0.117947,  0.960638],
+        [ 0.449659,  0.090608,  0.888593], [ 0.303643,  0.028104,  0.952371],
+        [ 0.403196,  0.012755,  0.915025], [ 0.449900, -0.080548,  0.889439],
+        [ 0.252866, -0.047667,  0.966326], [ 0.249395, -0.211636,  0.944993],
+        [ 0.302308, -0.139247,  0.942985], [ 0.399691, -0.156740,  0.903150],
+        [-0.348009,  0.509982,  0.786643], [-0.364005,  0.361769,  0.858268],
+        [-0.306882,  0.449713,  0.838798], [-0.204165,  0.470843,  0.858268],
+        [-0.368013,  0.203516,  0.907275], [-0.360619,  0.043725,  0.931688],
+        [-0.316346,  0.133354,  0.939224], [-0.215792,  0.150880,  0.964712],
+        [-0.317683,  0.294553,  0.901286], [-0.164646,  0.241277,  0.956387],
+        [-0.214764,  0.314722,  0.924568], [-0.158462,  0.403205,  0.901286],
+        [-0.061824,  0.255946,  0.964712], [ 0.090756,  0.351740,  0.931688],
+        [-0.008845,  0.343190,  0.939224], [-0.055341,  0.416881,  0.907275],
+        [-0.211240, -0.625845,  0.750796], [-0.107557, -0.536442,  0.837055],
+        [-0.196321, -0.548484,  0.812787], [-0.267147, -0.475041,  0.838432],
+        [ 0.000236, -0.429325,  0.903150], [ 0.106147, -0.309387,  0.944993],
+        [ 0.019450, -0.332267,  0.942985], [-0.047802, -0.252840,  0.966326],
+        [-0.089017, -0.448301,  0.889439], [-0.136870, -0.272499,  0.952371],
+        [-0.158871, -0.370796,  0.915025], [-0.248305, -0.385678,  0.888593],
+        [-0.201528, -0.191210,  0.960638], [-0.346897, -0.127467,  0.929201],
+        [-0.288738, -0.208962,  0.934326], [-0.313420, -0.305039,  0.899288],
+        [ 0.699503,  0.043725,  0.713291], [ 0.696646,  0.203516,  0.687943],
+        [ 0.661814,  0.133354,  0.737712], [ 0.579521,  0.150880,  0.800868],
+        [ 0.673594,  0.361769,  0.644511], [ 0.630591,  0.509983,  0.585041],
+        [ 0.613427,  0.449713,  0.649204], [ 0.526769,  0.470843,  0.707687],
+        [ 0.648047,  0.294553,  0.702334], [ 0.501791,  0.403205,  0.765266],
+        [ 0.562711,  0.314722,  0.764400], [ 0.529250,  0.241277,  0.813437],
+        [ 0.409434,  0.416881,  0.811526], [ 0.284882,  0.351740,  0.891696],
+        [ 0.379351,  0.343190,  0.859252], [ 0.438090,  0.255946,  0.861724],
+        [ 0.276003, -0.309387,  0.910001], [ 0.356751, -0.429325,  0.829704],
+        [ 0.354847, -0.332267,  0.873889], [ 0.425849, -0.252840,  0.868749],
+        [ 0.429643, -0.536442,  0.726386], [ 0.490790, -0.625845,  0.606170],
+        [ 0.501588, -0.548484,  0.669010], [ 0.576783, -0.475041,  0.664573],
+        [ 0.433318, -0.448301,  0.781832], [ 0.579301, -0.385678,  0.718097],
+        [ 0.507597, -0.370796,  0.777725], [ 0.502148, -0.272499,  0.820727],
+        [ 0.643341, -0.305039,  0.702184], [ 0.685915, -0.127466,  0.716431],
+        [ 0.634517, -0.208961,  0.744126], [ 0.564808, -0.191210,  0.802764],
+        [-0.445452,  0.498942,  0.743391], [-0.584618,  0.427737,  0.689393],
+        [-0.499292,  0.427913,  0.753391], [-0.459801,  0.350916,  0.815746],
+        [-0.707664,  0.342972,  0.617723], [-0.808789,  0.249821,  0.532399],
+        [-0.747671,  0.259481,  0.611275], [-0.715434,  0.181892,  0.674589],
+        [-0.633362,  0.349398,  0.690488], [-0.639427,  0.187484,  0.745642],
+        [-0.597104,  0.271403,  0.754856], [-0.509028,  0.272874,  0.816352],
+        [-0.595202,  0.107892,  0.796300], [-0.456318,  0.032883,  0.889209],
+        [-0.507548,  0.111690,  0.854353], [-0.463503,  0.192697,  0.864889],
+        [ 0.135742,  0.436900,  0.889209], [ 0.116528,  0.593572,  0.796300],
+        [ 0.081035,  0.513335,  0.854354], [-0.010454,  0.501854,  0.864889],
+        [ 0.091454,  0.732507,  0.674589], [ 0.062235,  0.844202,  0.532399],
+        [ 0.030958,  0.790812,  0.611275], [-0.061373,  0.783997,  0.617723],
+        [ 0.058537,  0.663770,  0.745643], [-0.094445,  0.717151,  0.690488],
+        [-0.035036,  0.654954,  0.754856], [-0.068516,  0.573476,  0.816352],
+        [-0.185164,  0.700322,  0.689393], [-0.302204,  0.596693,  0.743391],
+        [-0.216434,  0.620933,  0.753391], [-0.159133,  0.556089,  0.815746],
+        [-0.131372, -0.685178,  0.716431], [ 0.049500, -0.710273,  0.702184],
+        [-0.036748, -0.667028,  0.744125], [-0.027863, -0.595645,  0.802764],
+        [ 0.232067, -0.710273,  0.664573], [ 0.403843, -0.685178,  0.606170],
+        [ 0.327870, -0.667028,  0.669010], [ 0.342885, -0.595645,  0.726386],
+        [ 0.147936, -0.680038,  0.718097], [ 0.259470, -0.566933,  0.781832],
+        [ 0.160220, -0.607844,  0.777725], [ 0.070675, -0.566933,  0.820726],
+        [ 0.269715, -0.488718,  0.829704], [ 0.187471, -0.369801,  0.910001],
+        [ 0.180031, -0.451560,  0.873889], [ 0.080186, -0.488718,  0.868749],
+        [-0.431392, -0.137040,  0.891696], [-0.537458, -0.229271,  0.811526],
+        [-0.457871, -0.228124,  0.859251], [-0.398047, -0.314627,  0.861724],
+        [-0.630483, -0.318858,  0.707687], [-0.704780, -0.401265,  0.585040],
+        [-0.642400, -0.407254,  0.649204], [-0.582445, -0.495343,  0.644511],
+        [-0.558394, -0.320257,  0.765266], [-0.510541, -0.496059,  0.702334],
+        [-0.498210, -0.409243,  0.764399], [-0.417621, -0.404861,  0.813437],
+        [-0.443487, -0.574503,  0.687943], [-0.295735, -0.635419,  0.713291],
+        [-0.365455, -0.567647,  0.737712], [-0.351773, -0.484629,  0.800869],
+        [ 0.953363,  0.249821,  0.169376], [ 0.894196,  0.342972,  0.287722],
+        [ 0.928397,  0.259481,  0.265986], [ 0.923809,  0.181892,  0.336886],
+        [ 0.809496,  0.427738,  0.402190], [ 0.703004,  0.498942,  0.506796],
+        [ 0.756413,  0.427913,  0.494702], [ 0.744783,  0.350916,  0.567588],
+        [ 0.854704,  0.349398,  0.383930], [ 0.790242,  0.272874,  0.548687],
+        [ 0.846840,  0.271403,  0.457387], [ 0.882075,  0.187484,  0.432196],
+        [ 0.767608,  0.192697,  0.611266], [ 0.770620,  0.032883,  0.636446],
+        [ 0.803902,  0.111690,  0.584180], [ 0.861473,  0.107892,  0.496208],
+        [ 0.153263,  0.844202,  0.513647], [ 0.182623,  0.732507,  0.655807],
+        [ 0.213168,  0.790812,  0.573738], [ 0.300529,  0.783997,  0.543167],
+        [ 0.207697,  0.593572,  0.777518], [ 0.226770,  0.436900,  0.870456],
+        [ 0.263245,  0.513335,  0.816816], [ 0.351449,  0.501854,  0.790333],
+        [ 0.240944,  0.663770,  0.708065], [ 0.385598,  0.573477,  0.722799],
+        [ 0.330539,  0.654954,  0.679543], [ 0.359669,  0.717152,  0.596935],
+        [ 0.468598,  0.556089,  0.686426], [ 0.571420,  0.596694,  0.563414],
+        [ 0.496587,  0.620933,  0.606501], [ 0.442567,  0.700323,  0.560073],
+        [ 0.878628, -0.401265,  0.258841], [ 0.858857, -0.318858,  0.400866],
+        [ 0.846689, -0.407254,  0.342435], [ 0.789760, -0.495343,  0.361821],
+        [ 0.814449, -0.229271,  0.533018], [ 0.748706, -0.137040,  0.648582],
+        [ 0.760206, -0.228124,  0.608314], [ 0.706230, -0.314627,  0.634231],
+        [ 0.815396, -0.320257,  0.482250], [ 0.705126, -0.404861,  0.582139],
+        [ 0.759771, -0.409243,  0.505241], [ 0.746566, -0.496059,  0.443356],
+        [ 0.639671, -0.484629,  0.596620], [ 0.553582, -0.635419,  0.538322],
+        [ 0.627277, -0.567647,  0.533199], [ 0.679284, -0.574503,  0.456640],
+        [-0.589414,  0.770371,  0.243147], [-0.691910,  0.643752,  0.326871],
+        [-0.616865,  0.717414,  0.323721], [-0.560020,  0.727500,  0.396384],
+        [-0.771571,  0.492950,  0.402092], [-0.822949,  0.328280,  0.463667],
+        [-0.775962,  0.416237,  0.473952], [-0.721793,  0.421259,  0.549141],
+        [-0.709675,  0.576731,  0.404650], [-0.661673,  0.506272,  0.553062],
+        [-0.653675,  0.584862,  0.480256], [-0.579294,  0.662218,  0.475274],
+        [-0.598792,  0.506276,  0.620591], [-0.459869,  0.578830,  0.673406],
+        [-0.527761,  0.585660,  0.615200], [-0.516093,  0.662828,  0.542501],
+        [-0.763951, -0.314554,  0.563414], [-0.688655, -0.233611,  0.686426],
+        [-0.759240, -0.236034,  0.606500], [-0.813471, -0.156790,  0.560073],
+        [-0.595443, -0.144298,  0.790333], [-0.489504, -0.051880,  0.870456],
+        [-0.573977, -0.057979,  0.816816], [-0.628440,  0.022998,  0.777518],
+        [-0.674586, -0.149986,  0.722799], [-0.705928,  0.017632,  0.708064],
+        [-0.730382, -0.069011,  0.679543], [-0.798919, -0.073461,  0.596935],
+        [-0.748672,  0.096998,  0.655807], [-0.841976,  0.165058,  0.513646],
+        [-0.814100,  0.089811,  0.573738], [-0.839603,  0.005978,  0.543167],
+        [-0.502466,  0.829703,  0.243147], [-0.473263,  0.786703,  0.396384],
+        [-0.443147,  0.835958,  0.323721], [-0.347195,  0.878983,  0.326871],
+        [-0.429056,  0.722221,  0.542501], [-0.371337,  0.639244,  0.673406],
+        [-0.352945,  0.704953,  0.615200], [-0.253129,  0.742154,  0.620591],
+        [-0.405447,  0.780851,  0.475274], [-0.230200,  0.800706,  0.553062],
+        [-0.306298,  0.821910,  0.480256], [-0.278310,  0.871092,  0.404650],
+        [-0.129121,  0.825694,  0.549142], [-0.005662,  0.885991,  0.463667],
+        [-0.104696,  0.874305,  0.473952], [-0.177730,  0.898184,  0.402092],
+        [ 0.053324, -0.964447,  0.258841], [ 0.173326, -0.915993,  0.361821],
+        [ 0.070546, -0.936889,  0.342435], [-0.016203, -0.915993,  0.400866],
+        [ 0.287315, -0.841980,  0.456640], [ 0.389865, -0.747138,  0.538322],
+        [ 0.299891, -0.791053,  0.533199], [ 0.218068, -0.772328,  0.596620],
+        [ 0.189740, -0.876033,  0.443356], [ 0.119927, -0.804197,  0.582139],
+        [ 0.104085, -0.856678,  0.505241], [ 0.000945, -0.876033,  0.482250],
+        [ 0.035501, -0.772328,  0.634231], [-0.145350, -0.747137,  0.648582],
+        [-0.064727, -0.791053,  0.608314], [-0.083434, -0.841980,  0.533018],
+        [-0.580197, -0.796670,  0.169376], [-0.506169, -0.793915,  0.336886],
+        [-0.580090, -0.769900,  0.265986], [-0.645367, -0.707614,  0.287722],
+        [-0.414536, -0.762848,  0.496208], [-0.311566, -0.705594,  0.636446],
+        [-0.397084, -0.707854,  0.584180], [-0.459283, -0.644525,  0.611266],
+        [-0.496161, -0.753015,  0.432196], [-0.542194, -0.636371,  0.548687],
+        [-0.561458, -0.689610,  0.457387], [-0.636953, -0.668498,  0.383929],
+        [-0.598292, -0.565589,  0.567588], [-0.720899, -0.472719,  0.506796],
+        [-0.674230, -0.548348,  0.494701], [-0.693419, -0.597841,  0.402189],
+        [ 0.939203,  0.328280,  0.100644], [ 0.867672,  0.492950,  0.064390],
+        [ 0.900107,  0.416238,  0.128663], [ 0.880067,  0.421259,  0.219140],
+        [ 0.764766,  0.643752,  0.026779], [ 0.637523,  0.770371, -0.009616],
+        [ 0.694586,  0.717414,  0.053548], [ 0.671090,  0.727501,  0.142762],
+        [ 0.811827,  0.576732,  0.091203], [ 0.719976,  0.662218,  0.207610],
+        [ 0.790269,  0.584862,  0.182787], [ 0.826393,  0.506272,  0.246504],
+        [ 0.688492,  0.662828,  0.294343], [ 0.688586,  0.578830,  0.436812],
+        [ 0.727944,  0.585660,  0.356510], [ 0.795322,  0.506276,  0.333388],
+        [ 0.793692, -0.051880,  0.606104], [ 0.859336, -0.144298,  0.490632],
+        [ 0.850086, -0.057979,  0.523443], [ 0.884581,  0.022998,  0.465819],
+        [ 0.903889, -0.233611,  0.358344], [ 0.924434, -0.314554,  0.215588],
+        [ 0.937136, -0.236034,  0.257028], [ 0.968602, -0.156790,  0.192946],
+        [ 0.905342, -0.149985,  0.397316], [ 0.969804, -0.073461,  0.232558],
+        [ 0.939499, -0.069011,  0.335529], [ 0.928308,  0.017632,  0.371394],
+        [ 0.985924,  0.005978,  0.167088], [ 0.976435,  0.165058,  0.139033],
+        [ 0.974580,  0.089811,  0.205249], [ 0.946917,  0.096998,  0.306496],
+        [ 0.607263,  0.639244,  0.471804], [ 0.608542,  0.722222,  0.328744],
+        [ 0.567363,  0.704953,  0.425606], [ 0.477805,  0.742154,  0.470010],
+        [ 0.591397,  0.786703,  0.177053], [ 0.557655,  0.829704,  0.024750],
+        [ 0.535013,  0.835958,  0.122209], [ 0.448119,  0.878983,  0.163028],
+        [ 0.560284,  0.780851,  0.276323], [ 0.415585,  0.871092,  0.261700],
+        [ 0.471177,  0.821910,  0.320087], [ 0.430052,  0.800706,  0.417043],
+        [ 0.322184,  0.898184,  0.299105], [ 0.188464,  0.885991,  0.423675],
+        [ 0.283499,  0.874305,  0.393979], [ 0.335654,  0.825695,  0.453393],
+        [ 0.537751, -0.705594,  0.461477], [ 0.576908, -0.762848,  0.291960],
+        [ 0.595647, -0.707854,  0.379666], [ 0.663487, -0.644525,  0.379963],
+        [ 0.598108, -0.793915,  0.109393], [ 0.599900, -0.796670, -0.073737],
+        [ 0.637987, -0.769900,  0.015049], [ 0.706539, -0.707614,  0.009214],
+        [ 0.626586, -0.753014,  0.200898], [ 0.736836, -0.668498,  0.100914],
+        [ 0.696523, -0.689610,  0.198229], [ 0.714913, -0.636371,  0.289709],
+        [ 0.795922, -0.597841,  0.095369], [ 0.862509, -0.472719,  0.180596],
+        [ 0.814860, -0.548347,  0.187932], [ 0.773913, -0.565589,  0.284898],
+        [-0.635102,  0.754881,  0.163708], [-0.741664,  0.665917,  0.080560],
+        [-0.708318,  0.686408,  0.164710], [-0.737669,  0.628238,  0.247309],
+        [-0.831159,  0.556009, -0.005306], [-0.898352,  0.430169, -0.088985],
+        [-0.885636,  0.464328, -0.007038], [-0.913858,  0.399457,  0.072784],
+        [-0.807220,  0.584943,  0.078979], [-0.889599,  0.428997,  0.156767],
+        [-0.837161,  0.522654,  0.161227], [-0.801228,  0.545692,  0.245467],
+        [-0.903436,  0.359676,  0.233317], [-0.868637,  0.312790,  0.384229],
+        [-0.867415,  0.385231,  0.314941], [-0.817330,  0.477436,  0.322531],
+        [-0.893722,  0.147515,  0.423675], [-0.953826,  0.027443,  0.299105],
+        [-0.917487,  0.054759,  0.393979], [-0.891236, -0.011527,  0.453392],
+        [-0.981859, -0.096824,  0.163028], [-0.975905, -0.216788,  0.024750],
+        [-0.973474, -0.193423,  0.122209], [-0.948166, -0.263883,  0.177053],
+        [-0.962650, -0.069407,  0.261700], [-0.931373, -0.237045,  0.276323],
+        [-0.937120, -0.139103,  0.320087], [-0.902383, -0.108539,  0.417042],
+        [-0.894372, -0.303357,  0.328744], [-0.816640, -0.332417,  0.471803],
+        [-0.863280, -0.271307,  0.425606], [-0.865270, -0.174351,  0.470010],
+        [ 0.025419,  0.922888,  0.384229], [-0.005554,  0.972385,  0.233317],
+        [-0.042483,  0.948160,  0.314941], [-0.146601,  0.935137,  0.322531],
+        [-0.038797,  0.996593,  0.072784], [-0.073048,  0.993351, -0.088985],
+        [-0.109492,  0.993963, -0.007038], [-0.214725,  0.976660, -0.005306],
+        [-0.075148,  0.984772,  0.156767], [-0.250395,  0.964917,  0.078979],
+        [-0.181476,  0.970089,  0.161227], [-0.216030,  0.945028,  0.245467],
+        [-0.349695,  0.933393,  0.080560], [-0.471386,  0.866600,  0.163708],
+        [-0.380933,  0.909814,  0.164710], [-0.316066,  0.915937,  0.247309],
+        [ 0.125737, -0.975487,  0.180596], [ 0.266524, -0.959098,  0.095369],
+        [ 0.213532, -0.958689,  0.187932], [ 0.244515, -0.926847,  0.284898],
+        [ 0.401328, -0.915888,  0.009214], [ 0.523132, -0.849056, -0.073737],
+        [ 0.484320, -0.874762,  0.015049], [ 0.521220, -0.846382,  0.109393],
+        [ 0.353858, -0.929839,  0.100914], [ 0.472752, -0.857989,  0.200898],
+        [ 0.388214, -0.899997,  0.198229], [ 0.331935, -0.897712,  0.289709],
+        [ 0.500020, -0.815316,  0.291960], [ 0.460982, -0.757980,  0.461477],
+        [ 0.441980, -0.812716,  0.379666], [ 0.358276, -0.852799,  0.379963],
+        [-0.241049, -0.757980,  0.606104], [-0.343909, -0.815316,  0.465819],
+        [-0.255929, -0.812716,  0.523443], [-0.178924, -0.852799,  0.490632],
+        [-0.435542, -0.846382,  0.306496], [-0.509680, -0.849056,  0.139033],
+        [-0.438935, -0.874762,  0.205249], [-0.365007, -0.915888,  0.167088],
+        [-0.354854, -0.857989,  0.371394], [-0.285159, -0.929839,  0.232558],
+        [-0.278254, -0.899997,  0.335529], [-0.190400, -0.897712,  0.397316],
+        [-0.207127, -0.959099,  0.192946], [-0.044118, -0.975487,  0.215588],
+        [-0.121865, -0.958690,  0.257028], [-0.112000, -0.926847,  0.358344],
+        [-0.790032, -0.430169,  0.436811], [-0.868215, -0.399457,  0.294343],
+        [-0.810741, -0.464328,  0.356510], [-0.761384, -0.556010,  0.333388],
+        [-0.922091, -0.359676,  0.142762], [-0.949774, -0.312790, -0.009616],
+        [-0.921265, -0.385231,  0.053548], [-0.878258, -0.477436,  0.026779],
+        [-0.879125, -0.428997,  0.207610], [-0.833008, -0.545692,  0.091203],
+        [-0.832720, -0.522654,  0.182787], [-0.772708, -0.584943,  0.246504],
+        [-0.775352, -0.628238,  0.064390], [-0.648094, -0.754881,  0.100644],
+        [-0.715744, -0.686408,  0.128662], [-0.713115, -0.665917,  0.219140],
+        [ 0.790032,  0.430169, -0.436811], [ 0.761384,  0.556010, -0.333388],
+        [ 0.810741,  0.464328, -0.356510], [ 0.868215,  0.399457, -0.294343],
+        [ 0.713115,  0.665917, -0.219140], [ 0.648094,  0.754881, -0.100644],
+        [ 0.715744,  0.686408, -0.128662], [ 0.775352,  0.628238, -0.064390],
+        [ 0.772708,  0.584943, -0.246504], [ 0.833008,  0.545692, -0.091203],
+        [ 0.832720,  0.522654, -0.182787], [ 0.879125,  0.428997, -0.207610],
+        [ 0.878258,  0.477436, -0.026779], [ 0.949774,  0.312790,  0.009616],
+        [ 0.921265,  0.385231, -0.053548], [ 0.922091,  0.359676, -0.142762],
+        [ 0.906224, -0.216788, -0.362990], [ 0.966347, -0.096824, -0.238325],
+        [ 0.942512, -0.193423, -0.272506], [ 0.940940, -0.263883, -0.212124],
+        [ 0.994380,  0.027443, -0.102248], [ 0.988407,  0.147515,  0.035935],
+        [ 0.998499,  0.054760, -0.000736], [ 0.997870, -0.011527,  0.064215],
+        [ 0.987702, -0.069407, -0.140095], [ 0.993741, -0.108539,  0.026419],
+        [ 0.987329, -0.139103, -0.076371], [ 0.964751, -0.237045, -0.114300],
+        [ 0.980585, -0.174351,  0.089743], [ 0.936624, -0.332417,  0.110612],
+        [ 0.961207, -0.271307,  0.049741], [ 0.951483, -0.303357, -0.051523],
+        [ 0.031928,  0.993351, -0.110612], [ 0.064406,  0.996593,  0.051523],
+        [ 0.097795,  0.993963, -0.049741], [ 0.195143,  0.976660, -0.089743],
+        [ 0.097319,  0.972385,  0.212125], [ 0.128517,  0.922888,  0.362990],
+        [ 0.163503,  0.948160,  0.272506], [ 0.262143,  0.935137,  0.238325],
+        [ 0.130991,  0.984773,  0.114300], [ 0.295459,  0.945028,  0.140095],
+        [ 0.230424,  0.970089,  0.076371], [ 0.261222,  0.964917, -0.026419],
+        [ 0.388078,  0.915937,  0.102248], [ 0.497708,  0.866600, -0.035935],
+        [ 0.415016,  0.909814,  0.000736], [ 0.353062,  0.933394, -0.064215],
+        [ 0.868637, -0.312790, -0.384229], [ 0.903436, -0.359676, -0.233317],
+        [ 0.867415, -0.385231, -0.314941], [ 0.817330, -0.477436, -0.322531],
+        [ 0.913858, -0.399457, -0.072784], [ 0.898352, -0.430169,  0.088985],
+        [ 0.885636, -0.464328,  0.007038], [ 0.831159, -0.556009,  0.005306],
+        [ 0.889599, -0.428997, -0.156767], [ 0.807220, -0.584943, -0.078979],
+        [ 0.837161, -0.522654, -0.161227], [ 0.801228, -0.545692, -0.245467],
+        [ 0.741664, -0.665917, -0.080560], [ 0.635102, -0.754881, -0.163708],
+        [ 0.708318, -0.686408, -0.164710], [ 0.737669, -0.628238, -0.247309],
+        [-0.537751,  0.705594, -0.461477], [-0.663487,  0.644525, -0.379963],
+        [-0.595647,  0.707854, -0.379666], [-0.576908,  0.762848, -0.291960],
+        [-0.773913,  0.565589, -0.284898], [-0.862509,  0.472719, -0.180596],
+        [-0.814860,  0.548347, -0.187932], [-0.795922,  0.597841, -0.095369],
+        [-0.714913,  0.636371, -0.289709], [-0.736836,  0.668498, -0.100914],
+        [-0.696523,  0.689610, -0.198229], [-0.626586,  0.753014, -0.200898],
+        [-0.706539,  0.707614, -0.009214], [-0.599900,  0.796670,  0.073737],
+        [-0.637987,  0.769900, -0.015049], [-0.598108,  0.793915, -0.109393],
+        [-0.988407, -0.147515, -0.035935], [-0.994380, -0.027443,  0.102248],
+        [-0.998499, -0.054760,  0.000736], [-0.997870,  0.011527, -0.064215],
+        [-0.966347,  0.096824,  0.238325], [-0.906224,  0.216788,  0.362990],
+        [-0.942512,  0.193423,  0.272506], [-0.940940,  0.263883,  0.212124],
+        [-0.987702,  0.069407,  0.140095], [-0.964751,  0.237045,  0.114300],
+        [-0.987329,  0.139103,  0.076371], [-0.993741,  0.108539, -0.026419],
+        [-0.951483,  0.303357,  0.051523], [-0.936624,  0.332417, -0.110612],
+        [-0.961207,  0.271307, -0.049741], [-0.980585,  0.174351, -0.089743],
+        [-0.460982,  0.757980, -0.461477], [-0.500020,  0.815316, -0.291960],
+        [-0.441980,  0.812716, -0.379666], [-0.358276,  0.852799, -0.379963],
+        [-0.521220,  0.846382, -0.109393], [-0.523132,  0.849056,  0.073737],
+        [-0.484320,  0.874762, -0.015049], [-0.401328,  0.915888, -0.009214],
+        [-0.472752,  0.857989, -0.200898], [-0.353858,  0.929839, -0.100914],
+        [-0.388214,  0.899997, -0.198229], [-0.331935,  0.897712, -0.289709],
+        [-0.266524,  0.959098, -0.095369], [-0.125737,  0.975487, -0.180596],
+        [-0.213532,  0.958689, -0.187932], [-0.244515,  0.926847, -0.284898],
+        [-0.025419, -0.922888, -0.384229], [ 0.146601, -0.935137, -0.322531],
+        [ 0.042483, -0.948160, -0.314941], [ 0.005554, -0.972385, -0.233317],
+        [ 0.316066, -0.915937, -0.247309], [ 0.471386, -0.866600, -0.163708],
+        [ 0.380933, -0.909814, -0.164710], [ 0.349695, -0.933393, -0.080560],
+        [ 0.216030, -0.945028, -0.245467], [ 0.250395, -0.964917, -0.078979],
+        [ 0.181476, -0.970089, -0.161227], [ 0.075148, -0.984772, -0.156767],
+        [ 0.214725, -0.976660,  0.005306], [ 0.073048, -0.993351,  0.088985],
+        [ 0.109492, -0.993963,  0.007038], [ 0.038797, -0.996593, -0.072784],
+        [-0.128517, -0.922888, -0.362990], [-0.097319, -0.972385, -0.212125],
+        [-0.163503, -0.948160, -0.272506], [-0.262143, -0.935137, -0.238325],
+        [-0.064406, -0.996593, -0.051523], [-0.031928, -0.993351,  0.110612],
+        [-0.097795, -0.993963,  0.049741], [-0.195143, -0.976660,  0.089743],
+        [-0.130991, -0.984773, -0.114300], [-0.261222, -0.964917,  0.026419],
+        [-0.230424, -0.970089, -0.076371], [-0.295459, -0.945028, -0.140095],
+        [-0.353062, -0.933394,  0.064215], [-0.497708, -0.866600,  0.035935],
+        [-0.415016, -0.909814, -0.000736], [-0.388078, -0.915937, -0.102248],
+        [-0.688586, -0.578830, -0.436812], [-0.688492, -0.662828, -0.294343],
+        [-0.727944, -0.585660, -0.356510], [-0.795322, -0.506276, -0.333388],
+        [-0.671090, -0.727501, -0.142762], [-0.637523, -0.770371,  0.009616],
+        [-0.694586, -0.717414, -0.053548], [-0.764766, -0.643752, -0.026779],
+        [-0.719976, -0.662218, -0.207610], [-0.811827, -0.576732, -0.091203],
+        [-0.790269, -0.584862, -0.182787], [-0.826393, -0.506272, -0.246504],
+        [-0.867672, -0.492950, -0.064390], [-0.939203, -0.328280, -0.100644],
+        [-0.900107, -0.416238, -0.128663], [-0.880067, -0.421259, -0.219140],
+        [ 0.720899,  0.472719, -0.506796], [ 0.598292,  0.565589, -0.567588],
+        [ 0.674230,  0.548348, -0.494701], [ 0.693419,  0.597841, -0.402189],
+        [ 0.459283,  0.644525, -0.611266], [ 0.311566,  0.705594, -0.636446],
+        [ 0.397084,  0.707854, -0.584180], [ 0.414536,  0.762848, -0.496208],
+        [ 0.542194,  0.636371, -0.548687], [ 0.496161,  0.753015, -0.432196],
+        [ 0.561458,  0.689610, -0.457387], [ 0.636953,  0.668498, -0.383929],
+        [ 0.506169,  0.793915, -0.336886], [ 0.580197,  0.796670, -0.169376],
+        [ 0.580090,  0.769900, -0.265986], [ 0.645367,  0.707614, -0.287722],
+        [ 0.975905,  0.216788, -0.024750], [ 0.981859,  0.096824, -0.163028],
+        [ 0.973474,  0.193423, -0.122209], [ 0.948166,  0.263883, -0.177053],
+        [ 0.953826, -0.027443, -0.299105], [ 0.893722, -0.147515, -0.423675],
+        [ 0.917487, -0.054759, -0.393979], [ 0.891236,  0.011527, -0.453392],
+        [ 0.962650,  0.069407, -0.261700], [ 0.902383,  0.108539, -0.417042],
+        [ 0.937120,  0.139103, -0.320087], [ 0.931373,  0.237045, -0.276323],
+        [ 0.865270,  0.174351, -0.470010], [ 0.816640,  0.332417, -0.471803],
+        [ 0.863280,  0.271307, -0.425606], [ 0.894372,  0.303357, -0.328744],
+        [ 0.509680,  0.849056, -0.139033], [ 0.435542,  0.846382, -0.306496],
+        [ 0.438935,  0.874762, -0.205249], [ 0.365007,  0.915888, -0.167088],
+        [ 0.343909,  0.815316, -0.465819], [ 0.241049,  0.757980, -0.606104],
+        [ 0.255929,  0.812716, -0.523443], [ 0.178924,  0.852799, -0.490632],
+        [ 0.354854,  0.857989, -0.371394], [ 0.190400,  0.897712, -0.397316],
+        [ 0.278254,  0.899997, -0.335529], [ 0.285159,  0.929839, -0.232558],
+        [ 0.112000,  0.926847, -0.358344], [ 0.044118,  0.975487, -0.215588],
+        [ 0.121865,  0.958690, -0.257028], [ 0.207127,  0.959099, -0.192946],
+        [ 0.589414, -0.770371, -0.243147], [ 0.560020, -0.727500, -0.396384],
+        [ 0.616865, -0.717414, -0.323721], [ 0.691910, -0.643752, -0.326871],
+        [ 0.516093, -0.662828, -0.542501], [ 0.459869, -0.578830, -0.673406],
+        [ 0.527761, -0.585660, -0.615200], [ 0.598792, -0.506276, -0.620591],
+        [ 0.579294, -0.662218, -0.475274], [ 0.661673, -0.506272, -0.553062],
+        [ 0.653675, -0.584862, -0.480256], [ 0.709675, -0.576731, -0.404650],
+        [ 0.721793, -0.421259, -0.549141], [ 0.822949, -0.328280, -0.463667],
+        [ 0.775962, -0.416237, -0.473952], [ 0.771571, -0.492950, -0.402092],
+        [-0.553582,  0.635419, -0.538322], [-0.639671,  0.484629, -0.596620],
+        [-0.627277,  0.567647, -0.533199], [-0.679284,  0.574503, -0.456640],
+        [-0.706230,  0.314627, -0.634231], [-0.748706,  0.137040, -0.648582],
+        [-0.760206,  0.228124, -0.608314], [-0.814449,  0.229271, -0.533018],
+        [-0.705126,  0.404861, -0.582139], [-0.815396,  0.320257, -0.482250],
+        [-0.759771,  0.409243, -0.505241], [-0.746566,  0.496059, -0.443356],
+        [-0.858857,  0.318858, -0.400866], [-0.878628,  0.401265, -0.258841],
+        [-0.846689,  0.407254, -0.342435], [-0.789760,  0.495343, -0.361821],
+        [-0.924434,  0.314554, -0.215588], [-0.903889,  0.233611, -0.358344],
+        [-0.937136,  0.236034, -0.257028], [-0.968602,  0.156790, -0.192946],
+        [-0.859336,  0.144298, -0.490632], [-0.793692,  0.051880, -0.606104],
+        [-0.850086,  0.057979, -0.523443], [-0.884581, -0.022998, -0.465819],
+        [-0.905342,  0.149985, -0.397316], [-0.928308, -0.017632, -0.371394],
+        [-0.939499,  0.069011, -0.335529], [-0.969804,  0.073461, -0.232558],
+        [-0.946917, -0.096998, -0.306496], [-0.976435, -0.165058, -0.139033],
+        [-0.974580, -0.089811, -0.205249], [-0.985924, -0.005978, -0.167088],
+        [-0.053324,  0.964447, -0.258841], [ 0.016203,  0.915993, -0.400866],
+        [-0.070546,  0.936889, -0.342435], [-0.173326,  0.915993, -0.361821],
+        [ 0.083434,  0.841980, -0.533018], [ 0.145350,  0.747137, -0.648582],
+        [ 0.064727,  0.791053, -0.608314], [-0.035501,  0.772328, -0.634231],
+        [-0.000945,  0.876033, -0.482250], [-0.119927,  0.804197, -0.582139],
+        [-0.104085,  0.856678, -0.505241], [-0.189740,  0.876033, -0.443356],
+        [-0.218068,  0.772328, -0.596620], [-0.389865,  0.747138, -0.538322],
+        [-0.299891,  0.791053, -0.533199], [-0.287315,  0.841980, -0.456640],
+        [ 0.005662, -0.885991, -0.463667], [ 0.129121, -0.825694, -0.549142],
+        [ 0.104696, -0.874305, -0.473952], [ 0.177730, -0.898184, -0.402092],
+        [ 0.253129, -0.742154, -0.620591], [ 0.371337, -0.639244, -0.673406],
+        [ 0.352945, -0.704953, -0.615200], [ 0.429056, -0.722221, -0.542501],
+        [ 0.230200, -0.800706, -0.553062], [ 0.405447, -0.780851, -0.475274],
+        [ 0.306298, -0.821910, -0.480256], [ 0.278310, -0.871092, -0.404650],
+        [ 0.473263, -0.786703, -0.396384], [ 0.502466, -0.829703, -0.243147],
+        [ 0.443147, -0.835958, -0.323721], [ 0.347195, -0.878983, -0.326871],
+        [-0.557655, -0.829704, -0.024750], [-0.591397, -0.786703, -0.177053],
+        [-0.535013, -0.835958, -0.122209], [-0.448119, -0.878983, -0.163028],
+        [-0.608542, -0.722222, -0.328744], [-0.607263, -0.639244, -0.471804],
+        [-0.567363, -0.704953, -0.425606], [-0.477805, -0.742154, -0.470010],
+        [-0.560284, -0.780851, -0.276323], [-0.430052, -0.800706, -0.417043],
+        [-0.471177, -0.821910, -0.320087], [-0.415585, -0.871092, -0.261700],
+        [-0.335654, -0.825695, -0.453393], [-0.188464, -0.885991, -0.423675],
+        [-0.283499, -0.874305, -0.393979], [-0.322184, -0.898184, -0.299105],
+        [-0.953363, -0.249821, -0.169376], [-0.923809, -0.181892, -0.336886],
+        [-0.928397, -0.259481, -0.265986], [-0.894196, -0.342972, -0.287722],
+        [-0.861473, -0.107892, -0.496208], [-0.770620, -0.032883, -0.636446],
+        [-0.803902, -0.111690, -0.584180], [-0.767608, -0.192697, -0.611266],
+        [-0.882075, -0.187484, -0.432196], [-0.790242, -0.272874, -0.548687],
+        [-0.846840, -0.271403, -0.457387], [-0.854704, -0.349398, -0.383930],
+        [-0.744783, -0.350916, -0.567588], [-0.703004, -0.498942, -0.506796],
+        [-0.756413, -0.427913, -0.494702], [-0.809496, -0.427738, -0.402190],
+        [ 0.431392,  0.137040, -0.891696], [ 0.398047,  0.314627, -0.861724],
+        [ 0.457871,  0.228124, -0.859251], [ 0.537458,  0.229271, -0.811526],
+        [ 0.351773,  0.484629, -0.800869], [ 0.295735,  0.635419, -0.713291],
+        [ 0.365455,  0.567647, -0.737712], [ 0.443487,  0.574503, -0.687943],
+        [ 0.417621,  0.404861, -0.813437], [ 0.510541,  0.496059, -0.702334],
+        [ 0.498210,  0.409243, -0.764399], [ 0.558394,  0.320257, -0.765266],
+        [ 0.582445,  0.495343, -0.644511], [ 0.704780,  0.401265, -0.585040],
+        [ 0.642400,  0.407254, -0.649204], [ 0.630483,  0.318858, -0.707687],
+        [ 0.489504,  0.051880, -0.870456], [ 0.595443,  0.144298, -0.790333],
+        [ 0.573977,  0.057979, -0.816816], [ 0.628440, -0.022998, -0.777518],
+        [ 0.688655,  0.233611, -0.686426], [ 0.763951,  0.314554, -0.563414],
+        [ 0.759240,  0.236034, -0.606500], [ 0.813471,  0.156790, -0.560073],
+        [ 0.674586,  0.149986, -0.722799], [ 0.798919,  0.073461, -0.596935],
+        [ 0.730382,  0.069011, -0.679543], [ 0.705928, -0.017632, -0.708064],
+        [ 0.839603, -0.005978, -0.543167], [ 0.841976, -0.165058, -0.513646],
+        [ 0.814100, -0.089811, -0.573738], [ 0.748672, -0.096998, -0.655807],
+        [ 0.456318, -0.032883, -0.889209], [ 0.595202, -0.107892, -0.796300],
+        [ 0.507548, -0.111690, -0.854353], [ 0.463503, -0.192697, -0.864889],
+        [ 0.715434, -0.181892, -0.674589], [ 0.808789, -0.249821, -0.532399],
+        [ 0.747671, -0.259481, -0.611275], [ 0.707664, -0.342972, -0.617723],
+        [ 0.639427, -0.187484, -0.745642], [ 0.633362, -0.349398, -0.690488],
+        [ 0.597104, -0.271403, -0.754856], [ 0.509028, -0.272874, -0.816352],
+        [ 0.584618, -0.427737, -0.689393], [ 0.445452, -0.498942, -0.743391],
+        [ 0.499292, -0.427913, -0.753391], [ 0.459801, -0.350916, -0.815746],
+        [-0.276003,  0.309387, -0.910001], [-0.425849,  0.252840, -0.868749],
+        [-0.354847,  0.332267, -0.873889], [-0.356751,  0.429325, -0.829704],
+        [-0.564808,  0.191210, -0.802764], [-0.685915,  0.127466, -0.716431],
+        [-0.634517,  0.208961, -0.744126], [-0.643341,  0.305039, -0.702184],
+        [-0.502148,  0.272499, -0.820727], [-0.579301,  0.385678, -0.718097],
+        [-0.507597,  0.370796, -0.777725], [-0.433318,  0.448301, -0.781832],
+        [-0.576783,  0.475041, -0.664573], [-0.490790,  0.625845, -0.606170],
+        [-0.501588,  0.548484, -0.669010], [-0.429643,  0.536442, -0.726386],
+        [-0.187471,  0.369801, -0.910001], [-0.269715,  0.488718, -0.829704],
+        [-0.180031,  0.451560, -0.873889], [-0.080186,  0.488718, -0.868749],
+        [-0.342885,  0.595645, -0.726386], [-0.403843,  0.685178, -0.606170],
+        [-0.327870,  0.667028, -0.669010], [-0.232067,  0.710273, -0.664573],
+        [-0.259470,  0.566933, -0.781832], [-0.147936,  0.680038, -0.718097],
+        [-0.160220,  0.607844, -0.777725], [-0.070675,  0.566933, -0.820726],
+        [-0.049500,  0.710273, -0.702184], [ 0.131372,  0.685178, -0.716431],
+        [ 0.036748,  0.667028, -0.744125], [ 0.027863,  0.595645, -0.802764],
+        [-0.135742, -0.436900, -0.889209], [ 0.010454, -0.501854, -0.864889],
+        [-0.081035, -0.513335, -0.854354], [-0.116528, -0.593572, -0.796300],
+        [ 0.159133, -0.556089, -0.815746], [ 0.302204, -0.596693, -0.743391],
+        [ 0.216434, -0.620933, -0.753391], [ 0.185164, -0.700322, -0.689393],
+        [ 0.068516, -0.573476, -0.816352], [ 0.094445, -0.717151, -0.690488],
+        [ 0.035036, -0.654954, -0.754856], [-0.058537, -0.663770, -0.745643],
+        [ 0.061373, -0.783997, -0.617723], [-0.062235, -0.844202, -0.532399],
+        [-0.030958, -0.790812, -0.611275], [-0.091454, -0.732507, -0.674589],
+        [-0.226770, -0.436900, -0.870456], [-0.207697, -0.593572, -0.777518],
+        [-0.263245, -0.513335, -0.816816], [-0.351449, -0.501854, -0.790333],
+        [-0.182623, -0.732507, -0.655807], [-0.153263, -0.844202, -0.513647],
+        [-0.213168, -0.790812, -0.573738], [-0.300529, -0.783997, -0.543167],
+        [-0.240944, -0.663770, -0.708065], [-0.359669, -0.717152, -0.596935],
+        [-0.330539, -0.654954, -0.679543], [-0.385598, -0.573477, -0.722799],
+        [-0.442567, -0.700323, -0.560073], [-0.571420, -0.596694, -0.563414],
+        [-0.496587, -0.620933, -0.606501], [-0.468598, -0.556089, -0.686426],
+        [-0.284882, -0.351740, -0.891696], [-0.409434, -0.416881, -0.811526],
+        [-0.379351, -0.343190, -0.859252], [-0.438090, -0.255946, -0.861724],
+        [-0.526769, -0.470843, -0.707687], [-0.630591, -0.509983, -0.585041],
+        [-0.613427, -0.449713, -0.649204], [-0.673594, -0.361769, -0.644511],
+        [-0.501791, -0.403205, -0.765266], [-0.648047, -0.294553, -0.702334],
+        [-0.562711, -0.314722, -0.764400], [-0.529250, -0.241277, -0.813437],
+        [-0.696646, -0.203516, -0.687943], [-0.699503, -0.043725, -0.713291],
+        [-0.661814, -0.133354, -0.737712], [-0.579521, -0.150880, -0.800868],
+        [ 0.346897,  0.127467, -0.929201], [ 0.201528,  0.191210, -0.960638],
+        [ 0.288738,  0.208962, -0.934326], [ 0.313420,  0.305039, -0.899288],
+        [ 0.047802,  0.252840, -0.966326], [-0.106147,  0.309387, -0.944993],
+        [-0.019450,  0.332267, -0.942985], [-0.000236,  0.429325, -0.903150],
+        [ 0.136870,  0.272499, -0.952371], [ 0.089017,  0.448301, -0.889439],
+        [ 0.158871,  0.370796, -0.915025], [ 0.248305,  0.385678, -0.888593],
+        [ 0.107557,  0.536442, -0.837055], [ 0.211240,  0.625845, -0.750796],
+        [ 0.196321,  0.548484, -0.812787], [ 0.267147,  0.475041, -0.838432],
+        [ 0.348009, -0.509982, -0.786643], [ 0.204165, -0.470843, -0.858268],
+        [ 0.306882, -0.449713, -0.838798], [ 0.364005, -0.361769, -0.858268],
+        [ 0.055341, -0.416881, -0.907275], [-0.090756, -0.351740, -0.931688],
+        [ 0.008845, -0.343190, -0.939224], [ 0.061824, -0.255946, -0.964712],
+        [ 0.158462, -0.403205, -0.901286], [ 0.164646, -0.241277, -0.956387],
+        [ 0.214764, -0.314722, -0.924568], [ 0.317683, -0.294553, -0.901286],
+        [ 0.215792, -0.150880, -0.964712], [ 0.360619, -0.043725, -0.931688],
+        [ 0.316346, -0.133354, -0.939224], [ 0.368013, -0.203516, -0.907275],
+        [-0.249395,  0.211636, -0.944993], [-0.252866,  0.047667, -0.966326],
+        [-0.302308,  0.139247, -0.942985], [-0.399691,  0.156740, -0.903150],
+        [-0.251522, -0.117947, -0.960638], [-0.245163, -0.276550, -0.929201],
+        [-0.299846, -0.192683, -0.934326], [-0.398310, -0.180640, -0.899288],
+        [-0.303643, -0.028104, -0.952371], [-0.449659, -0.090608, -0.888593],
+        [-0.403196, -0.012755, -0.915025], [-0.449900,  0.080548, -0.889439],
+        [-0.539741, -0.075573, -0.838432], [-0.659784,  0.031464, -0.750796],
+        [-0.582308,  0.017153, -0.812787], [-0.538734,  0.095418, -0.837055],
+        [-0.142065, -0.276550, -0.950441], [-0.148649, -0.117947, -0.981831],
+        [-0.093860, -0.192683, -0.976762], [ 0.010435, -0.180640, -0.983494],
+        [-0.149663,  0.047667, -0.987587], [-0.144419,  0.211636, -0.966620],
+        [-0.095021,  0.139247, -0.985688], [ 0.010177,  0.156740, -0.987587],
+        [-0.097504, -0.028104, -0.994838], [ 0.061717,  0.080548, -0.994838],
+        [ 0.008704, -0.012755, -0.999881], [ 0.061830, -0.090608, -0.993965],
+        [ 0.164023,  0.095418, -0.981831], [ 0.309310,  0.031464, -0.950441],
+        [ 0.213641,  0.017153, -0.976762], [ 0.164403, -0.075573, -0.983494]
 ]
 
 def run_CHASA(file):
@@ -4007,7 +4007,7 @@ def run_CHASA(file):
     hbparms['use_hbond'] = 1
     hbparms['use_sidechain_hbond'] = 1
     wmin = 2
-    wmax = numres-1       
+    wmax = numres-1
     hblist = make_hbond_list(prot, wmin, wmax, hbparms)
 
     numint, numvirt, bbtot, numbb,wat_list,cntmult_list = mk_virt_bb_cntmult_loosHbd(prot,hblist)
@@ -4019,20 +4019,18 @@ def run_CHASA(file):
 
     asalist  = make_asa_list(prot)
 #   wat_list = None
-    atot,tot_solv_nrg = print_hbs_chasa(file.split('.')[0]+'.sas', prot, 
+    atot,tot_solv_nrg = print_hbs_chasa(file.split('.')[0]+'.sas', prot,
           asalist, ext_atoms=wat_list,solv_list=cntmult_list)
-    int_solv_nrg = tot_solv_nrg - (2.5 * numint)   
+    int_solv_nrg = tot_solv_nrg - (2.5 * numint)
     print 'Internal Hbond + Solvation Energy = ', int_solv_nrg
 
 #   sys.stdout.write('Simulation Finished at: %s\n' % time.ctime(time.time()))
 
 if __name__ == "__main__":
-    import sys    
+    import sys
 
     if len(sys.argv) < 2:
-        print USAGE 
+        print USAGE
         sys.exit()
 
     run_CHASA(file)
-
-
