@@ -7,7 +7,7 @@ cache:
   pip: true
   directories: $HOME/modinst
 install:
-  - test -e $HOME/modinst || wget https://salilab.org/modeller/9.17/modeller-9.17.tar.gz && tar -xzf modeller-9.17.tar.gz && echo -e "\n$HOME/modinst\n" > inst-pre && wget -q $LICENSE_URL -O mod-license >& /dev/null && echo -e "\n\n\n" > inst-post && cat inst-pre mod-license inst-post > inst-cmd && cd modeller-9.17 && ./Install < ../inst-cmd > /dev/null
+  - test ! -e $HOME/modinst && wget https://salilab.org/modeller/9.17/modeller-9.17.tar.gz && tar -xzf modeller-9.17.tar.gz && echo -e "\n$HOME/modinst\n" > inst-pre && wget -q $LICENSE_URL -O mod-license >& /dev/null && echo -e "\n\n\n" > inst-post && cat inst-pre mod-license inst-post > inst-cmd && cd modeller-9.17 && ./Install < ../inst-cmd > /dev/null
   - export PYTHONPATH=$HOME/modinst/modlib:$HOME/modinst/lib/x86_64-intel8/python2.5:$PYTHONPATH
   - export LD_LIBRARY_PATH=$HOME/modinst/lib/x86_64-intel8:$LD_LIBRARY_PATH
   - pip install coverage biopython
