@@ -5,18 +5,15 @@ python:
   - 2.7
 cache:
   pip: true
-  directories: $HOME/modinst
 install:
   - wget https://salilab.org/modeller/9.17/modeller-9.17.tar.gz
   - tar -xzf modeller-9.17.tar.gz
-  - echo > inst-pre
-  - echo "$HOME/modinst" >> inst-pre
+  - echo -e "\n$HOME/modinst\n" > inst-pre
   - wget -q $LICENSE_URL -O mod-license >& /dev/null
-  - echo > inst-post
-  - echo >> inst-post
-  - echo >> inst-post
+  - echo -e "\n\n\n" > inst-post
   - cat inst-pre mod-license inst-post > inst-cmd
-  - cd modeller-9.17 && ./Install < ../inst-cmd > /dev/null
+  - (cd modeller-9.17 && ./Install < ../inst-cmd > /dev/null)
+  - rm -rf modeller-9.17
   - export PYTHONPATH=$HOME/modinst/modlib:$HOME/modinst/lib/x86_64-intel8/python2.5:$PYTHONPATH
   - export LD_LIBRARY_PATH=$HOME/modinst/lib/x86_64-intel8:$LD_LIBRARY_PATH
   - pip install coverage biopython
