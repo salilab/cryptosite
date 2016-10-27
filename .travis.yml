@@ -6,6 +6,10 @@ python:
 cache:
   pip: true
   directories: $HOME/modinst
+addons:
+  apt:
+    packages:
+    - tar
 install:
   - test -e $HOME/modinst || \
     wget https://salilab.org/modeller/9.17/modeller-9.17.tar.gz && \
