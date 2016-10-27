@@ -1,4 +1,4 @@
-from SiteCrypt import PATH2BIOPYTHON, PATH2FPOCKET, PATH2CONCAVITY
+from SiteCrypt import PATH2BIOPYTHON, PATH2CONCAVITY
 
 import os, sys, warnings
 sys.path.append(PATH2BIOPYTHON)
@@ -114,9 +114,7 @@ def get_cnc(apo):
     Find pockets using Fpocket algorithm.
     '''
 
-    global PATH2FPOCKET
-
-    command = [PATH2FPOCKET+"fpocket", "-f", apo+'.pdb']
+    command = ["fpocket", "-f", apo+'.pdb']
     prc = subprocess.Popen(command, stdout=subprocess.PIPE)
     prc.wait()
 
