@@ -10,6 +10,15 @@ def temporary_directory():
     yield _tmpdir
     shutil.rmtree(_tmpdir, ignore_errors=True)
 
+@contextlib.contextmanager
+def temporary_working_directory():
+    _tmpdir = tempfile.mkdtemp()
+    _olddir = os.getcwd()
+    os.chdir(_tmpdir)
+    yield _tmpdir
+    os.chdir(_olddir)
+    shutil.rmtree(_tmpdir, ignore_errors=True)
+
 if 'coverage' in sys.modules:
     import atexit
     # Collect coverage information from subprocesses

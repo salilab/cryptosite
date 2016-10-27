@@ -1,4 +1,3 @@
-from SiteCrypt import PATH2DSSP
 from SiteCrypt import PATH2BIOPYTHON
 
 import os, subprocess, sys
@@ -61,7 +60,7 @@ def HydChrSSE(pdb,chain):
     '''
     Predict hydrophobicity, charges, and SSE.
     '''
-    command = [PATH2DSSP+"dssp-2", "-i", pdb+".pdb", "-o", "%s.ssp" % pdb]
+    command = ["mkdssp", "-i", pdb+".pdb", "-o", "%s.ssp" % pdb]
     prc = subprocess.Popen(command, stdout=subprocess.PIPE)
     prc.wait()
 

@@ -13,6 +13,7 @@ system paths (e.g. `PATH`, `PYTHONPATH`):
 
 - [MODELLER](https://salilab.org/modeller/)
 - [MUSCLE](http://www.drive5.com/muscle/)
+- [DSSP](http://swift.cmbi.ru.nl/gv/dssp/)
 
 # Usage
 
