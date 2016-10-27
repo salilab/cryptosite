@@ -1,10 +1,7 @@
-from SiteCrypt import PATH2BIOPYTHON
-
 import glob
 import numpy
 from scipy import spatial
 import os, sys, warnings
-sys.path.append(PATH2BIOPYTHON)
 from Bio.PDB.PDBParser import PDBParser
 from Bio import PDB
 from Bio import SeqIO

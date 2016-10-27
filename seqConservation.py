@@ -1,7 +1,6 @@
-from SiteCrypt import PATH2BLAST, PATH2UNIPROT, PATH2UCLUST, PATH2BIOPYTHON
+from SiteCrypt import PATH2BLAST, PATH2UNIPROT, PATH2UCLUST
 
 import os, sys, warnings, subprocess
-sys.path.append(PATH2BIOPYTHON)
 from Bio.Blast import NCBIXML
 from Bio.PDB.PDBParser import PDBParser
 from Bio import PDB

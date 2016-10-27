@@ -1,10 +1,8 @@
 from SiteCrypt import PATH2PATCHDOCK
 from SiteCrypt import PATH2IMP
-from SiteCrypt import PATH2BIOPYTHON
 
 import numpy as np
 import os, subprocess, sys
-sys.path.append(PATH2BIOPYTHON)
 from Bio import PDB
 import glob
 from scipy.spatial.distance import cdist

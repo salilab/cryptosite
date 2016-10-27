@@ -1,6 +1,5 @@
 # __init__.py
 
-PATH2BIOPYTHON = '/netapp/sali/peterc/biopython-1.55'
 PATH2BLAST = './'
 PATH2UNIPROT = '/netapp/database/uniprot/sequences/uniprot'
 PATH2UCLUST = './'

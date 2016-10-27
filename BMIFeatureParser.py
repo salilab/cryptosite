@@ -1,7 +1,6 @@
-from SiteCrypt import PATH2BIOPYTHON, PATH2CONCAVITY
+from SiteCrypt import PATH2CONCAVITY
 
 import os, sys, warnings
-sys.path.append(PATH2BIOPYTHON)
 from Bio.PDB.PDBParser import PDBParser
 from Bio import PDB
 from Bio import SeqIO
