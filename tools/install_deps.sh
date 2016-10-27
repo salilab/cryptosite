@@ -47,8 +47,8 @@ if [ ! -e ${python_dir}/_modeller.so ]; then
   mod_dir=${top_dir}/modeller-${MODVER}
   wget https://salilab.org/modeller/${MODVER}/modeller-${MODVER}.tar.gz
   tar -xzf modeller-${MODVER}.tar.gz
-  echo -e "3\n${mod_dir}" > inst-pre
-  echo -e "\n\n\n" > inst-post
+  echo "\n${mod_dir}" > inst-pre
+  echo "\n\n\n" > inst-post
   cat inst-pre ${modeller_license_file} inst-post > inst-cmd
   (cd modeller-${MODVER} && ./Install < ../inst-cmd > /dev/null)
   ln -sf ${mod_dir}/bin/mod${MODVER} ${bin_dir}
