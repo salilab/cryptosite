@@ -18,6 +18,8 @@ temp_dir=`mktemp -d`
 
 cd ${temp_dir}
 
+mkdir -p ${bin_dir} ${lib_dir} ${python_dir}
+
 # MUSCLE
 if [ ! -e ${bin_dir}/muscle ]; then
   wget http://www.drive5.com/muscle/downloads3.8.31/muscle3.8.31_i86linux64.tar.gz
