@@ -15,6 +15,9 @@ install:
   - wget ftp://ftp.cmbi.ru.nl/pub/software/dssp/dssp-2.0.4-linux-amd64
   - mv dssp-2.0.4-linux-amd64 $HOME/bin/mkdssp
   - chmod a+x $HOME/bin/mkdssp
+  - wget http://downloads.sourceforge.net/project/fpocket/fpocket2.tar.gz
+  - tar -xzf fpocket2.tar.gz
+  - (cd fpocket2 && make && cp bin/fpocket $HOME/bin)
   - wget https://salilab.org/modeller/9.17/modeller-9.17.tar.gz
   - tar -xzf modeller-9.17.tar.gz
   - echo -e "\n$HOME/modinst" > inst-pre
