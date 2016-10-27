@@ -11,6 +11,9 @@ install:
   - wget http://www.drive5.com/muscle/downloads3.8.31/muscle3.8.31_i86linux64.tar.gz
   - tar -xvzf muscle3.8.31_i86linux64.tar.gz
   - mv muscle3.8.31_i86linux64 $HOME/bin/muscle
+  - wget ftp://ftp.cmbi.ru.nl/pub/software/dssp/dssp-2.0.4-linux-amd64
+  - mv dssp-2.0.4-linux-amd64 $HOME/bin/mkdssp
+  - chmod a+x $HOME/bin/mkdssp
   - wget https://salilab.org/modeller/9.17/modeller-9.17.tar.gz
   - tar -xzf modeller-9.17.tar.gz
   - echo -e "\n$HOME/modinst" > inst-pre
