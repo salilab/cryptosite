@@ -6,28 +6,14 @@ python:
 cache:
   pip: true
   ccache: true
+  directories:
+    - $HOME/deps
 install:
-  - mkdir -p $HOME/bin
-  - export PATH=$HOME/bin:$PATH
-  - wget http://www.drive5.com/muscle/downloads3.8.31/muscle3.8.31_i86linux64.tar.gz
-  - tar -xvzf muscle3.8.31_i86linux64.tar.gz
-  - mv muscle3.8.31_i86linux64 $HOME/bin/muscle
-  - wget ftp://ftp.cmbi.ru.nl/pub/software/dssp/dssp-2.0.4-linux-amd64
-  - mv dssp-2.0.4-linux-amd64 $HOME/bin/mkdssp
-  - chmod a+x $HOME/bin/mkdssp
-  - wget http://downloads.sourceforge.net/project/fpocket/fpocket2.tar.gz
-  - tar -xzf fpocket2.tar.gz
-  - (cd fpocket2 && sed -e 's/\$(LFLAGS) \$^/\$^ \$(LFLAGS)/' makefile > makefile.new && mv makefile.new makefile && make bin/fpocket && cp bin/fpocket $HOME/bin)
-  - wget https://salilab.org/modeller/9.17/modeller-9.17.tar.gz
-  - tar -xzf modeller-9.17.tar.gz
-  - echo -e "\n$HOME/modinst" > inst-pre
   - wget -q $LICENSE_URL -O mod-license >& /dev/null
-  - echo -e "\n\n\n" > inst-post
-  - cat inst-pre mod-license inst-post > inst-cmd
-  - (cd modeller-9.17 && ./Install < ../inst-cmd > /dev/null)
-  - rm -rf modeller-9.17
-  - export PYTHONPATH=$HOME/modinst/modlib:$HOME/modinst/lib/x86_64-intel8/python2.5:$PYTHONPATH
-  - export LD_LIBRARY_PATH=$HOME/modinst/lib/x86_64-intel8:$LD_LIBRARY_PATH
+  - tools/install-deps.sh $HOME/deps `pwd`/mod-license
+  - export PATH=$HOME/deps/bin:$PATH
+  - export PYTHONPATH=$HOME/deps/python:$PYTHONPATH
+  - export LD_LIBRARY_PATH=$HOME/deps/lib:$LD_LIBRARY_PATH
   - pip install coverage biopython
 script:
   - nosetests --with-coverage --cover-branches
