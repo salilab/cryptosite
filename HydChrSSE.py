@@ -1,5 +1,5 @@
 from SiteCrypt import PATH2DSSP
-from SiteCrypt import PATH2MUSCLE, PATH2BIOPYTHON
+from SiteCrypt import PATH2BIOPYTHON
 
 import os, subprocess, sys
 sys.path.append(PATH2BIOPYTHON)
