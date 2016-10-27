@@ -8,7 +8,7 @@ cache:
 install:
   - wget https://salilab.org/modeller/9.17/modeller-9.17.tar.gz
   - tar -xzf modeller-9.17.tar.gz
-  - echo -e "\n$HOME/modinst\n" > inst-pre
+  - echo -e "\n$HOME/modinst" > inst-pre
   - wget -q $LICENSE_URL -O mod-license >& /dev/null
   - echo -e "\n\n\n" > inst-post
   - cat inst-pre mod-license inst-post > inst-cmd
