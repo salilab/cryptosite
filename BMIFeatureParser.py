@@ -114,35 +114,33 @@ def get_cnc(apo):
     Find pockets using Fpocket algorithm.
     '''
 
-    command = ["fpocket", "-f", apo+'.pdb']
-    prc = subprocess.Popen(command, stdout=subprocess.PIPE)
-    prc.wait()
+    subprocess.check_call(["fpocket", "-f", apo+'.pdb'])
 
-    data = open('%s_out/%s_out.pdb' % (apo,apo))
-    D = data.readlines()
-    data.close()
+    with open('%s_out/%s_out.pdb' % (apo,apo)) as data:
+        D = data.readlines()
 
     Pockets = {}
     for d in D:
         if d[17:20]=='STP' and d[:6]=='HETATM':
             pn = int(d[22:26])
-            if pn not in Pockets: Pockets[pn] = [(float(d[30:38]), float(d[38:46]), float(d[46:54]))]
-            else: Pockets[pn].append( (float(d[30:38]), float(d[38:46]), float(d[46:54])) )
+            coords = (float(d[30:38]), float(d[38:46]), float(d[46:54]))
+            if pn not in Pockets:
+                Pockets[pn] = [coords]
+            else:
+                Pockets[pn].append(coords)
 
     PocketInfo = {}
-    data = open('%s_out/%s_info.txt' % (apo,apo))
-    Z = data.read().split('\n\n')
-    data.close()
-
+    with open('%s_out/%s_info.txt' % (apo,apo)) as data:
+        Z = data.read().split('\n\n')
 
     for p in Z:
         p = p.split('\n')
         pn = ''
         for i in p:
-            if i[:6]=='Pocket': pn = int(i.split(':')[0][6:])
+            if i[:6]=='Pocket':
+                pn = int(i.split(':')[0][6:])
             if 'Druggability Score' in i.strip().split(':')[0].strip():
                 PocketInfo[pn] = float(i.split(':')[1])
-
 
     Atoms = {}
     Residues = {}
@@ -155,18 +153,20 @@ def get_cnc(apo):
                 mini=1000.
                 for pi in Pockets[p]:
                     dist = linalg.norm( array(coords)-array(pi) )
-                    if dist<mini: mini=dist
-                if mini<=5.: adist[p] = mini
+                    if dist<mini:
+                        mini=dist
+                if mini<=5.:
+                    adist[p] = mini
             atom, res, resid, cid  = d[12:16], d[17:20], int(d[22:26]), d[21]
             Residues[(res,resid,cid)] = 0.
 
             if len(adist)>0:
-                if max([PocketInfo[i] for i in adist])>Residues[(res,resid,cid)]: Residues[(res,resid,cid)]=max([PocketInfo[i] for i in adist])
+                if max([PocketInfo[i]
+                       for i in adist])>Residues[(res,resid,cid)]:
+                    Residues[(res,resid,cid)] = max([PocketInfo[i]
+                                                     for i in adist])
     print Residues
     return Residues, ('1','1')
-
-
-
 
 def get_cnc2(apo):
     '''
