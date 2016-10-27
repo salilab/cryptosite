@@ -6,6 +6,14 @@ binding sites in proteins and protein complexes.
 
 A [web interface](https://salilab.org/cryptosite/) is also available.
 
+# Dependencies
+
+The CryptoSite tools expect to be able to find the following tools in standard
+system paths (e.g. `PATH`, `PYTHONPATH`):
+
+- [MODELLER](https://salilab.org/modeller/)
+- [MUSCLE](http://www.drive5.com/muscle/)
+
 # Usage
 
 Input files:
