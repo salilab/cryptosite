@@ -1,5 +1,3 @@
-from SiteCrypt import PATH2CONCAVITY
-
 import os, sys, warnings
 from Bio.PDB.PDBParser import PDBParser
 from Bio import PDB
@@ -166,66 +164,6 @@ def get_cnc(apo):
                                                      for i in adist])
     print Residues
     return Residues, ('1','1')
-
-def get_cnc2(apo):
-    '''
-    Find pockets using Concavity algorithm.
-    '''
-
-    global PATH2CONCAVITY
-
-    # do concavities
-    cmd = [PATH2CONCAVITY+'concavity', '-grid_method', 'pocketfinder', '-extraction_method', 'none', '-print_grid_pdb', '1', apo+'.pdb', 'cnc']
-    prc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    prc.wait()
-
-    # read concavities
-    data = open('%s_cnc_residue.pdb' % (apo))
-    D = data.readlines()
-    data.close()
-
-    Cnc = {}
-    for d in D:
-        d = d.strip()
-        if d[:4]=='ATOM':
-            atom, res, resid, cid = d[12:16], d[17:20], int(d[22:26]), d[21]
-            Cnc[(atom,res,resid,cid)] = float(d[60:66])
-
-    # extract grid points
-    data = open('%s_BS.pdb' % (apo))
-    D = data.readlines()
-    data.close()
-
-    XYZ = []
-    for d in D:
-        if 'ATOM'==d[:4]:
-            x,y,z = float(d[30:38]), float(d[38:46]), float(d[46:54])
-            XYZ.append(numpy.array([x,y,z]))
-    XYZ = numpy.array(XYZ)
-
-
-    data = open('%sp_cnc_pocket.pdb' % (apo))
-    D = data.readlines()
-    data.close()
-    Points = []
-    for d in D:
-        if 'HETATM'==d[:6]:
-            hind = d.index(' H ')
-            xyz = numpy.array([float(d[19+hind:27+hind]), float(d[27+hind:35+hind]), float(d[35+hind:43+hind])])
-
-            distances = numpy.sqrt(numpy.sum((XYZ-xyz)**2,axis=1))
-            if numpy.min(distances) <= 4. and float(d[49+hind:55+hind])>=3.:
-                Points.append(float(d[49+hind:55+hind]))
-
-    print
-    print 'HISTOGRAM %s:' % apo,achain
-    print numpy.histogram(Points, bins=10)
-    print
-
-
-    return Cnc, (str(len(Points)), str(numpy.mean(Points)), str(numpy.std(Points)))
-
-
 
 def protein_convexity(pdb):
     '''
