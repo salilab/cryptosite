@@ -2,8 +2,6 @@ import numpy as np
 from scipy import cluster
 import pickle, sys
 
-sys.path.append('/netapp/sali/peterc/cryptosite/src_multichain/scikit-learn-0.11')
-
 from sklearn.cluster import KMeans
 from sklearn.metrics import confusion_matrix
 from sklearn.naive_bayes import GaussianNB
