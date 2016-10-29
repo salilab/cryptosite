@@ -42,6 +42,7 @@ fi
 
 # Make sure that our conda environment is up to date
 export PATH=${conda_dir}/bin:$PATH
+conda update --yes -q conda yaml
 source activate python${python_version}
 
 export KEY_MODELLER=`cat ${modeller_license_file}`
