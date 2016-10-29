@@ -10,7 +10,7 @@ cache:
     - $HOME/deps
 addons:
   apt:
-    sources:
+    packages:
       - libblas-dev
       - liblapack-dev
 install:
