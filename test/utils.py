@@ -19,6 +19,15 @@ def temporary_working_directory():
     os.chdir(_olddir)
     shutil.rmtree(_tmpdir, ignore_errors=True)
 
+@contextlib.contextmanager
+def mocked_object(parent, objname, replacement):
+    """Temporarily replace parent.objname with replacement.
+       Typically `parent` is a module or class object."""
+    oldobj = getattr(parent, objname)
+    setattr(parent, objname, replacement)
+    yield
+    setattr(parent, objname, oldobj)
+
 if 'coverage' in sys.modules:
     import atexit
     # Collect coverage information from subprocesses

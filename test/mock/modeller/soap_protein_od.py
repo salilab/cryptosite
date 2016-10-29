@@ -1,0 +1,2 @@
+class Scorer(object):
+    pass
