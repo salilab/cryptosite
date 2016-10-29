@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 # Install all dependencies under the provided directory, if they're not
 # there already. This is mainly intended for use by Travis CI
@@ -35,8 +35,8 @@ if [ ! -e ${conda_dir}/envs/python${python_version} ]; then
   fi
   bash miniconda.sh -b -p ${conda_dir}
   export PATH=${conda_dir}/bin:$PATH
-  conda update -q conda
-  conda create -q -n python${python_version} python=${python_version}
+  conda update --yes -q conda
+  conda create --yes -q -n python${python_version} python=${python_version}
   conda env list
 fi
 
@@ -45,7 +45,7 @@ export PATH=${conda_dir}/bin:$PATH
 source activate python${python_version}
 
 export KEY_MODELLER=`cat ${modeller_license_file}`
-conda update -q conda
+conda update --yes -q conda
 conda install --yes -c salilab pip biopython scikit-learn scipy modeller nose
 pip install coverage
 
