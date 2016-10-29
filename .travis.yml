@@ -14,7 +14,7 @@ install:
   - export PATH=$HOME/deps/bin:$PATH
   - export PYTHONPATH=$HOME/deps/python:$PYTHONPATH
   - export LD_LIBRARY_PATH=$HOME/deps/lib:$LD_LIBRARY_PATH
-  - pip install coverage biopython scikit-learn
+  - pip install coverage biopython scikit-learn scipy
 script:
   - nosetests --with-coverage --cover-branches
 after_success:
