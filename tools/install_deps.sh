@@ -4,21 +4,46 @@
 # there already. This is mainly intended for use by Travis CI
 # (see ../.travis.yml)
 
-if [ $# -ne 2 ]; then
-  echo "Usage: $0 top_directory modeller_license_file"
+if [ $# -ne 3 ]; then
+  echo "Usage: $0 top_directory python_version modeller_license_file"
   exit 1
 fi
 
 top_dir=$1
-modeller_license_file=$2
+python_version=$2
+modeller_license_file=$3
 bin_dir=${top_dir}/bin
 lib_dir=${top_dir}/lib
-python_dir=${top_dir}/python
+conda_dir=${top_dir}/miniconda
 temp_dir=`mktemp -d`
 
 cd ${temp_dir}
 
-mkdir -p ${bin_dir} ${lib_dir} ${python_dir}
+mkdir -p ${bin_dir} ${lib_dir}
+
+# Use miniconda Python rather than the Travis environment (we do this because
+# the latter has terrible support for scipy, while the former trivially supports
+# both it and Sali lab packages like Modeller)
+if [ ! -e ${conda_dir}/bin/conda ]; then
+  # Clean up after a potential previous install failure
+  rm -rf ${conda_dir}
+  # Save on some downloading if the version is the same
+  if [ "$python_version" == "2.7" ]; then
+    wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh
+  else
+    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+  fi
+  bash miniconda.sh -b -p ${conda_dir}
+fi
+
+# Make sure that our conda environment is up to date
+
+# Note that .travis.yml will need to do this too
+export PATH=${conda_dir}/bin:$PATH
+conda update --yes conda
+export KEY_MODELLER=`cat ${modeller_license_file}`
+conda install --yes -c salilab pip biopython scikit-learn scipy modeller nose
+pip install coverage
 
 # MUSCLE
 if [ ! -e ${bin_dir}/muscle ]; then
@@ -39,23 +64,6 @@ if [ ! -e ${bin_dir}/fpocket ]; then
   wget http://downloads.sourceforge.net/project/fpocket/fpocket2.tar.gz
   tar -xzf fpocket2.tar.gz
   (cd fpocket2 && sed -e 's/\$(LFLAGS) \$^/\$^ \$(LFLAGS)/' makefile > makefile.new && mv makefile.new makefile && make bin/fpocket && cp bin/fpocket ${bin_dir})
-fi
-
-# MODELLER
-if [ ! -e ${python_dir}/_modeller.so ]; then
-  MODVER=9.17
-  mod_dir=${top_dir}/modeller-${MODVER}
-  wget https://salilab.org/modeller/${MODVER}/modeller-${MODVER}.tar.gz
-  tar -xzf modeller-${MODVER}.tar.gz
-  echo "\n${mod_dir}" > inst-pre
-  echo "\n\n\n" > inst-post
-  cat inst-pre ${modeller_license_file} inst-post > inst-cmd
-  (cd modeller-${MODVER} && ./Install < ../inst-cmd > /dev/null)
-  ln -sf ${mod_dir}/bin/mod${MODVER} ${bin_dir}
-  ln -sf ${mod_dir}/lib/x86_64-intel8/lib*so* ${lib_dir}
-  rm -f ${python_dir}/modeller
-  ln -sf ${mod_dir}/modlib/modeller ${python_dir}
-  ln -sf ${mod_dir}/lib/x86_64-intel8/python2.5/_modeller.so ${python_dir}
 fi
 
 cd /
