@@ -11,7 +11,8 @@ A [web interface](https://salilab.org/cryptosite/) is also available.
 The CryptoSite tools expect to be able to find the following tools in standard
 system paths (e.g. `PATH`, `PYTHONPATH`):
 
-- [MODELLER](https://salilab.org/modeller/)
+- [MODELLER](https://salilab.org/modeller/) plus the
+  [SOAP-Protein library](https://salilab.org/SOAP/)
 - [MUSCLE](http://www.drive5.com/muscle/)
 - [DSSP](http://swift.cmbi.ru.nl/gv/dssp/)
 - [fpocket (version 2)](http://fpocket.sourceforge.net/)
