@@ -24,25 +24,29 @@ mkdir -p ${bin_dir} ${lib_dir}
 # Use miniconda Python rather than the Travis environment (we do this because
 # the latter has terrible support for scipy, while the former trivially supports
 # both it and Sali lab packages like Modeller)
-if [ ! -e ${conda_dir}/bin/conda ]; then
+if [ ! -e ${conda_dir}/envs/python${python_version} ]; then
   # Clean up after a potential previous install failure
   rm -rf ${conda_dir}
   # Save on some downloading if the version is the same
-  if [ "$python_version" == "2.7" ]; then
+  if [ "${python_version}" == "2.7" ]; then
     wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh
   else
     wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
   fi
   bash miniconda.sh -b -p ${conda_dir}
+  export PATH=${conda_dir}/bin:$PATH
+  conda update -q conda
+  conda create -q -n python${python_version} python=${python_version}
+  conda env list
 fi
 
 # Make sure that our conda environment is up to date
-
-# Note that .travis.yml will need to do this too
 export PATH=${conda_dir}/bin:$PATH
-conda update --yes conda
+source activate python${python_version}
+
 export KEY_MODELLER=`cat ${modeller_license_file}`
-conda install --yes -c salilab python=${python_version} pip biopython scikit-learn scipy modeller nose
+conda update -q conda
+conda install --yes -c salilab pip biopython scikit-learn scipy modeller nose
 pip install coverage
 
 # MUSCLE
