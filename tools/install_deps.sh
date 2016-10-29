@@ -37,12 +37,10 @@ if [ ! -e ${conda_dir}/envs/python${python_version} ]; then
   export PATH=${conda_dir}/bin:$PATH
   conda update --yes -q conda
   conda create --yes -q -n python${python_version} python=${python_version}
-  conda env list
 fi
 
 # Make sure that our conda environment is up to date
 export PATH=${conda_dir}/bin:$PATH
-conda update --yes -q conda yaml
 source activate python${python_version}
 
 export KEY_MODELLER=`cat ${modeller_license_file}`
