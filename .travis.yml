@@ -10,9 +10,9 @@ cache:
     - $HOME/deps
 install:
   - wget -q $LICENSE_URL -O mod-license >& /dev/null
-  - tools/install_deps.sh $HOME/deps $TRAVIS_PYTHON_VERSION `pwd`/mod-license
+  - tools/install_deps.sh $HOME/deps $HOME/miniconda $TRAVIS_PYTHON_VERSION `pwd`/mod-license
   - export PATH=$HOME/deps/bin:$PATH
-  - source $HOME/deps/miniconda/bin/activate python$TRAVIS_PYTHON_VERSION
+  - source $HOME/miniconda/bin/activate python$TRAVIS_PYTHON_VERSION
   - python -V
 script:
   - nosetests --with-coverage --cover-branches
