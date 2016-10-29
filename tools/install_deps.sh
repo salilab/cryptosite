@@ -42,7 +42,7 @@ fi
 export PATH=${conda_dir}/bin:$PATH
 conda update --yes conda
 export KEY_MODELLER=`cat ${modeller_license_file}`
-conda install --yes -c salilab pip biopython scikit-learn scipy modeller nose
+conda install --yes -c salilab python=${python_version} pip biopython scikit-learn scipy modeller nose
 pip install coverage
 
 # MUSCLE
