@@ -66,5 +66,12 @@ if [ ! -e ${bin_dir}/fpocket ]; then
   (cd fpocket2 && sed -e 's/\$(LFLAGS) \$^/\$^ \$(LFLAGS)/' makefile > makefile.new && mv makefile.new makefile && make bin/fpocket && cp bin/fpocket ${bin_dir})
 fi
 
+# PatchDock
+if [ ! -e ${bin_dir}/patch_dock.Linux ]; then
+  wget http://bioinfo3d.cs.tau.ac.il/PatchDock/download/patch_dock_download.zip
+  unzip patch_dock_download.zip
+  (cd PatchDock && cp -r * ${bin_dir})
+fi
+
 cd /
 rm -rf ${temp_dir}

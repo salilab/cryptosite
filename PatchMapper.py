@@ -1,4 +1,3 @@
-from SiteCrypt import PATH2PATCHDOCK
 from SiteCrypt import PATH2IMP
 
 import numpy as np
@@ -50,12 +49,12 @@ def patchmap_feature(pdb):
     Calculating PatchMap features.
     '''
 
-    cmd = [PATH2PATCHDOCK+"buildParams.pl", pdb+'.pdb', "ligands.ids", "2.0", "drug"]
+    cmd = ["buildParams.pl", pdb+'.pdb', "ligands.ids", "2.0", "drug"]
     print cmd
     prc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     prc.wait()
 
-    cmd2 = [PATH2PATCHDOCK+"patch_dock.Linux", "params.txt", pdb[:-4]+".out", "7"]
+    cmd2 = ["patch_dock.Linux", "params.txt", pdb[:-4]+".out", "7"]
     print cmd2
     prc2 = subprocess.Popen(cmd2, stdout=subprocess.PIPE)
     prc2.wait()

@@ -16,6 +16,7 @@ system paths (e.g. `PATH`, `PYTHONPATH`):
 - [MUSCLE](http://www.drive5.com/muscle/)
 - [DSSP](http://swift.cmbi.ru.nl/gv/dssp/)
 - [fpocket (version 2)](http://fpocket.sourceforge.net/)
+- [PatchDock](http://bioinfo3d.cs.tau.ac.il/PatchDock/)
 - [Biopython](http://biopython.org/)
 - [scikit-learn](http://scikit-learn.org/)
 
