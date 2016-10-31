@@ -2,7 +2,7 @@ import sys, os, glob
 from numpy import linalg, array, shape, argwhere
 from scipy import spatial
 import subprocess
-
+from operator import itemgetter
 
 def get_cnc(pfil,ifil):
 
@@ -84,54 +84,55 @@ def run_fpocket(Snap):
 
 #run_fpocket('SnapList.txt')
 
-RES = {}
+def main():
+    RES = {}
 
-from operator import itemgetter
-import sys
+    #out = open('pockets_%s.out' % sys.argv[-1],'w')
+    out = open('pockets.out','w')
+    snaps = []
 
-#out = open('pockets_%s.out' % sys.argv[-1],'w')
-out = open('pockets.out','w')
-snaps = []
+    data = open('SnapList.txt')
+    Data = data.readlines()
+    soap_scores = [float(i.strip().split()[-1]) for i in Data]
+    DRS = [i.strip().split()[0] for i in Data if float(i.strip().split()[-1]) < min(soap_scores)*.4]
+    data.close()
+    x=0
 
-data = open('SnapList.txt')
-Data = data.readlines()
-soap_scores = [float(i.strip().split()[-1]) for i in Data]
-DRS = [i.strip().split()[0] for i in Data if float(i.strip().split()[-1]) < min(soap_scores)*.4]
-data.close()
-x=0
+    print 'DRS: ', DRS
 
-print 'DRS: ', DRS
+    for dr in DRS:
+	#if 'pm.pdb' not in dr: continue
+	run_fpocket(dr)
+	if 1: #for y,fil in enumerate(glob.glob(dr+'/pm.pdb.B1*_out/*_out.pdb')):
+	    fils = glob.glob(dr.rsplit('.',1)[0]+'_out/*_out.pdb')
+	    print fils
+	    if len(fils)==0: continue
+	    fil = fils[0]
+	    pdbfil = fil
+	    inffil = fil.rsplit('_',1)[0]+'_info.txt'
+	    print pdbfil, inffil
+	    res = get_cnc(pdbfil,inffil)
+	    snaps.append(fil)
 
-for dr in DRS:
-    #if 'pm.pdb' not in dr: continue
-    run_fpocket(dr)
-    if 1: #for y,fil in enumerate(glob.glob(dr+'/pm.pdb.B1*_out/*_out.pdb')):
-        fils = glob.glob(dr.rsplit('.',1)[0]+'_out/*_out.pdb')
-        print fils
-        if len(fils)==0: continue
-        fil = fils[0]
-        pdbfil = fil
-        inffil = fil.rsplit('_',1)[0]+'_info.txt'
-        print pdbfil, inffil
-        res = get_cnc(pdbfil,inffil)
-        snaps.append(fil)
+	    if x==0:
+		for r in res: RES[r] = [res[r]]
+		x += 1
+	    else:
+		for r in res:
+		    if r in RES: RES[r].append(res[r])
+		    else: RES[r] = [res[r]]
 
-        if x==0:
-            for r in res: RES[r] = [res[r]]
-            x += 1
-        else:
-            for r in res:
-                if r in RES: RES[r].append(res[r])
-                else: RES[r] = [res[r]]
-
-        #if x==3: break
-        x += 1
+	    #if x==3: break
+	    x += 1
 
 
 
-out.write('\t'.join(['Res','ResID','ChainID']+snaps)+'\n')
+    out.write('\t'.join(['Res','ResID','ChainID']+snaps)+'\n')
 
-# --- r[2] chainID added to pockets.out file. Eventualy columns adressed later have to be changed.
-for r in sorted(RES.keys(), key=itemgetter(1)):
-    out.write('\t'.join([str(i) for i in [r[0],r[1],r[2]]+RES[r]])+'\n')
-out.close()
+    # --- r[2] chainID added to pockets.out file. Eventualy columns adressed later have to be changed.
+    for r in sorted(RES.keys(), key=itemgetter(1)):
+	out.write('\t'.join([str(i) for i in [r[0],r[1],r[2]]+RES[r]])+'\n')
+    out.close()
+
+if __name__ == '__main__':
+    main()
