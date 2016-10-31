@@ -227,9 +227,8 @@ def write_pdb(pdb,model='linear'):
         else: out.write(d)
     out.close()
 
+def main():
+    predict(sys.argv[-1]+'.features', model='final')
 
-
-
-#predict('1NW3A.features', model='poly')
-predict(sys.argv[-1]+'.features', model='final')
-#predict2('Train_final.features',model='poly')
+if __name__ == '__main__':
+    main()
