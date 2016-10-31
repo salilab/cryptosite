@@ -19,9 +19,7 @@ from sklearn.metrics import roc_curve, auc
 #import pylab as pl
 from sklearn.linear_model import LogisticRegression
 from operator import itemgetter
-
-
-MODELPATH = '/netapp/sali/peterc/cryptosite/src_multichain/'
+import cryptosite.config
 
 def get_matrix(inputdata, model='linear'):
 
@@ -117,35 +115,41 @@ def predict(inputdata, model='linear'):
     if model=='linear':
 
         print 'Scaling ...'
-        out1 = open(MODELPATH+'LinearScaler_Final.pkl')
+        out1 = open(os.path.join(cryptosite.config.datadir,
+                                 'LinearScaler_Final.pkl'))
         scaler = pickle.load(out1)
         out1.close()
         X_learn = scaler.transform(X_learn)
 
-        outmodel = open(MODELPATH+'LinearSVC_FinalModel.pkl')
+        outmodel = open(os.path.join(cryptosite.config.datadir,
+                                     'LinearSVC_FinalModel.pkl'))
         learner = pickle.load(outmodel)
         outmodel.close()
 
     elif model=='poly':
 
         print 'Scaling ...'
-        out1 = open(MODELPATH+'PolyScaler_Final.pkl')
+        out1 = open(os.path.join(cryptosite.config.datadir,
+                                 'PolyScaler_Final.pkl'))
         scaler = pickle.load(out1)
         out1.close()
         X_learn = scaler.transform(X_learn)
 
-        outmodel = open(MODELPATH+'PolySVC_FinalModel.pkl')
+        outmodel = open(os.path.join(cryptosite.config.datadir,
+                                     'PolySVC_FinalModel.pkl'))
         learner = pickle.load(outmodel)
         outmodel.close()
 
     elif model=='final':
         print 'Scaling ...'
-        out1 = open(MODELPATH+'Scaler_Final_Final.pkl')
+        out1 = open(os.path.join(cryptosite.config.datadir,
+                                 'Scaler_Final_Final.pkl'))
         scaler = pickle.load(out1)
         out1.close()
         X_learn = scaler.transform(X_learn)
 
-        outmodel = open(MODELPATH+'SVM_Final_Final.pkl')
+        outmodel = open(os.path.join(cryptosite.config.datadir,
+                                     'SVM_Final_Final.pkl'))
         learner = pickle.load(outmodel)
         outmodel.close()
 
