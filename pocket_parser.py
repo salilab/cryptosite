@@ -75,12 +75,7 @@ def get_cnc(pfil,ifil):
 
 
 def run_fpocket(Snap):
-
-    if 1:
-        #command = ["/netapp/sali/peterc/Undrugabble/Software/fpocket2/bin/fpocket", "-f", d]
-        #prc = subprocess.Popen(command, stdout=subprocess.PIPE)
-        #prc.wait()
-        os.system("/netapp/sali/peterc/Undrugabble/Software/fpocket2/bin/fpocket -f "+Snap)
+    subprocess.check_call(["fpocket", "-f", Snap])
 
 #run_fpocket('SnapList.txt')
 
