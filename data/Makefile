@@ -2,7 +2,8 @@ include ../Makefile.include
 
 .PHONY: install
 
-FILES=${DATADIR}/Scaler_Final_Final.pkl ${DATADIR}/SVM_Final_Final.pkl
+FILES=${DATADIR}/Scaler_Final_Final.pkl ${DATADIR}/SVM_Final_Final.pkl \
+      ${DATADIR}/PolyScaler_Final.pkl ${DATADIR}/PolySVC_FinalModel.pkl
 
 install: ${FILES}
 
