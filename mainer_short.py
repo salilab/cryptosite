@@ -1,10 +1,10 @@
 import sys
 sys.path.append('.')#/modbase1/home/peterc/cryptosite/src/')
-from cleaning import *
+from cryptosite.cleaning import *
 from seqConservation import *
-from HydChrSSE import *
-from BMIFeatureParser import *
-from ResParserBMI import *
+from cryptosite.hyd_chr_sse import *
+from cryptosite.bmi_feature_parser import *
+from cryptosite.res_parser_bmi import *
 from PatchMapper import *
 import os
 from modeller import *

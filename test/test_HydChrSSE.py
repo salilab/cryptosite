@@ -5,8 +5,8 @@ import sys
 import shutil
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(TOPDIR)
-import HydChrSSE
+sys.path.append(os.path.join(TOPDIR, 'lib'))
+from cryptosite import hyd_chr_sse
 
 class Tests(unittest.TestCase):
     def test_HydChrSSE(self):
@@ -14,7 +14,7 @@ class Tests(unittest.TestCase):
         with utils.temporary_working_directory() as tmpdir:
             shutil.copy(os.path.join(TOPDIR, 'test', 'input', 'test.pdb'),
                         '1abc.pdb')
-            HydChrSSE.HydChrSSE('1abc', 'A')
+            hyd_chr_sse.HydChrSSE('1abc', 'A')
             with open('1ab_mdlA.hcs') as fh:
                 data = fh.read()
             self.assertEqual(data,

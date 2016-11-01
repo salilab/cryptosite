@@ -3,9 +3,9 @@ import utils
 import os
 import sys
 
-TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'lib'))
 sys.path.append(TOPDIR)
-import cleaning
+from cryptosite import cleaning
 
 class Tests(unittest.TestCase):
 

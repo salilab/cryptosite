@@ -6,9 +6,8 @@ from numpy import dot, transpose, linalg, sqrt, array
 import numpy
 from operator import itemgetter
 import subprocess
-from CHASA import *
 from modeller import *
-
+import cryptosite.chasa
 
 warnings.filterwarnings("ignore")
 
@@ -23,7 +22,8 @@ def get_sas(pdb,prog='CHASA',probe=1.4):
     #TODO: add option for calculating that in Modeller with varying rolling sphere radius.
 
     # do SAS
-    if prog == 'CHASA': run_CHASA(pdb+'.pdb')
+    if prog == 'CHASA':
+        cryptosite.chasa.run_CHASA(pdb+'.pdb')
     elif prog =='MOD':
         # Read the PDB file
         env = environ()
