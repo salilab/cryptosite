@@ -1,12 +1,8 @@
-from SiteCrypt import PATH2IMP
-
 import numpy as np
 import os, subprocess, sys
 from Bio import PDB
 import glob
 from scipy.spatial.distance import cdist
-sys.path.append(os.path.join(os.environ['MODULESHOME'], 'init'))
-from python import module
 
 def read_ligand_data():
     data = open('ligands.ids')
@@ -82,9 +78,6 @@ def patchmap_feature(pdb):
     # - Create a dictionary with residue contact frequencies
     Counts = dict([ (c,0) for c in set(Res.values()) ])
 
-    module(['load', 'imp/last_ok_build'])
-
-
     for i,lig in enumerate(ligands):
 
         try: data = open(pdb+'.pdb'+str(i)+'.res')
@@ -98,10 +91,6 @@ def patchmap_feature(pdb):
             output.write(d[0]+' '+d[-1]+'\n')
         output.close()
 
-
-        #proc = subprocess.Popen([PATH2IMP+'/setup_environment.sh',\
-        #                         PATH2IMP+'/bin/ligand_score_m',\
-        #                pdb+'.pdb', 'Ligands/%s.mol2' % lig.split('/')[-1].split('.')[0], 'tr'],stdout=subprocess.PIPE)
 
         proc = subprocess.Popen(['ligand_score_multiple',\
                                  pdb+'.pdb', 'Ligands/%s.mol2' % lig.split('/')[-1].split('.')[0], 'tr'],stdout=subprocess.PIPE)
@@ -137,8 +126,6 @@ def patchmap_feature(pdb):
     output = open(pdb+'.pdb.ptm','w')
     for c in Counts: output.write('\t'.join([str(j) for j in c])+'\t'+str(Counts[c])+'\n')
     output.close()
-
-    module(['unload', 'imp/last_ok_build'])
 
 if __name__=='__main__':
 

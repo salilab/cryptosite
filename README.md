@@ -17,6 +17,7 @@ system paths (e.g. `PATH`, `PYTHONPATH`):
 - [DSSP](http://swift.cmbi.ru.nl/gv/dssp/)
 - [fpocket (version 2)](http://fpocket.sourceforge.net/)
 - [PatchDock](http://bioinfo3d.cs.tau.ac.il/PatchDock/)
+- [IMP](https://integrativemodeling.org/)
 - [Biopython](http://biopython.org/)
 - [scikit-learn](http://scikit-learn.org/)
 
