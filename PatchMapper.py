@@ -8,26 +8,25 @@ from scipy.spatial.distance import cdist
 sys.path.append(os.path.join(os.environ['MODULESHOME'], 'init'))
 from python import module
 
-
-data = open('ligands.ids')
-ligands = [i.strip() for i in data.readlines()]
-data.close()
-
-Lxyz = {}
-Lcor = {}
-for lig in ligands:
-    Lxyz[lig] = []
-    data = open(lig)
-    D = data.readlines()
+def read_ligand_data():
+    data = open('ligands.ids')
+    ligands = [i.strip() for i in data.readlines()]
     data.close()
 
-    for d in D:
-        x,y,z = float(d[30:38]), float(d[38:46]), float(d[46:54])
-        Lxyz[lig].append(np.array([x,y,z]))
-    Lxyz[lig] = np.array(Lxyz[lig])
-    Lcor[lig] = D
+    Lxyz = {}
+    Lcor = {}
+    for lig in ligands:
+	Lxyz[lig] = []
+	data = open(lig)
+	D = data.readlines()
+	data.close()
 
-
+	for d in D:
+	    x,y,z = float(d[30:38]), float(d[38:46]), float(d[46:54])
+	    Lxyz[lig].append(np.array([x,y,z]))
+	Lxyz[lig] = np.array(Lxyz[lig])
+	Lcor[lig] = D
+    return Lxyz
 
 def transform(t,xyz):
 
@@ -49,6 +48,7 @@ def patchmap_feature(pdb):
     Calculating PatchMap features.
     '''
 
+    Lxyz = read_ligand_data()
     cmd = ["buildParams.pl", pdb+'.pdb', "ligands.ids", "2.0", "drug"]
     print cmd
     prc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
