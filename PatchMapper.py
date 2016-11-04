@@ -3,6 +3,17 @@ import os, subprocess, sys
 from Bio import PDB
 import glob
 from scipy.spatial.distance import cdist
+import cryptosite.config
+
+def make_ligand_file(fname):
+    """Make a list of all ligand files, in the given file."""
+    with open(fname, 'w') as fh:
+        fh.write('\n'.join(glob.glob(os.path.join(cryptosite.config.datadir,
+                                                  'ligands', '*.pdb'))))
+
+def get_ligand_mol2(name):
+    """Given the name of a ligand (e.g. 'ACM') return the full path."""
+    return os.path.join(cryptosite.config.datadir, 'ligands', name + '.mol2')
 
 def read_ligand_data():
     data = open('ligands.ids')
@@ -22,7 +33,7 @@ def read_ligand_data():
 	    Lxyz[lig].append(np.array([x,y,z]))
 	Lxyz[lig] = np.array(Lxyz[lig])
 	Lcor[lig] = D
-    return Lxyz
+    return Lxyz, ligands
 
 def transform(t,xyz):
 
@@ -44,7 +55,8 @@ def patchmap_feature(pdb):
     Calculating PatchMap features.
     '''
 
-    Lxyz = read_ligand_data()
+    make_ligand_file('ligands.ids')
+    Lxyz, ligands = read_ligand_data()
     cmd = ["buildParams.pl", pdb+'.pdb', "ligands.ids", "2.0", "drug"]
     print cmd
     prc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
@@ -80,8 +92,7 @@ def patchmap_feature(pdb):
 
     for i,lig in enumerate(ligands):
 
-        try: data = open(pdb+'.pdb'+str(i)+'.res')
-        except IOError: continue
+        data = open(pdb+'.pdb'+str(i)+'.res')
         D = data.readlines()
         data.close()
 
@@ -92,8 +103,10 @@ def patchmap_feature(pdb):
         output.close()
 
 
-        proc = subprocess.Popen(['ligand_score_multiple',\
-                                 pdb+'.pdb', 'Ligands/%s.mol2' % lig.split('/')[-1].split('.')[0], 'tr'],stdout=subprocess.PIPE)
+        proc = subprocess.Popen(['ligand_score_multiple',
+                   pdb+'.pdb',
+                   get_ligand_mol2(lig.split('/')[-1].split('.')[0]), 'tr'],
+                   stdout=subprocess.PIPE)
 
         proc.wait()
 
