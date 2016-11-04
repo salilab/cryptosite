@@ -9,8 +9,7 @@ import contextlib
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(TOPDIR, 'lib'))
-sys.path.append(TOPDIR)
-import PatchMapper
+import cryptosite.patch_mapper
 
 @contextlib.contextmanager
 def mock_patch_dock_lig_score():
@@ -60,21 +59,21 @@ class Tests(unittest.TestCase):
         """Test make_ligand_file() function"""
         with utils.temporary_directory() as tmpdir:
             fname = os.path.join(tmpdir, 'ligands.ids')
-            PatchMapper.make_ligand_file(fname)
+            cryptosite.patch_mapper.make_ligand_file(fname)
             with open(fname) as fh:
                 lines = fh.readlines()
             self.assertEqual(len(lines), 16)
 
     def test_get_ligand_mol2(self):
         """Test get_ligand_mol2() function"""
-        fname = PatchMapper.get_ligand_mol2('ACM')
+        fname = cryptosite.patch_mapper.get_ligand_mol2('ACM')
         self.assertTrue(os.path.exists(fname))
 
     def test_read_ligand_data(self):
         """Test read_ligand_data() function"""
         with utils.temporary_working_directory() as tmpdir:
-            PatchMapper.make_ligand_file('ligands.ids')
-            xyz, ligands = PatchMapper.read_ligand_data()
+            cryptosite.patch_mapper.make_ligand_file('ligands.ids')
+            xyz, ligands = cryptosite.patch_mapper.read_ligand_data()
             self.assertEqual(len(xyz), 16)
             self.assertEqual(len(ligands), 16)
 
@@ -83,7 +82,7 @@ class Tests(unittest.TestCase):
         with utils.temporary_working_directory() as tmpdir:
             shutil.copy(os.path.join(TOPDIR, 'test', 'input', 'test.pdb'), '.')
             with mock_patch_dock_lig_score():
-                PatchMapper.patchmap_feature('test')
+                cryptosite.patch_mapper.patchmap_feature('test')
             with open('test.pdb.ptm') as fh:
                 contents = fh.readlines()
             self.assertEqual(len(contents), 8)

@@ -5,7 +5,7 @@ from seqConservation import *
 from cryptosite.hyd_chr_sse import *
 from cryptosite.bmi_feature_parser import *
 from cryptosite.res_parser_bmi import *
-from PatchMapper import *
+from cryptosite.patch_mapper import *
 import os
 from modeller import *
 from array import array

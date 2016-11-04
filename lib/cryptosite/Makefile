@@ -5,7 +5,7 @@ PY=${PYTHONDIR}/cryptosite
 
 FILES=${PY}/__init__.py ${PY}/chasa.py ${PY}/cleaning.py \
       ${PY}/bmi_feature_parser.py ${PY}/res_parser_bmi.py \
-      ${PY}/hyd_chr_sse.py
+      ${PY}/hyd_chr_sse.py ${PY}/patch_mapper.py
 
 install: ${FILES}
 
