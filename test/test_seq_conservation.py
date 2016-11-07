@@ -1,0 +1,51 @@
+import unittest
+import utils
+import os
+import sys
+import shutil
+import contextlib
+
+TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(TOPDIR, 'lib'))
+sys.path.append(TOPDIR)
+import seqConservation
+
+@contextlib.contextmanager
+def mock_usearch():
+    """Make mock usearch binary"""
+    subdir = 'mock_usearch'
+    os.mkdir(subdir)
+    fname = os.path.join(subdir, 'usearch')
+    with open(fname, 'w') as fh:
+        fh.write("""#!/usr/bin/env python
+import sys
+outf = sys.argv[4]
+with open(outf, 'w') as fh:
+    fh.write('\\t'.join(['S', '0', '292', '*', '*', '*', '*', '*',
+                         'AH70_12410', '*\\n']))
+    fh.write('\\t'.join(['L', '0', '292', '*', '*', '*', '*', '*',
+                         'AH70_12410', '*\\n']))
+    fh.write('\\t'.join(['H', '0', '292', '99.7', '+', '0', '0', '292M',
+                         'EN70_12566', 'AH70_12410\\n']))
+    fh.write('\\t'.join(['S', '1', '292', '*', '*', '*', '*', '*',
+                         'EX70_12567', '*\\n']))
+    fh.write('\\t'.join(['H', '1', '292', '98.2', '+', '0', '0', '292M',
+                         'AH70_12410', 'EX70_12567\\n']))
+""")
+    os.chmod(fname, 0775)
+
+    oldpath = os.environ['PATH']
+    os.environ['PATH'] = subdir + ':' + os.environ['PATH']
+    yield
+    os.environ['PATH'] = oldpath
+
+class Tests(unittest.TestCase):
+    def test_ucluster(self):
+        """Test ucluster() function"""
+        with utils.temporary_working_directory() as tmpdir:
+            with mock_usearch():
+                clusters = seqConservation.ucluster('dummy.ali')
+            self.assertEqual(len(clusters), 4)
+
+if __name__ == '__main__':
+    unittest.main()
