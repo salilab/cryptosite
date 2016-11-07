@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+
+"""Add features relating to pockets detected by fpocket."""
+
 import sys, os, glob
 from numpy import linalg, array, shape, argwhere
 from scipy import spatial
