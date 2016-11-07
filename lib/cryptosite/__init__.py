@@ -1,1 +1,1 @@
-pass
+_all_commands = ['predicter']

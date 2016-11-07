@@ -47,9 +47,7 @@ class CommandDispatcher(object):
 
     def _get_all_commands(self):
         mod = self.import_module()
-        cmds = [x[:-3] for x in os.listdir(os.path.join(mod.__path__[0]))
-                if x.endswith('.py') and not x.startswith('_')]
-        return cmds
+        return mod._all_commands
 
     def show_help(self):
         print("%s" % self._progname)
