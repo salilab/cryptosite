@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+"""Gather bioinformatics features."""
+
 from modeller import *
 import os, sys, warnings
 from numpy import dot, transpose, linalg, sqrt, array

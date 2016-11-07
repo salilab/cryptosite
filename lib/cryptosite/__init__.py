@@ -1,1 +1,1 @@
-_all_commands = ['predicter', 'pocket_parser']
+_all_commands = ['predicter', 'pocket_parser', 'am_bmi']
