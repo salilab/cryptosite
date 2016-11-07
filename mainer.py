@@ -1,7 +1,7 @@
 import sys
 sys.path.append('.')#/modbase1/home/peterc/cryptosite/src/')
 from cryptosite.cleaning import *
-from seqConservation import *
+from cryptosite.seq_conservation import *
 from cryptosite.hyd_chr_sse import *
 from cryptosite.bmi_feature_parser import *
 from cryptosite.res_parser_bmi import *

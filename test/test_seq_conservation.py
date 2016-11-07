@@ -7,8 +7,7 @@ import contextlib
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(TOPDIR, 'lib'))
-sys.path.append(TOPDIR)
-import seqConservation
+import cryptosite.seq_conservation
 
 @contextlib.contextmanager
 def mock_usearch():
@@ -44,7 +43,7 @@ class Tests(unittest.TestCase):
         """Test ucluster() function"""
         with utils.temporary_working_directory() as tmpdir:
             with mock_usearch():
-                clusters = seqConservation.ucluster('dummy.ali')
+                clusters = cryptosite.seq_conservation.ucluster('dummy.ali')
             self.assertEqual(len(clusters), 4)
 
 if __name__ == '__main__':
