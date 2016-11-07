@@ -1,22 +1,21 @@
-from SiteCrypt import PATH2BLAST, PATH2UNIPROT, PATH2UCLUST
-
 import os, sys, warnings, subprocess
 from Bio.Blast import NCBIXML
 from Bio.PDB.PDBParser import PDBParser
 from Bio import PDB
 from Bio.PDB.Polypeptide import PPBuilder
 import numpy
+import cryptosite.config
 
 
 
 def run_blast(pdb):
     '''
     Run blast of a given sequence
-    (only works on netapp disc where Uniprot is located)
     '''
 
-    cmd = ["-query","test.seq","-db",PATH2UNIPROT,"-evalue","0.00001","-out",pdb+".blast","-outfmt","5","-num_alignments","10000"]
-    cmd = [PATH2BLAST+"blastp"] + cmd
+    cmd = ["blastp", "-query", "test.seq", "-db", cryptosite.config.uniprot,
+           "-evalue", "0.00001", "-out", pdb+".blast", "-outfmt", "5",
+           "-num_alignments", "10000"]
     #os.system(cmd)
 
     print cmd
@@ -122,7 +121,8 @@ def ucluster(ali, cutoff=0.8):
       - cutoff: a distance cutoff to form sequence clusters.
     '''
 
-    cmd = [PATH2UCLUST + "usearch4.0.43", "--cluster", ali, "--uc", "results.uc", "--id", str(cutoff), "--usersort"]
+    cmd = ["usearch", "--cluster", ali, "--uc", "results.uc", "--id",
+           str(cutoff), "--usersort"]
     prc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     prc.wait()
 

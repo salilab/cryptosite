@@ -18,6 +18,8 @@ system paths (e.g. `PATH`, `PYTHONPATH`):
 - [fpocket (version 2)](http://fpocket.sourceforge.net/)
 - [PatchDock](http://bioinfo3d.cs.tau.ac.il/PatchDock/)
 - [IMP](https://integrativemodeling.org/)
+- [NCBI BLAST+]() plus a local copy of the [UniProt database]() for it to search against
+- [USEARCH](http://drive5.com/usearch/download.html)
 - [Biopython](http://biopython.org/)
 - [scikit-learn](http://scikit-learn.org/)
 
