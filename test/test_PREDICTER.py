@@ -8,14 +8,15 @@ import subprocess
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(TOPDIR, 'lib'))
 sys.path.append(TOPDIR)
-import PREDICTER
+import cryptosite.predicter
 
 class Tests(unittest.TestCase):
 
     def test_get_matrix(self):
         """Test get_matrix() function"""
         fname = os.path.join(TOPDIR, 'test', 'input', 'test.features')
-        m, header, indices = PREDICTER.get_matrix(fname, model='final')
+        m, header, indices = cryptosite.predicter.get_matrix(fname,
+                                                             model='final')
         self.assertEqual(len(m), 2)
         self.assertEqual(header, ['SQC', 'PTM', 'CNC_mean_'])
         self.assertEqual(len(indices), 2)

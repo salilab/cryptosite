@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+
+"""Do the final prediction of binding site given all features."""
+
 import numpy as np
 from scipy import cluster
 import pickle, sys
