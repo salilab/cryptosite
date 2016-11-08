@@ -18,7 +18,11 @@ system paths (e.g. `PATH`, `PYTHONPATH`):
 - [fpocket (version 2)](http://fpocket.sourceforge.net/)
 - [PatchDock](http://bioinfo3d.cs.tau.ac.il/PatchDock/)
 - [IMP](https://integrativemodeling.org/)
-- [NCBI BLAST+]() plus a local copy of the [UniProt database]() for it to search against
+- [NCBI BLAST+](ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/)
+  plus a local copy of the [UniProt database](ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/)
+  for it to search against
+  (the local database should be a concatenation of the `uniprot_trembl.fasta`
+  and `uniprot_sprot.fasta` files available from the UniProt website)
 - [USEARCH](http://drive5.com/usearch/download.html)
 - [Biopython](http://biopython.org/)
 - [scikit-learn](http://scikit-learn.org/)
