@@ -1,3 +1,4 @@
+[![docs](https://readthedocs.org/projects/cryptosite/badge/)](https://cryptosite.readthedocs.org/)
 [![Build Status](https://travis-ci.org/salilab/cryptosite.svg?branch=master)](https://travis-ci.org/salilab/cryptosite)
 [![codecov](https://codecov.io/gh/salilab/cryptosite/branch/master/graph/badge.svg)](https://codecov.io/gh/salilab/cryptosite)
 
