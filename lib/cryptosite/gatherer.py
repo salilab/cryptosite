@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+
+"""Gather all feature information into a single file."""
+
 import sys, glob
 import numpy as np
 import os
