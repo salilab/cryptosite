@@ -9,8 +9,11 @@ from modeller import soap_protein_od
 from modeller.terms import energy_term
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(TOPDIR)
-import soap_clean
+os.environ['PATH'] = os.path.join(TOPDIR, 'bin') + ':' + os.environ['PATH']
+os.environ['PYTHONPATH'] = os.path.join(TOPDIR, 'lib') + ':' \
+                           + os.environ.get('PYTHONPATH', '')
+sys.path.append(os.path.join(TOPDIR, 'lib'))
+import cryptosite.soap_clean
 
 # Mock the soap_protein_od.Scorer class, so a) we can test it without having
 # the SOAP potentials installed (even if we do have them, they are slow to
@@ -44,7 +47,7 @@ class Tests(unittest.TestCase):
 ATOM      1  N   CYS A   1      18.511  -1.416  15.632  1.00  6.84           C
 """)
             with utils.mocked_object(soap_protein_od, 'Scorer', MockScorer):
-                soap_clean.main()
+                cryptosite.soap_clean.main()
             with open('SnapList.txt') as fh:
                 data = fh.readlines()
             # don't know glob order
@@ -55,10 +58,9 @@ ATOM      1  N   CYS A   1      18.511  -1.416  15.632  1.00  6.84           C
     def test_soap_clean_subproc(self):
         """Test soap_clean script as a subprocess"""
 	env = os.environ.copy()
-	env['PATH'] = TOPDIR + ':' + env['PATH']
 	pypath = os.path.join(TOPDIR, 'test', 'mock')
 	env['PYTHONPATH'] = pypath + ':' + env.get('PYTHONPATH', '')
-	subprocess.check_call('soap_clean.py', env=env)
+	subprocess.check_call(['cryptosite', 'soap_clean'], env=env)
 
 if __name__ == '__main__':
     unittest.main()
