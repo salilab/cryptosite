@@ -53,17 +53,14 @@ for chain in PDBChainOrder:
     D = seqFile.read().split('>')[1:]
     seqFile.close()
 
-    if 1:
-        for d in D:
-            if d.split()[0].strip()==chain:
-                sbjctSeq = ''.join(d.split()[1:])
-                SubjectSeqList[chain] = sbjctSeq.strip()
-                QuerySeqList[chain] = querySeq.strip()
-        sbjctSeq = sbjctSeq.strip()
+    for d in D:
+        if d.split()[0].strip()==chain:
+            sbjctSeq = ''.join(d.split()[1:])
+            SubjectSeqList[chain] = sbjctSeq.strip()
+            QuerySeqList[chain] = querySeq.strip()
+    sbjctSeq = sbjctSeq.strip()
 
     if d.split('\n')[0].strip() == '':
-        #print 'SequenceInputError: The subject sequence for chain %s not present in the input file!' % chain
-        #raise
         sbjctSeq = querySeq
 
 
@@ -100,8 +97,6 @@ out.close()
 
 
 # --- build model of all the chains
-
-#RESMAP=build_model(pdb, PDBChainOrder, ChainLenghts)
 
 print "Printing MODELLER input:"
 print pdb
@@ -146,39 +141,31 @@ res_parser(pdb+'_mdl')
 
 # --- prepare AllosMod file
 
-#P = os.listdir('.')
-#P.remove('bla.py')
+f = pdb+'_mdl.bmiftr'
+data = open(f)
+F1 = len(data.readlines())
+data.close()
 
-if 1:
-    f = pdb+'_mdl.bmiftr'
-    data = open(f)
-    F1 = len(data.readlines())
-    data.close()
+data = open('alignment.pir')
+S = data.read()
+D = S.split(':')[-1].replace('\n','')[:-1].replace('-','')
+P = '>'+S.split('>')[1].replace(pdb,pdb+'.pdb').replace('structure','structureX')
+data.close()
 
-    data = open('alignment.pir')
-    S = data.read()
-    D = S.split(':')[-1].replace('\n','')[:-1].replace('-','')
-    P = '>'+S.split('>')[1].replace(pdb,pdb+'.pdb').replace('structure','structureX')
-    data.close()
+os.system('mkdir -p %s' % pdb)
+out = open('%s/align.ali' % pdb, 'w')
+out.write( P )
+out.write(">P1;pm.pdb\n" )
+out.write("structureX:pm.pdb:1    :%s:%i  :%s::::\n" % (chain,len(D),chain))
+out.write(D+'*\n')
+out.close()
 
-    #continue
-    os.system('mkdir -p %s' % pdb)
-    out = open('%s/align.ali' % pdb, 'w')
-    out.write( P )
-    out.write(">P1;pm.pdb\n" )
-    out.write("structureX:pm.pdb:1    :%s:%i  :%s::::\n" % (chain,len(D),chain))
-    out.write(D+'*\n')
-    out.close()
+os.system('cp %s.pdb %s' % (pdb,pdb))
 
-    os.system('cp %s.pdb %s' % (pdb,pdb))
+out1 = open('%s/input.dat' % pdb, 'w')
+out1.write('rAS=1000\nNRUNS=50\nSCRAPP=True\nMDTemp=SCAN')
+out1.close()
 
-    out1 = open('%s/input.dat' % pdb, 'w')
-    out1.write('rAS=1000\nNRUNS=50\nSCRAPP=True\nMDTemp=SCAN')
-    out1.close()
-
-    out2 = open('%s/list' % pdb, 'w')
-    out2.write('%s.pdb' % pdb)
-    out2.close()
-
-    #zip
-    #os.system('zip -r %s.zip %s' % (pdb,pdb))
+out2 = open('%s/list' % pdb, 'w')
+out2.write('%s.pdb' % pdb)
+out2.close()
