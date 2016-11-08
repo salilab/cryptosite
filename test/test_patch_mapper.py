@@ -87,5 +87,24 @@ class Tests(unittest.TestCase):
                 contents = fh.readlines()
             self.assertEqual(len(contents), 8)
 
+    def test_modify_patch_dock_params(self):
+        """Test _modify_patch_dock_params() function"""
+        with utils.temporary_directory() as tmpdir:
+            fname = os.path.join(tmpdir, 'params.txt')
+            with open(fname, 'w') as fh:
+                fh.write("""
+protLib /chem.lib
+ligandSeg 5.0 15.0 0.1 1 1 1 5
+clusterParams 0.05 2 1.0 2.0
+""")
+            cryptosite.patch_mapper._modify_patch_dock_params(fname)
+            with open(fname) as fh:
+                contents = fh.read()
+        self.assertEqual(contents, """
+protLib /chem.lib
+ligandSeg 5.0 15.0 0.5 1 1 0 5
+clusterParams 0.1 3 1.0 2.0
+""")
+
 if __name__ == '__main__':
     unittest.main()

@@ -48,7 +48,20 @@ def transform(t,xyz):
 
     return np.dot(M,xyz.T).T + t
 
-
+def _modify_patch_dock_params(fname):
+    """Modify the given PatchDock parameter file from defaults.
+       We want to use non-default values to make PatchDock run slightly
+       faster."""
+    with open(fname) as fh:
+        contents = fh.readlines()
+    with open(fname, 'w') as fh:
+        for line in contents:
+            if line.startswith('ligandSeg'):
+                fh.write("ligandSeg 5.0 15.0 0.5 1 1 0 5\n");
+            elif line.startswith('clusterParams 0.05 2 1.0 2.0'):
+                fh.write("clusterParams 0.1 3 1.0 2.0\n");
+            else:
+                fh.write(line)
 
 def patchmap_feature(pdb):
     '''
@@ -61,6 +74,7 @@ def patchmap_feature(pdb):
     print cmd
     prc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     prc.wait()
+    _modify_patch_dock_params("params.txt")
 
     cmd2 = ["patch_dock.Linux", "params.txt", pdb[:-4]+".out", "7"]
     print cmd2
