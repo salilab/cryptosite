@@ -7,6 +7,7 @@ from cryptosite.bmi_feature_parser import *
 from cryptosite.res_parser_bmi import *
 from cryptosite.patch_mapper import *
 import os
+import glob
 from modeller import *
 from array import array
 
@@ -173,7 +174,6 @@ res_parser(pdb+'_mdl')
 
 
 # --- prepare AllosMod file
-import glob, os
 
 #P = os.listdir('.')
 #P.remove('bla.py')
