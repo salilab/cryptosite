@@ -1,5 +1,4 @@
 import sys
-sys.path.append('.')#/modbase1/home/peterc/cryptosite/src/')
 from cryptosite.cleaning import *
 from cryptosite.seq_conservation import *
 from cryptosite.hyd_chr_sse import *
@@ -8,8 +7,6 @@ from cryptosite.res_parser_bmi import *
 from cryptosite.patch_mapper import *
 import os
 import glob
-from modeller import *
-from array import array
 
 pdb,chains = 'XXX', ''
 paramdata = open('param.txt')
