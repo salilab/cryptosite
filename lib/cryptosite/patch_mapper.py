@@ -8,8 +8,8 @@ import cryptosite.config
 def make_ligand_file(fname):
     """Make a list of all ligand files, in the given file."""
     with open(fname, 'w') as fh:
-        fh.write('\n'.join(glob.glob(os.path.join(cryptosite.config.datadir,
-                                                  'ligands', '*.pdb'))))
+        fh.write('\n'.join(sorted(glob.glob(os.path.join(cryptosite.config.datadir,
+                                                         'ligands', '*.pdb')))))
 
 def get_ligand_mol2(name):
     """Given the name of a ligand (e.g. 'ACM') return the full path."""
