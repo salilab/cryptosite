@@ -38,7 +38,21 @@ with open(outf, 'w') as fh:
     yield
     os.environ['PATH'] = oldpath
 
+def mock_ucluster(ali, cutoff=0.8):
+    return {'G7PIG01':2, 'XXXq':2}
+
 class Tests(unittest.TestCase):
+    def test_parse_blast(self):
+        """Test parse_blast() function"""
+        blast_out = os.path.join(TOPDIR, 'test', 'input', 'XXXA.blast')
+        with utils.temporary_working_directory() as tmpdir:
+            with utils.mocked_object(cryptosite.seq_conservation, 'ucluster',
+                                     mock_ucluster):
+                cryptosite.seq_conservation.parse_blast(blast_out, 'XXX',
+                                                        'AMENFQKVEKIGEGTYGVVYKARNKLTGEVVALKKIRVPSTAIREISLLKELNHPNIVKLLDVIHTENKLYLVFEFLHQDLKKFMDASALTGIPLPLIKSYLFQLLQGLAFCHSHRVLHRDLKPQNLLINTEGAIKLADFGLARAEVVTLWYRAPEILLGCKYYSTAVDIWSLGCIFAEMVTRRALFPGDSEIDQLFRIFRTLGTPDEVVWPGVTSMPDYKPSFPKWARQDFSKVVPPLDEDGRSLLSQMLHYDPNKRISAKAALAHPFFQDVTKPVPHLRL')
+            os.unlink('XXX.ali')
+            os.unlink('XXX.sqc')
+
     def test_ucluster(self):
         """Test ucluster() function"""
         with utils.temporary_working_directory() as tmpdir:
