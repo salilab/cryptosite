@@ -15,7 +15,7 @@ def run_blast(pdb):
 
     cmd = ["blastp", "-query", "test.seq", "-db", cryptosite.config.uniprot,
            "-evalue", "0.00001", "-out", pdb+".blast", "-outfmt", "5",
-           "-num_alignments", "10000"]
+           "-num_alignments", "500"]
     #os.system(cmd)
 
     print cmd
