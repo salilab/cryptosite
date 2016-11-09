@@ -20,12 +20,16 @@ class Tests(unittest.TestCase):
         """Test get_energy() function"""
         inputs = os.path.join(TOPDIR, 'test', 'input')
         with utils.temporary_directory() as tmpdir:
-            touch(os.path.join(tmpdir, 'pm.pdb.B10010001.pdb'))
-            touch(os.path.join(tmpdir, 'pm.pdb.B10020001.pdb'))
-            touch(os.path.join(tmpdir, 'pm.pdb.B99990001.pdb'))
-            shutil.copy(os.path.join(inputs, 'pm.pdb.D00000001'), tmpdir)
+            subdir = os.path.join(tmpdir, 'XXX.pdb_14')
+            os.mkdir(subdir)
+            touch(os.path.join(subdir, 'pm.pdb.B10010001.pdb'))
+            touch(os.path.join(subdir, 'pm.pdb.B10020001.pdb'))
+            touch(os.path.join(subdir, 'pm.pdb.B99990001.pdb'))
+            shutil.copy(os.path.join(inputs, 'pm.pdb.D00000001'), subdir)
 
             e = cryptosite.analysis.get_energy(tmpdir)
+            with open(os.path.join(subdir, 'energy.dat')) as fh:
+                e = fh.readlines()
             self.assertEqual(e,
                     ['   1000      13478.55371   0.0280   0.0836       '
                      '3374.72437        499.52283\n',
