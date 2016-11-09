@@ -36,5 +36,23 @@ class Tests(unittest.TestCase):
                      '   1000      13580.25098   0.0279   0.0794       '
                      '3332.75293        493.31027\n'])
 
+    def test_get_probability(self):
+        """Test get_probability() function"""
+        with utils.temporary_directory() as tmpdir:
+            subdir = os.path.join(tmpdir, 'XXX.pdb_14')
+            os.mkdir(subdir)
+            with open(os.path.join(subdir, 'energy.dat'), 'w') as fh:
+                fh.write("""1 13291.22266 0.0279 0.0755 3336.66089 493.88873
+2 13228.57910 0.0285 0.0719 3450.11133 510.68152
+3 13289.01074 0.0281 0.0776 3391.32886 501.98062
+4 13319.61426 0.0280 0.0708 3335.29370 493.68634
+""")
+            cryptosite.analysis.get_probability(tmpdir)
+            with open(os.path.join(subdir, 'p.dat')) as fh:
+                lines = [float(x) for x in fh.readlines()]
+            self.assertEqual(len(lines), 4)
+            self.assertAlmostEqual(lines[0], 0.1, places=1)
+            self.assertAlmostEqual(lines[1], 0.7, places=1)
+
 if __name__ == '__main__':
     unittest.main()
