@@ -165,26 +165,6 @@ def match_to_pdb(Sel, pdbres, chainid):
             pass
     return B
 
-
-def compactness(S):
-    '''
-    Obsolete, due to do a similar packing feature.
-    '''
-
-    if len(S)<=1: return 0.
-    res = S.keys()
-    F = []
-    for i in range(len(res)-1):
-        for j in range(i+1,len(res)):
-            dist = 1000.
-            for ai in S[res[i]]:
-
-                for aj in S[res[j]]:
-                    ds = numpy.linalg.norm(numpy.array(ai)-numpy.array(aj))
-                    if ds < dist: dist = ds
-            F.append(dist)
-    return sum(F)/len(F)
-
 def res_packing(pdb, res_list, radius=4.):
     '''
     Calculate packing of the residues. Packing is defined as number of atoms
