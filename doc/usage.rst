@@ -9,7 +9,7 @@ which can be called directly from other Python software
 Overview
 ========
 
-Running the basic protocol consists of three steps:
+Running the basic protocol consists of these steps:
 
 #. Create a set of input files specifying the structure to probe, and basic
    CryptoSite parameters.
