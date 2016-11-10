@@ -48,6 +48,9 @@ on which CryptoSite currently functions.
 
 * `scikit-learn <http://scikit-learn.org/>`_.
 
+* `AllosMod <https://github.com/salilab/allosmod-lib>`_ is needed to run part
+  of the protocol.
+
 * `nose <https://nose.readthedocs.io/en/latest/>`_ is also needed to run the
   test suite (recommended but not essential).
 
