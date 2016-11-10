@@ -114,7 +114,7 @@ def protein_convexity(pdb):
         Centroids[res] = (sac,slv)
 
     SurfNet = {}
-    RX = SurfRes.keys()
+    RX = list(SurfRes.keys())
     for r1 in range(len(RX)-1):
         F1 = SurfRes[RX[r1]]
         C1 = numpy.array([numpy.array([c[1],c[2],c[3]]) for c in F1 if c[4]>2.])
