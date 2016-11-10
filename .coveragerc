@@ -1,0 +1,7 @@
+[run]
+omit =
+  test/*
+  scipy/*
+  numpy/*
+  modeller/*
+  Bio/*
