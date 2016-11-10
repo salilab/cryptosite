@@ -23,7 +23,7 @@ Running the basic protocol consists of these steps:
 
 #. Calculate additional features using the AllosMod output
    (``cryptosite soap_clean``, ``cryptosite pocket_parser``,
-    ``cryptosite am_bmi``, ``cryptosite analysis``).
+   ``cryptosite am_bmi``, ``cryptosite analysis``).
 
 #. Gather together all features into a single file (``cryptosite gatherer``).
 
