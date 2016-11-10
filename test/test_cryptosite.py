@@ -21,6 +21,11 @@ class Tests(unittest.TestCase):
             out = utils.check_output(['cryptosite'] + args)
             self.assertTrue('Get help on using' in out)
 
+    def test_help_command(self):
+        """Check cryptosite command help"""
+        out = utils.check_output(['cryptosite', 'help', 'gather'])
+        self.assertTrue('Gather all feature information' in out)
+
     def test_unknown_command(self):
         """Check 'cryptosite' with an unknown command"""
         for args in (['bad-command'], ['help', 'bad-command']):
