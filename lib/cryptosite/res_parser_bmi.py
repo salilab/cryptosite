@@ -1,3 +1,4 @@
+from __future__ import print_function, absolute_import
 import glob
 import numpy
 from scipy import spatial
@@ -129,8 +130,8 @@ def get_features(fil, seq):
         res, resid = d[0][17:20],int(d[0][22:26])
         if PDB.Polypeptide.three_to_one(res)==seq[resid-1]: Selected[( res, resid, seq[resid-1] )] = 0
         else:
-            print "Residues do not match for: ", fil, state
-            print peter
+            print("Residues do not match for: ", fil, state)
+            print(peter)
     return Selected
 
 
@@ -170,11 +171,11 @@ def match_to_pdb(Sel, pdbres, chainid):
                 #        p = (s[0],s[1])
                 #        B[p] = numpy.mean((numpy.array(pdbinfo[1])-mu)/std)
                 #else:
-                print "Residues do not match for PDB: "
+                print("Residues do not match for PDB: ")
                 pass
 
         else:
-            print "Residues do not match for MODEL: "
+            print("Residues do not match for MODEL: ")
             pass
     return B
 

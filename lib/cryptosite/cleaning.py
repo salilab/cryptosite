@@ -1,3 +1,4 @@
+from __future__ import print_function, absolute_import
 import os, sys, warnings, subprocess
 from Bio import PDB
 from Bio.Blast import NCBIXML
@@ -41,7 +42,7 @@ def muscleAlign(qSeq, sSeq, pdb, chain):
 
     # --- align using Muscle
     cmd = ["muscle", "-in", "sequences.seq", "-out", "alignment.ali"]
-    print cmd
+    print(cmd)
     subprocess.check_call(cmd)
 
     with open('alignment.ali') as data:

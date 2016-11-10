@@ -1,3 +1,4 @@
+from __future__ import print_function, absolute_import
 import numpy as np
 import os, subprocess, sys
 from Bio import PDB
@@ -71,13 +72,13 @@ def patchmap_feature(pdb):
     make_ligand_file('ligands.ids')
     Lxyz, ligands = read_ligand_data()
     cmd = ["buildParams.pl", pdb+'.pdb', "ligands.ids", "2.0", "drug"]
-    print cmd
+    print(cmd)
     prc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     prc.wait()
     _modify_patch_dock_params("params.txt")
 
     cmd2 = ["patch_dock.Linux", "params.txt", pdb[:-4]+".out", "7"]
-    print cmd2
+    print(cmd2)
     prc2 = subprocess.Popen(cmd2, stdout=subprocess.PIPE)
     prc2.wait()
 
@@ -126,7 +127,7 @@ def patchmap_feature(pdb):
 
 
 
-        print i,lig,pdb
+        print(i,lig,pdb)
         data = open('mol2_score.res')#pdb+str(i)+'.res')
         LS = [float(l.strip().split()[-1]) for l in data.readlines()]
         data.close()

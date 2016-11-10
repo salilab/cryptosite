@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import print_function, absolute_import
 from modeller import *
 from modeller.scripts import complete_pdb
 from modeller import soap_protein_od

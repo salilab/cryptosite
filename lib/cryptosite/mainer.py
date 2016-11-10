@@ -2,6 +2,7 @@
 
 """Initial setup and preparation of AllosMod inputs (long version)"""
 
+from __future__ import print_function, absolute_import
 import sys
 from cryptosite.cleaning import *
 from cryptosite.seq_conservation import *
@@ -41,7 +42,7 @@ def main():
 
     myfile.close()
 
-    print 'PDB: ',pdb,'\tCHAIN: ',chains
+    print('PDB: ',pdb,'\tCHAIN: ',chains)
     # --- start of for loop going through all chains for sequence features
 
     ChainLenghts, SubjectSeqList, QuerySeqList = {},{},{}
@@ -49,7 +50,7 @@ def main():
     for chain in PDBChainOrder:
         try: querySeq = get_pdb_seq(pdb+'.pdb', chain)
         except KeyError:
-            print 'CHAIN: ',chain, 'not in the PDB file'
+            print('CHAIN: ',chain, 'not in the PDB file')
             raise
         ChainLenghts[chain]=(querySeq[0],len(querySeq),querySeq[-1])
         sbjctSeq = ''
@@ -103,10 +104,10 @@ def main():
 
     # --- build model of all the chains
 
-    print "Printing MODELLER input:"
-    print pdb
-    print PDBChainOrder
-    print ChainLenghts
+    print("Printing MODELLER input:")
+    print(pdb)
+    print(PDBChainOrder)
+    print(ChainLenghts)
 
     build_model(pdb, PDBChainOrder, ChainLenghts)
 

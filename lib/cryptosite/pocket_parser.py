@@ -2,6 +2,7 @@
 
 """Add features relating to pockets detected by fpocket."""
 
+from __future__ import print_function, absolute_import
 import sys, os, glob
 from numpy import linalg, array, shape, argwhere
 from scipy import spatial
@@ -97,19 +98,19 @@ def main():
     data.close()
     x=0
 
-    print 'DRS: ', DRS
+    print('DRS: ', DRS)
 
     for dr in DRS:
 	#if 'pm.pdb' not in dr: continue
 	run_fpocket(dr)
 	if 1: #for y,fil in enumerate(glob.glob(dr+'/pm.pdb.B1*_out/*_out.pdb')):
 	    fils = glob.glob(dr.rsplit('.',1)[0]+'_out/*_out.pdb')
-	    print fils
+	    print(fils)
 	    if len(fils)==0: continue
 	    fil = fils[0]
 	    pdbfil = fil
 	    inffil = fil.rsplit('_',1)[0]+'_info.txt'
-	    print pdbfil, inffil
+	    print(pdbfil, inffil)
 	    res = get_cnc(pdbfil,inffil)
 	    snaps.append(fil)
 

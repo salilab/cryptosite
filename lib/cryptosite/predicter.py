@@ -2,6 +2,7 @@
 
 """Do the final prediction of binding site given all features."""
 
+from __future__ import print_function, absolute_import
 import numpy as np
 from scipy import cluster
 import pickle, sys
@@ -59,7 +60,7 @@ def get_matrix(inputdata, model='linear'):
         visited = [Header.index('CNC_mean_'), Header.index('SQC'), Header.index('PTM')]
 
     else:
-        print 'Wrong model: ', model
+        print('Wrong model: ', model)
         exit()
 
     M = []
@@ -93,20 +94,20 @@ def get_matrix(inputdata, model='linear'):
 
 def predict(inputdata, model='linear'):
 
-    print 'Reading in the data ...'
+    print('Reading in the data ...')
     M, Header, Indeces = get_matrix(inputdata, model)
 
-    print 'Processing the data for model %s ...' % model.upper()
+    print('Processing the data for model %s ...' % model.upper())
     if 1:
         pdb=inputdata.split('.')[0]
-        print pdb
+        print(pdb)
         NewIndeces, newcnt = {},0
         X_learn, Y_learn = [],[]
 
         for r,m in enumerate(M):
             if len(np.argwhere(np.isnan(np.array(m[1:-1]))==True))>0:
-                print r,m[0]
-                print peter
+                print(r,m[0])
+                print(peter)
 
             X_learn.append(np.array(m[1:-1]))
             Y_learn.append(m[-1])
@@ -118,7 +119,7 @@ def predict(inputdata, model='linear'):
 
     if model=='linear':
 
-        print 'Scaling ...'
+        print('Scaling ...')
         out1 = open(os.path.join(cryptosite.config.datadir,
                                  'LinearScaler_Final.pkl'))
         scaler = pickle.load(out1)
@@ -132,7 +133,7 @@ def predict(inputdata, model='linear'):
 
     elif model=='poly':
 
-        print 'Scaling ...'
+        print('Scaling ...')
         out1 = open(os.path.join(cryptosite.config.datadir,
                                  'PolyScaler_Final.pkl'))
         scaler = pickle.load(out1)
@@ -145,7 +146,7 @@ def predict(inputdata, model='linear'):
         outmodel.close()
 
     elif model=='final':
-        print 'Scaling ...'
+        print('Scaling ...')
         out1 = open(os.path.join(cryptosite.config.datadir,
                                  'Scaler_Final_Final.pkl'))
         scaler = pickle.load(out1)
@@ -158,17 +159,17 @@ def predict(inputdata, model='linear'):
         outmodel.close()
 
     else:
-        print 'Unknown model: ', model
-        print peter
+        print('Unknown model: ', model)
+        print(peter)
 
 
-    print 'Predicting ...'
+    print('Predicting ...')
     Y_pred = learner.predict(X_learn)
     CM = confusion_matrix(Y_learn,Y_pred)
-    print
-    print "Confusion matrix for: ",pdb
-    print CM
-    print
+    print()
+    print("Confusion matrix for: ",pdb)
+    print(CM)
+    print()
 
     # output
     Y_pred_prob = learner.predict_proba(X_learn)
@@ -182,9 +183,9 @@ def predict(inputdata, model='linear'):
 
     if model=='linear': outn = open(pdb+'.lin.pred','w')
     elif model=='poly' or model=='final': outn = open(pdb+'.pol.pred','w')
-    else: print peter
+    else: print(peter)
 
-    print 'Writing output files ...'
+    print('Writing output files ...')
     outn.write('\t'.join(['PDBID','Res','ResID']+Header+['CryptositeValue'])+'\n')
     for x in xrange(len(Y_PRED_PROB_ALL)):
         outn.write( '\t'.join(list(NewIndeces[x])+[str(i) for i in X_learn[x]]+[str(Y_PRED_PROB_ALL[x])])+'\n' )
@@ -192,9 +193,9 @@ def predict(inputdata, model='linear'):
 
     if model=='linear': write_pdb(pdb,model='linear')
     elif model=='poly' or model=='final': write_pdb(pdb,model='poly')
-    else: print peter
+    else: print(peter)
 
-    print 'Done!'
+    print('Done!')
 
 
 def write_pdb(pdb,model='linear'):
@@ -209,7 +210,7 @@ def write_pdb(pdb,model='linear'):
         D = data.readlines()
         data.close()
         out = open('%s.pol.pred.pdb' % pdb, 'w')
-    else: print peter
+    else: print(peter)
 
     Data = {}
     for d in D:

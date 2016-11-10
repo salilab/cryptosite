@@ -1,3 +1,4 @@
+from __future__ import print_function, absolute_import
 import os, sys, warnings
 from Bio.PDB.PDBParser import PDBParser
 from Bio import PDB
@@ -162,7 +163,7 @@ def get_cnc(apo):
                        for i in adist])>Residues[(res,resid,cid)]:
                     Residues[(res,resid,cid)] = max([PocketInfo[i]
                                                      for i in adist])
-    print Residues
+    print(Residues)
     return Residues, ('1','1')
 
 def protein_convexity(pdb):

@@ -2,6 +2,7 @@
 
 """Gather all feature information into a single file."""
 
+from __future__ import print_function, absolute_import
 import sys, glob
 import numpy as np
 import os
@@ -21,7 +22,7 @@ def process_directory(tts):
     for pdb in pdbs:
         efiles = glob.glob(tts + '/pred_dECALCrAS1000/'+pdb+'/energy.dat')
 
-        print tts + '/pred_dECALCrAS1000/'+pdb+'/energy.dat'
+        print(tts + '/pred_dECALCrAS1000/'+pdb+'/energy.dat')
 
         for e in efiles:
             pdbf = e.rsplit('/',2)[1]
@@ -73,8 +74,8 @@ def process_directory(tts):
                 PD5.append( np.sort(p,axis=1)[:,-percentile:].std(axis=1) )
                 if len(RES)==0: RES = Res
             except (IOError, ValueError, IndexError):
-                print 'Error'
-                print d
+                print('Error')
+                print(d)
                 pass
             # --- read in geometry
             files = glob.glob(tts+'/pred_dECALCrAS1000/'+pdb+'/am_features.out')
@@ -140,7 +141,7 @@ def process_directory(tts):
         L +=[pm5[res[1]-1], pd5[res[1]-1], pms[res[1]-1]]
         out.write('\t'.join([str(i) for i in L])+'\n')
     out.close()
-    print np.shape(qm), np.shape(qd), np.shape(pm), np.shape(pd),np.shape(pm5),np.shape(pms) ,pdb
+    print(np.shape(qm), np.shape(qd), np.shape(pm), np.shape(pd),np.shape(pm5),np.shape(pms) ,pdb)
 
 
     ### --- create the final file with all the features
@@ -180,7 +181,7 @@ def process_directory(tts):
         H += ['CBS']
 
         for d in D[1:]:
-            print d
+            print(d)
             d = d.strip().split()
             try:
                 A[(d[0],int(d[1]),d[2])] += d[3:]
@@ -194,7 +195,7 @@ def process_directory(tts):
             out.write('\t'.join(A[i]+['0'])+'\n')
         out.close()
 
-    print H, len(H)
+    print(H, len(H))
 
 def main():
     process_directory(sys.argv[-2])

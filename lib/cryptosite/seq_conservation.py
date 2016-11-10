@@ -1,3 +1,4 @@
+from __future__ import print_function, absolute_import
 import os, sys, warnings, subprocess
 from Bio.Blast import NCBIXML
 from Bio.PDB.PDBParser import PDBParser
@@ -18,13 +19,13 @@ def run_blast(pdb):
            "-num_alignments", "500"]
     #os.system(cmd)
 
-    print cmd
-    print "Running BLAST ..."
+    print(cmd)
+    print("Running BLAST ...")
 
     prc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     prc.wait()
 
-    print "BLASTing finished!"
+    print("BLASTing finished!")
 
 
 
@@ -85,9 +86,9 @@ def parse_blast(blastOut, pdb, qseq, evalue=0.00001):
             for i in xrange(len(hquery)):
                 if hquery[i] != '-':
                     if hquery[i]!=qseq[qi]:
-                        print 'Some Error in alignment!'
-                        print hquery[i],qseq[qi],hquery[i]==qseq[qi]
-                        print peter
+                        print('Some Error in alignment!')
+                        print(hquery[i],qseq[qi],hquery[i]==qseq[qi])
+                        print(peter)
                     if hsbjct[i] in q: A[qi,q.index(hsbjct[i])] += ma #1.
                     else: pass
                     qi += 1

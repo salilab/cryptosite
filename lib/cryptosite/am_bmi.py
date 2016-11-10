@@ -2,6 +2,7 @@
 
 """Gather bioinformatics features."""
 
+from __future__ import print_function, absolute_import
 from modeller import *
 import os, sys, warnings
 from numpy import dot, transpose, linalg, sqrt, array
@@ -240,7 +241,7 @@ def main():
     data.close()
     x=0
 
-    print 'DRS: ', DRS
+    print('DRS: ', DRS)
 
     for dr in DRS:
 	   # if 'pm.pdb' not in dr: continue
@@ -252,7 +253,7 @@ def main():
 	pdb = dr #sys.argv[-1]
 	chain = pdb[-1]
 	pdb = pdb
-	print pdb
+	print(pdb)
 
 	try:
 	    sasa14 = get_sas(pdb,probe=1.4)
