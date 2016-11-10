@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
-"""Gather bioinformatics features."""
+"""Calculate bioinformatics features for AllosMod models."""
 
 from __future__ import print_function, absolute_import
 from numpy import dot, transpose, linalg, sqrt, array
 import numpy
 import subprocess
+import optparse
 
 def get_sas(pdb,probe):
     import modeller
@@ -172,7 +173,7 @@ def get_cvx(apo):
 
 
 
-def main():
+def make_features():
     out = open('am_features.out','w')
 
     snaps = []
@@ -237,6 +238,24 @@ def main():
             L = [str(i) for i in list(p)+[numpy.mean(RES[p]['sas14']),numpy.mean(RES[p]['sas30']),numpy.mean(RES[p]['prt']),numpy.mean(RES[p]['cvx'])]]
             out.write( '\t'.join(L)+'\n' )
     out.close()
+
+def parse_args():
+    usage = """%prog [opts]
+
+Calculate bioinformatics features for AllosMod models. This tool should be
+run in the same directory that 'cryptosite soap_clean' was previously run in.
+For each AllosMod model previously scored well by SOAP, a number of
+features (surface accessibility, protein protusion, convexity) are calculated
+and stored in a am_features.out file.
+"""
+    parser = optparse.OptionParser(usage)
+    opts, args = parser.parse_args()
+    if len(args) != 0:
+        parser.error("incorrect number of arguments")
+
+def main():
+    parse_args()
+    make_features()
 
 if __name__ == '__main__':
     main()

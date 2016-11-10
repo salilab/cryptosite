@@ -10,6 +10,15 @@ utils.set_search_paths(TOPDIR)
 import cryptosite.am_bmi
 
 class Tests(unittest.TestCase):
+    def test_bad(self):
+        """Test wrong arguments to am_bmi"""
+        for args in (['x'],):
+            out = utils.check_output(['cryptosite', 'am_bmi'] + args,
+                                     stderr=subprocess.STDOUT, retcode=2)
+            out = utils.check_output(['python', '-m',
+                                     'cryptosite.am_bmi'] + args,
+                                     stderr=subprocess.STDOUT, retcode=2)
+
     def test_get_sas(self):
         """Test get_sas() function"""
         with utils.temporary_working_directory() as tmpdir:
