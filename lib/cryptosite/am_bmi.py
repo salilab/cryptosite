@@ -24,9 +24,8 @@ def get_sas(pdb,probe):
     mdl.write(file=pdb.rsplit('.',1)[0]+'.sas')
 
     # read SAS
-    data = open('%s.sas' % (pdb.rsplit('.',1)[0], ))
-    D = data.readlines()
-    data.close()
+    with open('%s.sas' % (pdb.rsplit('.',1)[0], )) as data:
+        D = data.readlines()
 
     Sas = {}
     for d in D:
@@ -40,9 +39,8 @@ def get_sas(pdb,probe):
 
 def protein_protrusion(pdb):
 
-    data = open(pdb)
-    D = data.readlines()
-    data.close()
+    with open(pdb) as data:
+        D = data.readlines()
 
     XYZ = []
     for d in D:
@@ -88,9 +86,8 @@ def protein_convexity(pdb):
     Calculate protein convexity as in Andras Fiser paper.
     '''
 
-    data = open(pdb.rsplit('.',1)[0]+'.sas')
-    D = data.readlines()
-    data.close()
+    with open(pdb.rsplit('.',1)[0]+'.sas') as data:
+        D = data.readlines()
 
     XYZ = {}
     for d in D:
@@ -180,11 +177,10 @@ def main():
 
     snaps = []
 
-    data = open('SnapList.txt')
-    Data = data.readlines()
+    with open('SnapList.txt') as data:
+        Data = data.readlines()
     soap_scores = [float(i.strip().split()[-1]) for i in Data]
     DRS = [i.strip().split()[0] for i in Data if float(i.strip().split()[-1]) < min(soap_scores)*.4]
-    data.close()
     x=0
 
     print('DRS: ', DRS)
@@ -208,9 +204,8 @@ def main():
 
 
         # read pdb fragment PDB
-        data = open(pdb)
-        D = data.readlines()
-        data.close()
+        with open(pdb) as data:
+            D = data.readlines()
 
         RES = {}
         for d in D:
