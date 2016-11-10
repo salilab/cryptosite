@@ -51,8 +51,6 @@ def protein_protrusion(pdb):
             XYZ.append(numpy.array([x,y,z]))
     XYZ = numpy.array(XYZ)
 
-
-    out = open(pdb+'.prt','w')
     for d in D:
         if 'ATOM'==d[:4]:
 
@@ -64,11 +62,9 @@ def protein_protrusion(pdb):
             if len(natoms)>6: natoms = '999.00'
             elif len(natoms)<6: natoms = (6-len(natoms))*' ' + natoms
 
-            out.write(d[:60]+str(natoms)+d[66:])
-        else: out.write(d)
-    out.close()
-
-
+            yield d[:60]+str(natoms)+d[66:]
+        else:
+            yield d
 
 def get_prt(apo):
     '''
@@ -76,15 +72,8 @@ def get_prt(apo):
     '''
 
     # do protrusion
-    protein_protrusion(apo)
-
-    # read protrusion
-    data = open('%s.prt' % (apo))
-    D = data.readlines()
-    data.close()
-
     Prt = {}
-    for d in D:
+    for d in protein_protrusion(apo):
         d = d.strip()
         if d[:4]=='ATOM':
             atom, res, resid, cid = d[12:16], d[17:20], int(d[22:26]), d[21]
@@ -153,7 +142,6 @@ def protein_convexity(pdb):
                 if a2 not in SurfNet: SurfNet[a2] = [fc]
                 else: SurfNet[a2].append(fc)
 
-    out = open(pdb+'.con','w')
     for d in D:
         if 'ATOM'==d[:4]:
             res,cid = int(d[22:26]),d[21]
@@ -165,11 +153,9 @@ def protein_convexity(pdb):
                 elif len(cnvx)<6: cnvx = (6-len(cnvx))*' ' + cnvx
             else: cnvx = '  0.00'
 
-            out.write(d[:60]+str(cnvx)+d[66:])
-        else: out.write(d)
-    out.close()
-
-
+            yield d[:60]+str(cnvx)+d[66:]
+        else:
+            yield d
 
 def get_cvx(apo):
     '''
@@ -177,15 +163,8 @@ def get_cvx(apo):
     '''
 
     # do convexities
-    protein_convexity(apo)
-
-    # read convexities
-    data = open('%s.con' % (apo))
-    D = data.readlines()
-    data.close()
-
     Cvx = {}
-    for d in D:
+    for d in protein_convexity(apo):
         d = d.strip()
         if d[:4]=='ATOM':
             atom, res, resid, cid = d[12:16], d[17:20], int(d[22:26]), d[21]
