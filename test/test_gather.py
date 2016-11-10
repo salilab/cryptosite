@@ -8,17 +8,17 @@ import subprocess
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 utils.set_search_paths(TOPDIR)
-import cryptosite.gatherer
+import cryptosite.gather
 
 class Tests(unittest.TestCase):
 
     def test_bad(self):
-        """Test wrong arguments to gatherer"""
+        """Test wrong arguments to gather"""
         for args in ([], ['x'] * 4):
-            out = utils.check_output(['cryptosite', 'gatherer'] + args,
+            out = utils.check_output(['cryptosite', 'gather'] + args,
                                      stderr=subprocess.STDOUT, retcode=2)
             out = utils.check_output(['python', '-m',
-                                     'cryptosite.gatherer'] + args,
+                                     'cryptosite.gather'] + args,
                                      stderr=subprocess.STDOUT, retcode=2)
 
     def test_process_directory(self):
@@ -27,7 +27,7 @@ class Tests(unittest.TestCase):
         inputs = os.path.join(TOPDIR, 'test', 'input')
         with utils.temporary_working_directory() as tmpdir:
             shutil.copy(os.path.join(inputs, 'XXX_mdl.bmiftr'), '.')
-            cryptosite.gatherer.process_directory(indir)
+            cryptosite.gather.process_directory(indir)
             os.unlink('XXX.features')
             os.unlink('XXX.am')
 

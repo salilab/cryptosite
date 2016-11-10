@@ -25,7 +25,7 @@ Running the basic protocol consists of these steps:
    (``cryptosite soap_clean``, ``cryptosite pocket_parser``,
    ``cryptosite am_bmi``, ``cryptosite analysis``).
 
-#. Gather together all features into a single file (``cryptosite gatherer``).
+#. Gather together all features into a single file (``cryptosite gather``).
 
 #. Predict cryptic binding sites with an SVM using the complete set of features
    as input (``cryptosite predicter``).
