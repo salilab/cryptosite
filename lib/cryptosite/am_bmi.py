@@ -4,15 +4,12 @@
 
 from __future__ import print_function, absolute_import
 from modeller import *
-import os, sys, warnings
+import os, sys
 from numpy import dot, transpose, linalg, sqrt, array
 import numpy
 from operator import itemgetter
 import subprocess
 import cryptosite.chasa
-
-warnings.filterwarnings("ignore")
-
 
 def get_sas(pdb,probe):
 
