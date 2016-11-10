@@ -3,23 +3,20 @@
 """Gather bioinformatics features."""
 
 from __future__ import print_function, absolute_import
-from modeller import *
-import os, sys
 from numpy import dot, transpose, linalg, sqrt, array
 import numpy
-from operator import itemgetter
 import subprocess
-import cryptosite.chasa
 
 def get_sas(pdb,probe):
+    import modeller
 
     # Read the PDB file
-    env = environ()
-    mdl = model(env)
+    env = modeller.environ()
+    mdl = modeller.model(env)
     mdl.read(file=pdb)
 
     # Calculate atomic accessibilities (in Biso) with appropriate probe_radius
-    myedat = energy_data()
+    myedat = modeller.energy_data()
     myedat.radii_factor = 1.6
     mdl.write_data(edat=myedat, output='PSA ATOMIC_SOL',
                    psa_integration_step=0.05, probe_radius=probe)
@@ -201,7 +198,6 @@ def get_cvx(apo):
 
 def main():
     out = open('am_features.out','w')
-    #out = open('am_features_%s.out' % sys.argv[-1],'w')
 
     snaps = []
 
@@ -215,13 +211,11 @@ def main():
     print('DRS: ', DRS)
 
     for dr in DRS:
-           # if 'pm.pdb' not in dr: continue
-
         '''
         Gather bioinformatics features (no neighborhood yet).
         '''
 
-        pdb = dr #sys.argv[-1]
+        pdb = dr
         chain = pdb[-1]
         pdb = pdb
         print(pdb)
@@ -233,8 +227,6 @@ def main():
             cvxa = get_cvx(pdb)
         except: continue
 
-
-        #outf = open(pdb+'.feat','w')
 
         # read pdb fragment PDB
         data = open(pdb)
