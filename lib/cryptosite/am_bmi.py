@@ -243,7 +243,7 @@ def parse_args():
     usage = """%prog [opts]
 
 Calculate bioinformatics features for AllosMod models. This tool should be
-run in the same directory that 'cryptosite soap_clean' was previously run in.
+run in the same directory that 'cryptosite soap' was previously run in.
 For each AllosMod model previously scored well by SOAP, a number of
 features (surface accessibility, protein protusion, convexity) are calculated
 and stored in a am_features.out file.

@@ -129,7 +129,7 @@ def parse_args():
     usage = """%prog [opts]
 
 Add features relating to pockets detected by fpocket. This tool should be
-run in the same directory that 'cryptosite soap_clean' was previously run in.
+run in the same directory that 'cryptosite soap' was previously run in.
 For each AllosMod model previously scored well by SOAP, fpocket is used
 to detect pockets and features derived from this output are stored in
 a pockets.out file.
