@@ -24,16 +24,16 @@ def read_ligand_data():
     Lxyz = {}
     Lcor = {}
     for lig in ligands:
-	Lxyz[lig] = []
-	data = open(lig)
-	D = data.readlines()
-	data.close()
+        Lxyz[lig] = []
+        data = open(lig)
+        D = data.readlines()
+        data.close()
 
-	for d in D:
-	    x,y,z = float(d[30:38]), float(d[38:46]), float(d[46:54])
-	    Lxyz[lig].append(np.array([x,y,z]))
-	Lxyz[lig] = np.array(Lxyz[lig])
-	Lcor[lig] = D
+        for d in D:
+            x,y,z = float(d[30:38]), float(d[38:46]), float(d[46:54])
+            Lxyz[lig].append(np.array([x,y,z]))
+        Lxyz[lig] = np.array(Lxyz[lig])
+        Lcor[lig] = D
     return Lxyz, ligands
 
 def transform(t,xyz):

@@ -111,7 +111,7 @@ def get_qioft(landscape, rcut=11.):
             temp1 = 'pm_' + fh.readline().strip()
             pm = os.path.join(dirname, temp1)
         models = sorted(glob.glob(os.path.join(dirname, 'pm.pdb.B[1-8]*.pdb')))
-    
+
         coord = get_coordinates_sc(m, pm)
         dist = get_distances(coord, rcut)
         with open(os.path.join(dirname, 'qioft_%s_%dsc.dat'

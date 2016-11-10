@@ -244,59 +244,59 @@ def main():
     print('DRS: ', DRS)
 
     for dr in DRS:
-	   # if 'pm.pdb' not in dr: continue
+           # if 'pm.pdb' not in dr: continue
 
-	'''
-	Gather bioinformatics features (no neighborhood yet).
-	'''
+        '''
+        Gather bioinformatics features (no neighborhood yet).
+        '''
 
-	pdb = dr #sys.argv[-1]
-	chain = pdb[-1]
-	pdb = pdb
-	print(pdb)
+        pdb = dr #sys.argv[-1]
+        chain = pdb[-1]
+        pdb = pdb
+        print(pdb)
 
-	try:
-	    sasa14 = get_sas(pdb,probe=1.4)
-	    sasa30 = get_sas(pdb,probe=3.)
-	    prta = get_prt(pdb)
-	    cvxa = get_cvx(pdb)
-	except: continue
-
-
-	#outf = open(pdb+'.feat','w')
-
-	# read pdb fragment PDB
-	data = open(pdb)
-	D = data.readlines()
-	data.close()
-
-	RES = {}
-	for d in D:
-	    d = d.strip()
-	    if d[:4]=='ATOM':
-		atom, res, resid, cid = d[12:16], d[17:20], int(d[22:26]), d[21]
-		if cid == ' ':
-		    cid='A'
-		if atom==' OXT': continue
-
-		p = (d[17:20], int(d[22:26]), d[21])
-		if d[21]== ' ':
-		    p = (d[17:20], int(d[22:26]), 'A')
-		if p not in RES: RES[p] = {'sas14':[],'sas30':[],'prt':[],'cvx':[]}
-		sasa14i = sasa14[(atom,res,resid,cid)]
-		sasa30i = sasa30[(atom,res,resid,cid)]
-		prtai = prta[(atom,res,resid,cid)]
-		cvxai = cvxa[(atom,res,resid,cid)]
-
-		RES[p]['sas14'].append(sasa14i)
-		RES[p]['sas30'].append(sasa30i)
-		RES[p]['prt'].append(prtai)
-		RES[p]['cvx'].append(cvxai)
+        try:
+            sasa14 = get_sas(pdb,probe=1.4)
+            sasa30 = get_sas(pdb,probe=3.)
+            prta = get_prt(pdb)
+            cvxa = get_cvx(pdb)
+        except: continue
 
 
-	for p in RES:
-	    L = [str(i) for i in list(p)+[numpy.mean(RES[p]['sas14']),numpy.mean(RES[p]['sas30']),numpy.mean(RES[p]['prt']),numpy.mean(RES[p]['cvx'])]]
-	    out.write( '\t'.join(L)+'\n' )
+        #outf = open(pdb+'.feat','w')
+
+        # read pdb fragment PDB
+        data = open(pdb)
+        D = data.readlines()
+        data.close()
+
+        RES = {}
+        for d in D:
+            d = d.strip()
+            if d[:4]=='ATOM':
+                atom, res, resid, cid = d[12:16], d[17:20], int(d[22:26]), d[21]
+                if cid == ' ':
+                    cid='A'
+                if atom==' OXT': continue
+
+                p = (d[17:20], int(d[22:26]), d[21])
+                if d[21]== ' ':
+                    p = (d[17:20], int(d[22:26]), 'A')
+                if p not in RES: RES[p] = {'sas14':[],'sas30':[],'prt':[],'cvx':[]}
+                sasa14i = sasa14[(atom,res,resid,cid)]
+                sasa30i = sasa30[(atom,res,resid,cid)]
+                prtai = prta[(atom,res,resid,cid)]
+                cvxai = cvxa[(atom,res,resid,cid)]
+
+                RES[p]['sas14'].append(sasa14i)
+                RES[p]['sas30'].append(sasa30i)
+                RES[p]['prt'].append(prtai)
+                RES[p]['cvx'].append(cvxai)
+
+
+        for p in RES:
+            L = [str(i) for i in list(p)+[numpy.mean(RES[p]['sas14']),numpy.mean(RES[p]['sas30']),numpy.mean(RES[p]['prt']),numpy.mean(RES[p]['cvx'])]]
+            out.write( '\t'.join(L)+'\n' )
     out.close()
 
 if __name__ == '__main__':
