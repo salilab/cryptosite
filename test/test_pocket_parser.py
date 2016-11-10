@@ -11,6 +11,14 @@ utils.set_search_paths(TOPDIR)
 import cryptosite.pocket_parser
 
 class Tests(unittest.TestCase):
+    def test_bad(self):
+        """Test wrong arguments to pocket_parser"""
+        for args in (['x'],):
+            out = utils.check_output(['cryptosite', 'pocket_parser'] + args,
+                                     stderr=subprocess.STDOUT, retcode=2)
+            out = utils.check_output(['python', '-m',
+                                     'cryptosite.pocket_parser'] + args,
+                                     stderr=subprocess.STDOUT, retcode=2)
 
     def test_get_cnc(self):
         """Test get_cnc() function"""

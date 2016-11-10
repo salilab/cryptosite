@@ -7,6 +7,7 @@ import sys, os, glob
 from numpy import linalg, array, shape, argwhere
 from scipy import spatial
 import subprocess
+import optparse
 from operator import itemgetter
 
 def get_cnc(pfil,ifil):
@@ -80,7 +81,7 @@ def get_cnc(pfil,ifil):
 def run_fpocket(Snap):
     subprocess.check_call(["fpocket", "-f", Snap])
 
-def main():
+def pocket_features():
     RES = {}
 
     out = open('pockets.out','w')
@@ -123,6 +124,24 @@ def main():
     for r in sorted(RES.keys(), key=itemgetter(1)):
         out.write('\t'.join([str(i) for i in [r[0],r[1],r[2]]+RES[r]])+'\n')
     out.close()
+
+def parse_args():
+    usage = """%prog [opts]
+
+Add features relating to pockets detected by fpocket. This tool should be
+run in the same directory that 'cryptosite soap_clean' was previously run in.
+For each AllosMod model previously scored well by SOAP, fpocket is used
+to detect pockets and features derived from this output are stored in
+a pockets.out file.
+"""
+    parser = optparse.OptionParser(usage)
+    opts, args = parser.parse_args()
+    if len(args) != 0:
+        parser.error("incorrect number of arguments")
+
+def main():
+    parse_args()
+    pocket_features()
 
 if __name__ == '__main__':
     main()
