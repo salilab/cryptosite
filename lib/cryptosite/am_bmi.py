@@ -44,32 +44,6 @@ def get_sas(pdb,probe):
             Sas[(atom,res,resid,cid)] = float(d[60:66])
     return Sas
 
-
-def get_sas2(pdb):
-    '''
-    Calculate accesible surface area using CHASA algorithm.
-    '''
-    #TODO: add option for calculating that in Modeller with varying rolling sphere radius.
-
-    # do SAS
-    cryptosite.chasa.run_CHASA(pdb)
-
-    # read SAS
-    data = open('%s.sas' % (pdb.rsplit('.',1)[0], ))
-    D = data.readlines()
-    data.close()
-
-    Sas = {}
-    for d in D:
-        d = d.strip()
-        if d[:4]=='ATOM':
-            atom, res, resid, cid = d[12:16], d[17:20], int(d[22:26]), d[21]
-            if cid == ' ':
-                cid='A'
-            Sas[(atom,res,resid,cid)] = float(d[60:66])
-    return Sas
-
-
 def protein_protrusion(pdb):
 
     data = open(pdb)
