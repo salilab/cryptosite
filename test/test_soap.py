@@ -28,8 +28,6 @@ class MockScorer(energy_term):
             return 20., ()
         elif self.count == 3:
             raise modeller.ModellerError("SOAP error")
-        else:
-            raise ValueError("some other error")
 
 class Tests(unittest.TestCase):
     def test_bad(self):
@@ -45,7 +43,7 @@ class Tests(unittest.TestCase):
         """Test soap script as a module"""
         with utils.temporary_working_directory() as tmpdir:
             for pdb in ('test.pdb', 'pm.pdb0.pdb', 'pm.pdb1.pdb',
-                        'pm.pdb2.pdb', 'pm.pdb3.pdb', 'pm.pdb.B10010002.pdb'):
+                        'pm.pdb2.pdb', 'pm.pdb.B10010002.pdb'):
                 fname = os.path.join(tmpdir, pdb)
                 with open(fname, 'w') as fh:
                     fh.write("""

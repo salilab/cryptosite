@@ -42,7 +42,9 @@ def soap_score():
             except modeller.ModellerError:
                 print("The SOAP-Protein-OD library file is not included with MODELLER.")
                 print("Please get it from http://salilab.org/SOAP/.")
-        except: pass
+        # Was 'except: pass' but this will hide genuine errors. Replace with
+        # a more specific list of exceptions (and test)
+        except: raise
 
     out.close()
 
