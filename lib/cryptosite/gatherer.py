@@ -7,6 +7,7 @@ import sys, glob
 import numpy as np
 import os
 import random
+import optparse
 
 def process_directory(tts):
     pdbs = os.listdir(tts + '/pred_dECALCrAS1000')
@@ -197,8 +198,25 @@ def process_directory(tts):
 
     print(H, len(H))
 
+def parse_args():
+    usage = """%prog [opts] <am_directory>
+
+Gather all feature information into a single file.
+This tool should be run in the main working directory (where mainer was
+previously run, containing the XXX_mdl.bmiftr file).
+<am_directory> names the directory containing AllosMod results. The tool
+will collect all feature information from these two locations, and generate
+an XXX.features file, which can later be used as input to the predicter tool.
+"""
+    parser = optparse.OptionParser(usage)
+    opts, args = parser.parse_args()
+    if len(args) != 1:
+        parser.error("incorrect number of arguments")
+    return args[0]
+
 def main():
-    process_directory(sys.argv[-2])
+    directory = parse_args()
+    process_directory(directory)
 
 if __name__ == '__main__':
     main()
