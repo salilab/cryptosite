@@ -1065,7 +1065,7 @@ def protein_from_pdb(p):
             na = na + 1
             rnam = line[17:20]
             rnum = line[22:27]
-            if rnum <> current_res:
+            if rnum != current_res:
                 alim = 0
                 if len(f): alim = f[-1]
                 for aptr in range(len(a)-1, alim, -1):
@@ -1386,7 +1386,7 @@ def print_hbs_chasa(fil, mol, flags, probe=1.4, ndiv=3,
     tot_solv_nrg = ap_solv_nrg + p_solv_nrg
     write('TER %8.3f %8.3f\n' % (CHASA,tot_solv_nrg))
 
-    if ff <> file:
+    if ff != file:
         write('END\n')
         ff.close()
 
@@ -1588,7 +1588,7 @@ def make_hbond_list(p, wmin, wmax, hbparms):
     for i in range(minres, maxres):
         start = fai[i]
         end = fai[i+1]
-        if rn[i] <> 'PRO':
+        if rn[i] != 'PRO':
             if not ((i == 0) and (minres == 0)):
                 # for NH as the donor
                 donor = get_atom_named(atoms, ' N  ', start, end)
@@ -2302,7 +2302,7 @@ def get_atom_named(atoms, atom_name, start, end):
 def get_scacceptor(atoms, start, end, res):
     scatoms = []
     for arec in RESIDUES[res]:
-        if arec[7] and arec[0] <> ' O  ':
+        if arec[7] and arec[0] != ' O  ':
             acp = (get_atom_named(atoms, arec[0], start, end))
             try:
                 acp1 = acp.first_parent
@@ -3200,7 +3200,7 @@ def mk_virt_bb_cntmult_loosHbd(prot,hblist,tryall=0,watpdb=None,ext_rad=1.25):
 
     #construct a virtual water along the NH axis at 2.95 from the N
     for i in range(minres,maxres):
-        if rn[i] <> 'PRO':
+        if rn[i] != 'PRO':
             if not ((i == 0) and (minres == 0)):
                 start = fai[i]
                 end = fai[i+1]
