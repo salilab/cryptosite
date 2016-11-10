@@ -50,7 +50,7 @@ class Tests(unittest.TestCase):
 ATOM      1  N   CYS A   1      18.511  -1.416  15.632  1.00  6.84           C
 """)
             with utils.mocked_object(soap_protein_od, 'Scorer', MockScorer):
-                cryptosite.soap.main()
+                cryptosite.soap.soap_score()
             with open('SnapList.txt') as fh:
                 data = fh.readlines()
             # don't know glob order
