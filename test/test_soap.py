@@ -32,6 +32,14 @@ class MockScorer(energy_term):
             raise ValueError("some other error")
 
 class Tests(unittest.TestCase):
+    def test_bad(self):
+        """Test wrong arguments to soap"""
+        for args in (['x'],):
+            out = utils.check_output(['cryptosite', 'soap'] + args,
+                                     stderr=subprocess.STDOUT, retcode=2)
+            out = utils.check_output(['python', '-m',
+                                     'cryptosite.soap'] + args,
+                                     stderr=subprocess.STDOUT, retcode=2)
 
     def test_soap_module(self):
         """Test soap script as a module"""

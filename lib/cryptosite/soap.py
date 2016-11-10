@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
+"""Evaluate SOAP score for each AllosMod model."""
+
 from __future__ import print_function, absolute_import
 import glob, sys, os
+import optparse
 
-def main():
+def soap_score():
     import modeller
     from modeller.scripts import complete_pdb
     from modeller import soap_protein_od
@@ -42,6 +45,25 @@ def main():
         except: pass
 
     out.close()
+
+def parse_args():
+    usage = """%prog [opts]
+
+Evaluate SOAP-Protein score for each AllosMod model in the current directory.
+A new file SnapList.txt is created which tabluates this score for each model.
+This file is used as input by 'cryptosite am_bmi' and 'cryptosite pockets'.
+
+Note that the SOAP-Protein potential is not included with MODELLER; it can
+be downloaded separately from https://salilab.org/SOAP/.
+"""
+    parser = optparse.OptionParser(usage)
+    opts, args = parser.parse_args()
+    if len(args) != 0:
+        parser.error("incorrect number of arguments")
+
+def main():
+    parse_args()
+    soap_score()
 
 if __name__ == '__main__':
     main()
