@@ -5,6 +5,13 @@ import shutil
 import contextlib
 import subprocess
 
+def set_search_paths(topdir):
+    """Set search paths so that we can run binaries and import Python modules"""
+    os.environ['PATH'] = os.path.join(topdir, 'bin') + ':' + os.environ['PATH']
+    os.environ['PYTHONPATH'] = os.path.join(topdir, 'lib') + ':' \
+                               + os.environ.get('PYTHONPATH', '')
+    sys.path.append(os.path.join(topdir, 'lib'))
+
 def check_output(args, stderr=None, retcode=0, input=None, *other, **keys):
     """Run a subprocess and return its output.
        If the return code from the subprocess does not match `retcode`, an

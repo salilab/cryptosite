@@ -6,10 +6,7 @@ import re
 import subprocess
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-os.environ['PATH'] = os.path.join(TOPDIR, 'bin') + ':' + os.environ['PATH']
-os.environ['PYTHONPATH'] = os.path.join(TOPDIR, 'lib') + ':' \
-                           + os.environ.get('PYTHONPATH', '')
-sys.path.append(os.path.join(TOPDIR, 'lib'))
+utils.set_search_paths(TOPDIR)
 
 class Tests(unittest.TestCase):
 
