@@ -21,7 +21,6 @@ from sklearn import preprocessing
 from itertools import product
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import roc_curve, auc
-#import pylab as pl
 from sklearn.linear_model import LogisticRegression
 from operator import itemgetter
 import cryptosite.config
@@ -98,24 +97,23 @@ def predict(inputdata, model='linear'):
     M, Header, Indeces = get_matrix(inputdata, model)
 
     print('Processing the data for model %s ...' % model.upper())
-    if 1:
-        pdb=inputdata.split('.')[0]
-        print(pdb)
-        NewIndeces, newcnt = {},0
-        X_learn, Y_learn = [],[]
+    pdb=inputdata.split('.')[0]
+    print(pdb)
+    NewIndeces, newcnt = {},0
+    X_learn, Y_learn = [],[]
 
-        for r,m in enumerate(M):
-            if len(np.argwhere(np.isnan(np.array(m[1:-1]))==True))>0:
-                print(r,m[0])
-                print(peter)
+    for r,m in enumerate(M):
+        if len(np.argwhere(np.isnan(np.array(m[1:-1]))==True))>0:
+            print(r,m[0])
+            print(peter)
 
-            X_learn.append(np.array(m[1:-1]))
-            Y_learn.append(m[-1])
-            NewIndeces[newcnt] = Indeces[r]
-            newcnt+=1
+        X_learn.append(np.array(m[1:-1]))
+        Y_learn.append(m[-1])
+        NewIndeces[newcnt] = Indeces[r]
+        newcnt+=1
 
-        X_learn = np.array(X_learn)
-        X_learn = np.vstack(( X_learn[:,0], X_learn[:,2], X_learn[:,1] )).T
+    X_learn = np.array(X_learn)
+    X_learn = np.vstack(( X_learn[:,0], X_learn[:,2], X_learn[:,1] )).T
 
     if model=='linear':
 
@@ -176,11 +174,6 @@ def predict(inputdata, model='linear'):
     Y_PRED_PROB_ALL = list(Y_pred_prob[:, 1])
     Y_TEST_ALL = list(Y_learn)
 
-    #fprC, tprC, thresholdsC = roc_curve(Y_TEST_ALL, Y_PRED_PROB_ALL)
-    #roc_aucC = auc(fprC, tprC)
-    #print "Area under the ROC curve : %f" % roc_aucC
-
-
     if model=='linear': outn = open(pdb+'.lin.pred','w')
     elif model=='poly' or model=='final': outn = open(pdb+'.pol.pred','w')
     else: print(peter)
@@ -228,7 +221,7 @@ def write_pdb(pdb,model='linear'):
             try: pred = Data[p]
             except KeyError: pred = ('0.0', '0.0')
 
-            v = '%.2f' % (float(pred[1])*100) #str(round(100*float(pred[1]),2))
+            v = '%.2f' % (float(pred[1])*100)
             v = (6-len(v))*' '+v
             line = d[:56]+pred[0]+'0'+v+'\n'
             out.write(line)

@@ -11,7 +11,6 @@ import optparse
 
 def process_directory(tts):
     pdbs = os.listdir(tts + '/pred_dECALCrAS1000')
-    # pdbs = [i for i in pdbs if '_' in i and 'pdb' in i and PDB in i]
     pdbs = [i for i in pdbs if '_' in i and 'pdb' in i ]
     pdbs = list(set(pdbs))
 
@@ -27,7 +26,6 @@ def process_directory(tts):
 
         for e in efiles:
             pdbf = e.rsplit('/',2)[1]
-            #pdb = pdbf.split('_')[0]
 
             # --- read energy file and determine the temperature
             data = open(e)
@@ -36,13 +34,11 @@ def process_directory(tts):
             E = [float(i.strip().split()[-1]) for i in D]
             # --- read in Qi
             try:
-                #data = open(e.rsplit('/',1)[0]+'/qioft_pm_'+pdb.split('.')[0]+'.pdb_11sc.dat')
                 data = open(e.rsplit('/',1)[0]+'/qioft_pm_XXX.pdb_11sc.dat')
                 D = data.readlines()
                 data.close()
                 q = []
-                #for d in D: Q[temp].append( np.array([float(i) for i in d.strip().split()]) )
-                if len(D)>0:# and 'THEORETICAL' not in D[0]:
+                if len(D)>0:
                     for d in D:
                         q.append( np.array([float(i) for i in d.strip().split()]) )
                     q = np.array(q)
@@ -86,7 +82,6 @@ def process_directory(tts):
                 D = data.readlines()
                 data.close()
 
-                #print pdbf,fil
                 for d in D:
                     d = d.strip().split()
                     if len(d)!=7: continue
@@ -106,7 +101,6 @@ def process_directory(tts):
                             AM['prt'][res].append(float(d[5]))
                             AM['cvx'][res].append(float(d[6]))
                         except (ValueError, IndexError): pass
-            #print pdbf,pdb,temp,percentile,len(files)
     qm = np.array(QM)
     qd = np.array(QD)
     pm = np.array(PM)
@@ -147,16 +141,11 @@ def process_directory(tts):
 
     ### --- create the final file with all the features
 
-    #out = open('1LAYA2.features','w')
     Header = ['ApoID','Res','ResID','ChainID','SAS','PRT','CVX','CNC','SSE','HYD','CHR','SQC','PCK','D2S','PTM','NBG','SASn','PRTn','CVXn','CNCn','Un','Bn','En','Gn','Hn','Sn','Tn','In','HYDn','CHRn','SQCn','PCKn','SAS14_mean_','SAS14_std_','SAS30_mean_','SAS30_std_','PRT_mean_','PRT_std_','CVX_mean_','CVX_std_','QI_mean_','QI_std_','CNC_mean_','CNC_std_','CN5_mean_','CN5_std_','CNS_','CBS']
-    #out.write('\t'.join(Header)+'\n')
-
 
     files = glob.glob('*.am')
     pdbs = set([i.split('_')[0].split('/')[-1] for i in files])
-    for a in pdbs: #if 1:
-
-            #a = '1LAYA2'
+    for a in pdbs:
         fff = a.split('.')[0]
         data = open(fff+'_mdl.bmiftr')
         D = data.readlines()
@@ -188,9 +177,6 @@ def process_directory(tts):
                 A[(d[0],int(d[1]),d[2])] += d[3:]
             except:
                 pass
-
-
-             #out.write('\t'.join(Header)+ '\t'.join(H)+'\n')
 
         for i in A:
             out.write('\t'.join(A[i]+['0'])+'\n')

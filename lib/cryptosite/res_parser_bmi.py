@@ -26,12 +26,11 @@ def get_chains(pdb, chain, ligand=0):
         if 'ATOM'==d[:4]:
             if d[21]==chain and d[17:20]!= 'HOH':
                 res, rsid, icode, bfactor = d[17:20],int(d[22:26]),d[26], float(d[60:66])
-                if 1:#icode!=' ':
-                    if (res,rsid,icode) not in ress:
-                        if len(ress)==0: X=rsid-1
-                        X+=1
-                        ress[(res,rsid,icode)] = [X,[bfactor]]
-                    else: ress[(res,rsid,icode)][1].append(bfactor)
+                if (res,rsid,icode) not in ress:
+                    if len(ress)==0: X=rsid-1
+                    X+=1
+                    ress[(res,rsid,icode)] = [X,[bfactor]]
+                else: ress[(res,rsid,icode)][1].append(bfactor)
                 newrsid = ' '*(4-len(str(X)))+str(X)
                 newline = d[:22]+newrsid+' '+d[27:]
                 out.write(newline)
@@ -39,10 +38,8 @@ def get_chains(pdb, chain, ligand=0):
         elif 'HETATM'==d[:6] or 'TER'==d[:3]:
             if d[21]==chain and d[17:20]!= 'HOH':
                 res, rsid, icode = d[17:20],int(d[22:26]),d[26]
-                if 1:#icode!=' ':
-                    if (res,rsid,icode) not in ress:
-                        if len(ress)==0: X=rsid-1
-                        #X+=1
+                if (res,rsid,icode) not in ress:
+                    if len(ress)==0: X=rsid-1
 
                 newrsid = ' '*(4-len(str(X)))+str(X)
                 newline = d[:22]+newrsid+' '+d[27:]
@@ -51,9 +48,6 @@ def get_chains(pdb, chain, ligand=0):
         if ligand!=0:
             if d[17:20]==ligand and d[21]==chain: lig += d[:16]+' '+d[17:]
     out.close()
-
-    #os.system('mv %s.pdb %s.org.pdb' % (pdb,pdb))
-    #os.system('mv %s_%s_tmp.pdb %s.pdb' % (pdb,chain,pdb))
 
     RES = dict([ (i[1],[i,ress[i][1]] ) for i in ress])
     SEQ = ''
@@ -80,12 +74,11 @@ def get_model(pdb, chain):
         if 'ATOM'==d[:4] and d[21]==chain:
             if d[17:20]!= 'HOH':
                 res, rsid, icode, bfactor = d[17:20],int(d[22:26]),d[26], float(d[60:66])
-                if 1:#icode!=' ':
-                    if (res,rsid,icode) not in ress:
-                        if len(ress)==0: X=rsid-1
-                        X+=1
-                        ress[(res,rsid,icode)] = [X,[bfactor]]
-                    else: ress[(res,rsid,icode)][1].append(bfactor)
+                if (res,rsid,icode) not in ress:
+                    if len(ress)==0: X=rsid-1
+                    X+=1
+                    ress[(res,rsid,icode)] = [X,[bfactor]]
+                else: ress[(res,rsid,icode)][1].append(bfactor)
                 newrsid = ' '*(4-len(str(X)))+str(X)
                 newline = d[:21]+chain+newrsid+' '+d[27:]
                 out.write(newline)
@@ -93,17 +86,14 @@ def get_model(pdb, chain):
         elif ('HETATM'==d[:6] or 'TER'==d[:3]) and d[21]==chain:
             if d[17:20]!= 'HOH':
                 res, rsid, icode = d[17:20],int(d[22:26]),d[26]
-                if 1:#icode!=' ':
-                    if (res,rsid,icode) not in ress:
-                        if len(ress)==0: X=rsid-1
-                        X+=1
+                if (res,rsid,icode) not in ress:
+                    if len(ress)==0: X=rsid-1
+                    X+=1
 
                 newrsid = ' '*(4-len(str(X)))+str(X)
                 newline = d[:21]+chain+newrsid+' '+d[27:]
                 out.write(newline)
     out.close()
-
-    #os.system('mv %s_%s_tmp.pdb %s%s.pdb' % (pdb,chain,pdb,chain))
 
     RES = dict([ (i[1],[i,ress[i][1]] ) for i in ress])
     SEQ = ''
@@ -167,10 +157,6 @@ def match_to_pdb(Sel, pdbres, chainid):
                 p = (s[0],s[1],chainid)
                 B[p] = 0.5*std + (numpy.max(AllBfactors)-mu)/std
             else:
-                #if pdbinfo[0][0]==s[0] and pdbinfo[0][1]==s[1] and pdbali[s[1]-1]!='-':
-                #        p = (s[0],s[1])
-                #        B[p] = numpy.mean((numpy.array(pdbinfo[1])-mu)/std)
-                #else:
                 print("Residues do not match for PDB: ")
                 pass
 
@@ -536,10 +522,6 @@ def res_parser(fil):
         RESAPO[p]['PCK'] = Packing[p]
         RESAPO[p]['D2S'] = Dist2Surface[p]
         RESAPO[p]['PTM'] = PatchMap[p]
-        #try: RESAPO[p]['BFC'] = Bapo[p]
-        #except KeyError:
-        #       print 'HERE!!!!', p
-        #       #del RESAPO[p]
 
 
     Hdr = ['SAS','PRT','CVX','CNC','SSE','HYD','CHR','SQC','PCK','D2S','PTM']
@@ -568,7 +550,6 @@ def res_parser(fil):
             Attn[14] += RESAPO[n]['CHR']
             Attn[15] += RESAPO[n]['SQC']
             Attn[16] += RESAPO[n]['PCK']
-            #Attn[17] += RESAPO[n]['BFC']
 
         Attn = numpy.array(Attn)/len(Neighbors[p])
 

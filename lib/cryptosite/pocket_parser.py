@@ -23,8 +23,6 @@ def get_cnc(pfil,ifil):
     for d in D:
         if d[17:20]=='STP' and d[:6]=='HETATM':
             pn = int(d[22:26])
-            #if pn not in Pockets: Pockets[pn] = [(float(d[30:38]), float(d[38:46]), float(d[46:54]))]
-            #else: Pockets[pn].append( (float(d[30:38]), float(d[38:46]), float(d[46:54])) )
             Pockets[pc] = pn
             PocketC.append(array([float(d[30:38]), float(d[38:46]), float(d[46:54])]))
             pc += 1
@@ -82,12 +80,9 @@ def get_cnc(pfil,ifil):
 def run_fpocket(Snap):
     subprocess.check_call(["fpocket", "-f", Snap])
 
-#run_fpocket('SnapList.txt')
-
 def main():
     RES = {}
 
-    #out = open('pockets_%s.out' % sys.argv[-1],'w')
     out = open('pockets.out','w')
     snaps = []
 
@@ -101,31 +96,26 @@ def main():
     print('DRS: ', DRS)
 
     for dr in DRS:
-        #if 'pm.pdb' not in dr: continue
         run_fpocket(dr)
-        if 1: #for y,fil in enumerate(glob.glob(dr+'/pm.pdb.B1*_out/*_out.pdb')):
-            fils = glob.glob(dr.rsplit('.',1)[0]+'_out/*_out.pdb')
-            print(fils)
-            if len(fils)==0: continue
-            fil = fils[0]
-            pdbfil = fil
-            inffil = fil.rsplit('_',1)[0]+'_info.txt'
-            print(pdbfil, inffil)
-            res = get_cnc(pdbfil,inffil)
-            snaps.append(fil)
+        fils = glob.glob(dr.rsplit('.',1)[0]+'_out/*_out.pdb')
+        print(fils)
+        if len(fils)==0: continue
+        fil = fils[0]
+        pdbfil = fil
+        inffil = fil.rsplit('_',1)[0]+'_info.txt'
+        print(pdbfil, inffil)
+        res = get_cnc(pdbfil,inffil)
+        snaps.append(fil)
 
-            if x==0:
-                for r in res: RES[r] = [res[r]]
-                x += 1
-            else:
-                for r in res:
-                    if r in RES: RES[r].append(res[r])
-                    else: RES[r] = [res[r]]
-
-            #if x==3: break
+        if x==0:
+            for r in res: RES[r] = [res[r]]
             x += 1
+        else:
+            for r in res:
+                if r in RES: RES[r].append(res[r])
+                else: RES[r] = [res[r]]
 
-
+        x += 1
 
     out.write('\t'.join(['Res','ResID','ChainID']+snaps)+'\n')
 
