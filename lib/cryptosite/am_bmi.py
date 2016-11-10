@@ -161,10 +161,10 @@ def protein_convexity(pdb):
 
     SurfNet = {}
     RX = SurfRes.keys()
-    for r1 in xrange(len(RX)-1):
+    for r1 in range(len(RX)-1):
         F1 = SurfRes[RX[r1]]
         C1 = numpy.array([numpy.array([c[1],c[2],c[3]]) for c in F1 if c[4]>2.])
-        for r2 in xrange(r1+1,len(RX)):
+        for r2 in range(r1+1,len(RX)):
             F2 = SurfRes[RX[r2]]
             C2 = numpy.array([numpy.array([c[1],c[2],c[3]]) for c in F2 if c[4]>2.])
 

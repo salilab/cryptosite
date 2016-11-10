@@ -57,7 +57,7 @@ def get_chains(pdb, chain, ligand=0):
 
     RES = dict([ (i[1],[i,ress[i][1]] ) for i in ress])
     SEQ = ''
-    for x in xrange(min(RES.keys()),max(RES.keys())+1):
+    for x in range(min(RES.keys()),max(RES.keys())+1):
         if x in RES: SEQ += PDB.Polypeptide.three_to_one(RES[x][0][0])
         else: SEQ += '-'
 
@@ -107,7 +107,7 @@ def get_model(pdb, chain):
 
     RES = dict([ (i[1],[i,ress[i][1]] ) for i in ress])
     SEQ = ''
-    for x in xrange(min(RES.keys()),max(RES.keys())+1):
+    for x in range(min(RES.keys()),max(RES.keys())+1):
         if x in RES: SEQ += PDB.Polypeptide.three_to_one(RES[x][0][0])
         else: SEQ += '-'
 
@@ -188,8 +188,8 @@ def compactness(S):
     if len(S)<=1: return 0.
     res = S.keys()
     F = []
-    for i in xrange(len(res)-1):
-        for j in xrange(i+1,len(res)):
+    for i in range(len(res)-1):
+        for j in range(i+1,len(res)):
             dist = 1000.
             for ai in S[res[i]]:
 
@@ -295,8 +295,8 @@ def distance_from_surface(all_atoms, surf_atoms):
 
     Dist = spatial.distance.cdist(XYZs,XYZa)
     Dist2Surf = {}
-    for a in xrange(numpy.shape(Dist)[1]):
-        for s in xrange(numpy.shape(Dist)[0]):
+    for a in range(numpy.shape(Dist)[1]):
+        for s in range(numpy.shape(Dist)[0]):
             if Ida[a] not in Dist2Surf: Dist2Surf[Ida[a]] = Dist[s,a]
             else: Dist2Surf[Ida[a]] = min([Dist2Surf[Ida[a]], Dist[s,a]])
     return Dist2Surf

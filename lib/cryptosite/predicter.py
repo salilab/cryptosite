@@ -68,7 +68,7 @@ def get_matrix(inputdata, model='linear'):
     for d in D[1:]:
         d = d.strip().split('\t')
         LA = []
-        for hd in xrange(len(Header)):
+        for hd in range(len(Header)):
             if hd not in visited: pass
             else:
                 if hd==1:
@@ -187,7 +187,7 @@ def predict(inputdata, model='linear'):
 
     print('Writing output files ...')
     outn.write('\t'.join(['PDBID','Res','ResID']+Header+['CryptositeValue'])+'\n')
-    for x in xrange(len(Y_PRED_PROB_ALL)):
+    for x in range(len(Y_PRED_PROB_ALL)):
         outn.write( '\t'.join(list(NewIndeces[x])+[str(i) for i in X_learn[x]]+[str(Y_PRED_PROB_ALL[x])])+'\n' )
     outn.close()
 

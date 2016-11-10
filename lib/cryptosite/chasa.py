@@ -1068,7 +1068,7 @@ def protein_from_pdb(p):
             if rnum <> current_res:
                 alim = 0
                 if len(f): alim = f[-1]
-                for aptr in xrange(len(a)-1, alim, -1):
+                for aptr in range(len(a)-1, alim, -1):
                     if a[aptr].name not in aname_seen:
 #                           print (nfstr % (a[aptr].name, int(current_res)))
                         del a[aptr]
@@ -1102,7 +1102,7 @@ def protein_from_pdb(p):
 
     alim = 0
     if len(f): alim = f[-1]
-    for aptr in xrange(len(a)-1, alim, -1):
+    for aptr in range(len(a)-1, alim, -1):
         if a[aptr].name not in aname_seen:
 #           print (nfstr % (a[aptr].name, int(current_res)))
             del a[aptr]
@@ -1340,7 +1340,7 @@ def print_hbs_chasa(fil, mol, flags, probe=1.4, ndiv=3,
     Gamma_hb_oxy = 2.0
     Gamma_ap = 0.03
     CHASA = 0.0
-    for i in xrange(minres,maxres):
+    for i in range(minres,maxres):
         rname = residue_names[i]
         start = fai[i]
         end = fai[i+1]
@@ -1585,7 +1585,7 @@ def make_hbond_list(p, wmin, wmax, hbparms):
     shbtor = hbparms['sidechain_hbond_torsion']
     shbene = hbparms['sidechain_hbond_score']
 
-    for i in xrange(minres, maxres):
+    for i in range(minres, maxres):
         start = fai[i]
         end = fai[i+1]
         if rn[i] <> 'PRO':
@@ -2160,10 +2160,10 @@ def make_asa_list(mol, hphob=1, hphil=0, hydrogens=0):
 
     minres, maxres = get_res_extents(mol)
 
-    for r in xrange(minres, maxres):
+    for r in range(minres, maxres):
         rnam = mol.residue_names[r]
         first, last = fai[r], fai[r+1]
-        for at in xrange(first, last):
+        for at in range(first, last):
             if not hydrogens and is_hydrogen(rnam, atoms[at].name):
                 continue
 

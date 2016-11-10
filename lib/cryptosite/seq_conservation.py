@@ -83,7 +83,7 @@ def parse_blast(blastOut, pdb, qseq, evalue=0.00001):
                 sseq += str(Seqs[sseq])
             ma = 1./Clusters[sseq]
 
-            for i in xrange(len(hquery)):
+            for i in range(len(hquery)):
                 if hquery[i] != '-':
                     if hquery[i]!=qseq[qi]:
                         print('Some Error in alignment!')
@@ -103,10 +103,10 @@ def parse_blast(blastOut, pdb, qseq, evalue=0.00001):
     # --- re-weight the A matrix, correct for lambda factor
     lmbd = Meff
     out = open(pdb+'.sqc','w')
-    for i in xrange(len(A)):
+    for i in range(len(A)):
         Si = 0
         Fa = sum(A[i])
-        for j in xrange(len(q)):
+        for j in range(len(q)):
             si = (1./(Meff+lmbd)) * ( (lmbd/len(q)) + A[i,j] ) #A[i,j]/Fa
             A[i,j] = si
             if si>0.: Si -= si*numpy.log(si)
