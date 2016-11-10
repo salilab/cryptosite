@@ -72,7 +72,7 @@ def protein_protrusion(pdb):
 
 def get_prt(apo):
     '''
-    Calculate protein protrusion using Andreas Fisher equation.
+    Calculate protein protrusion using Andras Fiser equation.
     '''
 
     # do protrusion
@@ -96,7 +96,7 @@ def get_prt(apo):
 
 def protein_convexity(pdb):
     '''
-    Calculate protein convexity as in Andras Fisher paper.
+    Calculate protein convexity as in Andras Fiser paper.
     '''
 
     data = open(pdb.rsplit('.',1)[0]+'.sas')
@@ -173,7 +173,7 @@ def protein_convexity(pdb):
 
 def get_cvx(apo):
     '''
-    Calculate protein convexity as in Andras Fisher paper.
+    Calculate protein convexity as in Andras Fiser paper.
     '''
 
     # do convexities
