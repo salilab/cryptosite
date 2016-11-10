@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 """
 Title: CHASA.py
 Author: Pat Fleming, pat.fleming@jhu.edu
@@ -215,7 +217,7 @@ class Linus:
         elif self.hbdpar.has_key(name):
             return self.hbdpar[name]
         else:
-            raise AttributeError, 'Undefined attribute %s' % name
+            raise AttributeError('Undefined attribute %s' % name)
 
     def __setattr__(self, name, value):
         if name in ('pdbfile', 'protein', 'hbdpar', 'hblist'):
@@ -223,7 +225,7 @@ class Linus:
         elif not hasattr(self, name):
             self.__dict__[name] = value
         else:
-            raise AttributeError, 'Attribute %s cannot be set directly' % name
+            raise AttributeError('Attribute %s cannot be set directly' % name)
 
     def set_hbond_parameters(self, **kw):
         """Set the hydrogen bond parameters
@@ -244,7 +246,7 @@ class Linus:
                 vtype = type(self.hbdpar[key])
                 self.hbdpar[key] = converters[vtype](value)
             else:
-                raise KeyError, 'Undefined hbond parameter %s' % key
+                raise KeyError('Undefined hbond parameter %s' % key)
 
 class LinusProtein:
     """Class to describe a protein in LINUS.
@@ -348,7 +350,7 @@ class LinusProtein:
             if self.atoms[i].name == atomname:
                 return self.atoms[i]
         else:
-            raise ValueError, 'No such atom: %s' % atomname
+            raise ValueError('No such atom: %s' % atomname)
 
 
 class Atom3d:
@@ -1086,8 +1088,8 @@ def protein_from_pdb(p):
             aname_seen.append(aname)
             atom = get_atom_with_name(a, start, end, aname)
             if atom is None:
-                raise NameError, 'Unknown atom "%s" in resiude %s' % (aname,
-                                                                      rnam)
+                raise NameError('Unknown atom "%s" in resiude %s' % (aname,
+                                                                     rnam))
             atom.x = float(line[30:38])
             atom.y = float(line[38:46])
             atom.z = float(line[46:54])
@@ -4022,7 +4024,7 @@ def run_CHASA(file):
     atot,tot_solv_nrg = print_hbs_chasa(file.split('.')[0]+'.sas', prot,
           asalist, ext_atoms=wat_list,solv_list=cntmult_list)
     int_solv_nrg = tot_solv_nrg - (2.5 * numint)
-    print 'Internal Hbond + Solvation Energy = ', int_solv_nrg
+    print('Internal Hbond + Solvation Energy = ', int_solv_nrg)
 
 #   sys.stdout.write('Simulation Finished at: %s\n' % time.ctime(time.time()))
 
@@ -4030,7 +4032,7 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) < 2:
-        print USAGE
+        print(USAGE)
         sys.exit()
 
     run_CHASA(file)
