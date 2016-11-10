@@ -200,7 +200,9 @@ def main():
             sasa30 = get_sas(pdb,probe=3.)
             prta = get_prt(pdb)
             cvxa = get_cvx(pdb)
-        except: continue
+        except: raise
+        # This was except: continue but that masks too many errors. Todo:
+        # replace with a a more specific except block.
 
 
         # read pdb fragment PDB
