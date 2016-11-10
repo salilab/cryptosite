@@ -125,7 +125,6 @@ near bottom of script:
 
 import sys, os, time
 from math import sqrt, pi, sin, cos, acos, fabs
-from string import strip
 import gzip
 import numpy
 
@@ -1095,7 +1094,7 @@ def protein_from_pdb(p):
             atom.z = float(line[46:54])
             atom.resnum = nr
         elif line[:4] == 'COMP':
-            p.name = strip(line[10:70])
+            p.name = line[10:70].strip()
         elif line[:3] in ('TER', 'END'):
             break
 
