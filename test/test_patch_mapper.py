@@ -31,7 +31,7 @@ for i, lig in enumerate(ligands):
         fh.write("Best Rmsd Result: 100000000.00 rank -1\\n")
         fh.write("Best Rank Result: 100000000.00 rank 100000\\n")
 """)
-    os.chmod(fname, 0775)
+    os.chmod(fname, 0o755)
 
     fname = os.path.join(subdir, 'ligand_score_multiple')
     with open(fname, 'w') as fh:
@@ -46,7 +46,7 @@ with open('mol2_score.res', 'w') as fh:
     if tr:
         fh.write("Score for ISB.pdb trans 0 is -0.41\\n")
 """)
-    os.chmod(fname, 0775)
+    os.chmod(fname, 0o755)
 
     oldpath = os.environ['PATH']
     os.environ['PATH'] = subdir + ':' + os.environ['PATH']

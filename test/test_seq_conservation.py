@@ -31,7 +31,7 @@ with open(outf, 'w') as fh:
     fh.write('\\t'.join(['H', '1', '292', '98.2', '+', '0', '0', '292M',
                          'AH70_12410', 'EX70_12567\\n']))
 """)
-    os.chmod(fname, 0775)
+    os.chmod(fname, 0o755)
 
     oldpath = os.environ['PATH']
     os.environ['PATH'] = subdir + ':' + os.environ['PATH']
