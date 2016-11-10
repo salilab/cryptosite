@@ -14,7 +14,7 @@ class Tests(unittest.TestCase):
         with utils.temporary_working_directory() as tmpdir:
             shutil.copy(os.path.join(TOPDIR, 'test', 'input', 'test.pdb'),
                         '1abc.pdb')
-	    res, seq = res_parser_bmi.get_chains('1abc', 'A')
+            res, seq = res_parser_bmi.get_chains('1abc', 'A')
             self.assertEqual(len(res), 7)
             self.assertEqual(seq, 'YV-TEPCI')
 

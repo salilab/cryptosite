@@ -15,7 +15,7 @@ class Tests(unittest.TestCase):
         with utils.temporary_working_directory() as tmpdir:
             shutil.copy(os.path.join(TOPDIR, 'test', 'input', 'test.pdb'),
                         '1abc.pdb')
-	    out = cryptosite.am_bmi.get_sas('1abc', 1.4)
+            out = cryptosite.am_bmi.get_sas('1abc', 1.4)
             self.assertEqual(len(out), 60)
 
 if __name__ == '__main__':

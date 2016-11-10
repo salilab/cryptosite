@@ -13,7 +13,7 @@ class Tests(unittest.TestCase):
 
     def test_get_cnc(self):
         """Test get_cnc() function"""
-        res = cryptosite.pocket_parser.get_cnc(os.path.join(TOPDIR, 'test', 
+        res = cryptosite.pocket_parser.get_cnc(os.path.join(TOPDIR, 'test',
                                                       'input', 'test.pdb'),
                                                None)
         self.assertEqual(len(res), 8)

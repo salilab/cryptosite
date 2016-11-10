@@ -22,14 +22,14 @@ import cryptosite.soap_clean
 class MockScorer(energy_term):
     name = 'MockScorer'
     def __init__(self):
-	self.count = 0
+        self.count = 0
     def _assess(self, atmsel, schedule_scale=None, **vars):
-	self.count += 1
-	if self.count == 1:
+        self.count += 1
+        if self.count == 1:
             return 10., ()
-	elif self.count == 2:
+        elif self.count == 2:
             return 20., ()
-	elif self.count == 3:
+        elif self.count == 3:
             raise modeller.ModellerError("SOAP error")
         else:
             raise ValueError("some other error")
@@ -57,10 +57,10 @@ ATOM      1  N   CYS A   1      18.511  -1.416  15.632  1.00  6.84           C
 
     def test_soap_clean_subproc(self):
         """Test soap_clean script as a subprocess"""
-	env = os.environ.copy()
-	pypath = os.path.join(TOPDIR, 'test', 'mock')
-	env['PYTHONPATH'] = pypath + ':' + env.get('PYTHONPATH', '')
-	subprocess.check_call(['cryptosite', 'soap_clean'], env=env)
+        env = os.environ.copy()
+        pypath = os.path.join(TOPDIR, 'test', 'mock')
+        env['PYTHONPATH'] = pypath + ':' + env.get('PYTHONPATH', '')
+        subprocess.check_call(['cryptosite', 'soap_clean'], env=env)
 
 if __name__ == '__main__':
     unittest.main()
