@@ -7,6 +7,9 @@ TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(TOPDIR, 'lib'))
 from cryptosite import cleaning
 
+pdb_line = "ATOM      2  CA  ALA A   1     -17.308  -2.623  35.999  " \
+           "1.00 25.00           C"
+
 class Tests(unittest.TestCase):
 
     def test_get_pdb_seq(self):
@@ -41,6 +44,37 @@ ATOM      6  C   TYR B   3      18.511  -1.416  15.632  1.00  6.84           C
         gaps = cleaning.get_gaps(os.path.join(TOPDIR, 'test', 'input',
                                               'test-multi.ali'))
         self.assertEqual(gaps, ['3:A,4:A', '10:B,12:B'])
+
+    def test_build_model_no_gaps(self):
+        """Test build_model() with no gaps"""
+        with utils.temporary_working_directory() as tmpdir:
+            with open('alignment.pir', 'w') as fh:
+                fh.write(">P1;XXX\n")
+                fh.write("structureX:input.pdb:1:A:1:A::::\n")
+                fh.write("A*\n")
+                fh.write(">P1;xxx_X\n")
+                fh.write("sequence:input::::::::\n")
+                fh.write("A*\n")
+            with open('input.pdb', 'w') as fh:
+                fh.write(pdb_line + '\n')
+            cleaning.build_model('XXX', ['A'])
+            os.unlink('XXX_mdl.pdb')
+
+    def test_build_model_gaps(self):
+        """Test build_model() with gaps"""
+        with utils.temporary_working_directory() as tmpdir:
+            with open('alignment.pir', 'w') as fh:
+                fh.write(">P1;XXX\n")
+                fh.write("structureX:input.pdb:1:A:2:A::::\n")
+                fh.write("A-A*\n")
+                fh.write(">P1;xxx_X\n")
+                fh.write("sequence:input::::::::\n")
+                fh.write("AAA*\n")
+            with open('input.pdb', 'w') as fh:
+                fh.write(pdb_line + '\n')
+                fh.write(pdb_line[:25] + '2' + pdb_line[26:] + '\n')
+            cleaning.build_model('XXX', ['A'])
+            os.unlink('XXX_mdl.pdb')
 
 if __name__ == '__main__':
     unittest.main()
