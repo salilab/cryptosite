@@ -9,6 +9,7 @@ from operator import itemgetter
 import subprocess
 from modeller import *
 import cryptosite.chasa
+import cryptosite.am_bmi
 
 warnings.filterwarnings("ignore")
 
@@ -51,61 +52,6 @@ def get_sas(pdb,prog='CHASA',probe=1.4):
             atom, res, resid, cid = d[12:16], d[17:20], int(d[22:26]), d[21]
             Sas[(atom,res,resid,cid)] = float(d[60:66])
     return Sas
-
-
-def protein_protrusion(pdb):
-
-    data = open(pdb)
-    D = data.readlines()
-    data.close()
-
-    XYZ = []
-    for d in D:
-        if 'ATOM'==d[:4]:
-            x,y,z = float(d[30:38]), float(d[38:46]), float(d[46:54])
-            XYZ.append(numpy.array([x,y,z]))
-    XYZ = numpy.array(XYZ)
-
-
-    out = open(pdb+'.prt','w')
-    for d in D:
-        if 'ATOM'==d[:4]:
-
-            xyz = numpy.array([float(d[30:38]), float(d[38:46]), float(d[46:54])])
-            distances = numpy.sqrt(numpy.sum((XYZ-xyz)**2,axis=1))
-            mins = set(numpy.argwhere(8. <= distances).transpose()[0])
-            maxs = set(numpy.argwhere(distances <= 12.).transpose()[0])
-            natoms = str(len(mins&maxs))+'.00'
-            if len(natoms)>6: natoms = '999.00'
-            elif len(natoms)<6: natoms = (6-len(natoms))*' ' + natoms
-
-            out.write(d[:60]+str(natoms)+d[66:])
-        else: out.write(d)
-    out.close()
-
-
-
-def get_prt(apo):
-    '''
-    Calculate protein protrusion using Andreas Fisher equation.
-    '''
-
-    # do protrusion
-    protein_protrusion(apo+'.pdb')
-
-    # read protrusion
-    data = open('%s.pdb.prt' % (apo))
-    D = data.readlines()
-    data.close()
-
-    Prt = {}
-    for d in D:
-        d = d.strip()
-        if d[:4]=='ATOM':
-            atom, res, resid, cid = d[12:16], d[17:20], int(d[22:26]), d[21]
-            Prt[(atom,res,resid,cid)] = float(d[60:66])
-    return Prt
-
 
 def get_cnc(apo):
     '''
@@ -165,103 +111,6 @@ def get_cnc(apo):
                                                      for i in adist])
     print(Residues)
     return Residues, ('1','1')
-
-def protein_convexity(pdb):
-    '''
-    Calculate protein convexity as in Andras Fisher paper.
-    '''
-
-    data = open(pdb+'.sas')
-    D = data.readlines()
-    data.close()
-
-    XYZ = {}
-    for d in D:
-        if 'ATOM'==d[:4] and d[17:20]!='HOH':
-            x,y,z = float(d[30:38]), float(d[38:46]), float(d[46:54])
-            atid,rsid,sas,cid = int(d[6:11]), int(d[22:26]), float(d[60:66]), d[21]
-            if (rsid,cid) not in XYZ: XYZ[(rsid,cid)] = [[atid,x,y,z,sas]]
-            else: XYZ[(rsid,cid)].append([atid,x,y,z,sas])
-
-    SurfRes = {}
-    for res in XYZ:
-        sass = [i[-1] for i in XYZ[res]]
-        if max(sass)>2.: SurfRes[res] = XYZ[res]
-
-    Centroids = {}
-    for res in SurfRes:
-        C = SurfRes[res]
-        Cs = numpy.array([i for i in C if i[-1]>=2.])
-        aac = numpy.mean(C, axis=0)[1:-1]
-        sac = numpy.mean(Cs, axis=0)[1:-1]
-        slv = 2*sac - aac
-        Centroids[res] = (sac,slv)
-
-    SurfNet = {}
-    RX = SurfRes.keys()
-    for r1 in range(len(RX)-1):
-        F1 = SurfRes[RX[r1]]
-        C1 = numpy.array([numpy.array([c[1],c[2],c[3]]) for c in F1 if c[4]>2.])
-        for r2 in range(r1+1,len(RX)):
-            F2 = SurfRes[RX[r2]]
-            C2 = numpy.array([numpy.array([c[1],c[2],c[3]]) for c in F2 if c[4]>2.])
-
-            dx = numpy.subtract.outer(C1[:,0], C2[:,0])
-            dy = numpy.subtract.outer(C1[:,1], C2[:,1])
-            dz = numpy.subtract.outer(C1[:,2], C2[:,2])
-
-            distance = numpy.sqrt(dx**2 + dy**2 + dz**2)
-            if numpy.min(distance) < 6.:
-                a1,a2 = RX[r1], RX[r2]
-                dslv = numpy.linalg.norm(Centroids[a1][1]-Centroids[a2][1])
-                dexp = numpy.linalg.norm(Centroids[a1][0]-Centroids[a2][0])
-
-                fc = (dslv/dexp)-1
-
-                if a1 not in SurfNet: SurfNet[a1] = [fc]
-                else: SurfNet[a1].append(fc)
-                if a2 not in SurfNet: SurfNet[a2] = [fc]
-                else: SurfNet[a2].append(fc)
-
-    out = open(pdb+'.con','w')
-    for d in D:
-        if 'ATOM'==d[:4]:
-            res,cid = int(d[22:26]),d[21]
-            if cid==' ':
-                cid='A'
-            if (res,cid) in SurfNet:
-                cnvx = str(round(100*numpy.mean(SurfNet[(res,cid)]),2))
-                if len(cnvx)>6: cnvx = '999.00'
-                elif len(cnvx)<6: cnvx = (6-len(cnvx))*' ' + cnvx
-            else: cnvx = '  0.00'
-
-            out.write(d[:60]+str(cnvx)+d[66:])
-        else: out.write(d)
-    out.close()
-
-
-
-def get_cvx(apo):
-    '''
-    Calculate protein convexity as in Andras Fisher paper.
-    '''
-
-    # do convexities
-    protein_convexity(apo)
-
-    # read convexities
-    data = open('%s.con' % (apo))
-    D = data.readlines()
-    data.close()
-
-    Cvx = {}
-    for d in D:
-        d = d.strip()
-        if d[:4]=='ATOM':
-            atom, res, resid, cid = d[12:16], d[17:20], int(d[22:26]), d[21]
-            Cvx[(atom,res,resid,cid)] = float(d[60:66])
-    return Cvx
-
 
 def get_hcs(apo,achain):
     '''
@@ -326,9 +175,9 @@ def gather_features(pdb,PDBChainOrder):
     '''
 
     sasa = get_sas(pdb,prog='MOD',probe=3.0)
-    prta = get_prt(pdb)
+    prta = cryptosite.am_bmi.get_prt(pdb)
     cnca, cncfa = get_cnc(pdb)
-    cvxa = get_cvx(pdb)
+    cvxa = cryptosite.am_bmi.get_cvx(pdb)
     hcsa = {}
     sqca = {}
 
