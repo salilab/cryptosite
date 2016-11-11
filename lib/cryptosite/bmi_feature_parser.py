@@ -1,18 +1,8 @@
 from __future__ import print_function, absolute_import
-import os, sys, warnings
-from Bio.PDB.PDBParser import PDBParser
 from Bio import PDB
-from Bio import SeqIO
-from numpy import dot, transpose, linalg, sqrt, array
-import numpy
-from operator import itemgetter
+from numpy import linalg, array
 import subprocess
-from modeller import *
 import cryptosite.am_bmi
-
-warnings.filterwarnings("ignore")
-
-parser = PDBParser()
 
 def get_cnc(apo):
     '''
