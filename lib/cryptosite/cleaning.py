@@ -6,8 +6,6 @@ from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.Polypeptide import PPBuilder
 import re
 import subprocess
-from modeller import *
-from modeller.automodel import *
 from operator import itemgetter
 
 
@@ -94,6 +92,8 @@ def build_model(pdb,chains,chainLs):
     Build model using Modeller, treating residues in the structure as rigid, and
     loop modeling for the rest.
     '''
+    import modeller
+    from modeller.automodel import loopmodel, automodel, assess
 
     # --- get gaps
     gaps = get_gaps('alignment.pir')
@@ -102,18 +102,19 @@ def build_model(pdb,chains,chainLs):
     out.close()
 
     # --- set up modeling
-    env = environ()
+    env = modeller.environ()
 
     env.io.atom_files_directory = ['.', '../atom_files']
 
     class MyLoop(loopmodel):
         def select_loop_atoms(self):
             gaps = get_gaps('alignment.pir')
-            return selection(self.residue_range(i.split(',')[0], i.split(',')[1]) for i in gaps)
+            return modeller.selection(self.residue_range(
+                              i.split(',')[0], i.split(',')[1]) for i in gaps)
         def special_restraints(self, aln):
             rsr = self.restraints
-            wholeSel = selection(self) - self.select_loop_atoms()
-            r = rigid_body(wholeSel)
+            wholeSel = modeller.selection(self) - self.select_loop_atoms()
+            r = modeller.rigid_body(wholeSel)
             rsr.rigid_bodies.append(r)
 
     if len(gaps)>0:
@@ -153,6 +154,6 @@ def build_model(pdb,chains,chainLs):
         os.system('rm %s_X.*' % (pdb.lower(),))
 
     if len(chains)==1:
-        mdl  = model(env, file='XXX_mdl')
+        mdl  = modeller.model(env, file='XXX_mdl')
         mdl.rename_segments(segment_ids='A')
         mdl.write(file='%s_mdl.pdb' % (pdb))
