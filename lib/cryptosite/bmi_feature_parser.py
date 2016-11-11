@@ -14,39 +14,6 @@ warnings.filterwarnings("ignore")
 
 parser = PDBParser()
 
-
-
-def get_sas(pdb, probe=1.4):
-    '''
-    Calculate accessible surface area.
-    '''
-
-    # Read the PDB file
-    env = environ()
-    mdl = model(env)
-    mdl.read(file=pdb+'.pdb')
-
-    # Calculate atomic accessibilities (in Biso) with appropriate probe_radius
-    myedat = energy_data()
-    myedat.radii_factor = 1.6
-    mdl.write_data(edat=myedat, output='PSA ATOMIC_SOL',
-                   psa_integration_step=0.05, probe_radius=probe)
-
-    mdl.write(file=pdb+'.sas')
-
-    # read SAS
-    data = open('%s.sas' % (pdb))
-    D = data.readlines()
-    data.close()
-
-    Sas = {}
-    for d in D:
-        d = d.strip()
-        if d[:4]=='ATOM':
-            atom, res, resid, cid = d[12:16], d[17:20], int(d[22:26]), d[21]
-            Sas[(atom,res,resid,cid)] = float(d[60:66])
-    return Sas
-
 def get_cnc(apo):
     '''
     Find pockets using Fpocket algorithm.
@@ -168,10 +135,10 @@ def gather_features(pdb,PDBChainOrder):
     Gather bioinformatics features (no neighborhood yet).
     '''
 
-    sasa = get_sas(pdb, probe=3.0)
-    prta = cryptosite.am_bmi.get_prt(pdb)
+    sasa = cryptosite.am_bmi.get_sas(pdb + '.pdb', probe=3.0)
+    prta = cryptosite.am_bmi.get_prt(pdb + '.pdb')
     cnca, cncfa = get_cnc(pdb)
-    cvxa = cryptosite.am_bmi.get_cvx(pdb)
+    cvxa = cryptosite.am_bmi.get_cvx(pdb + '.pdb')
     hcsa = {}
     sqca = {}
 
