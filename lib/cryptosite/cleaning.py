@@ -1,10 +1,9 @@
 from __future__ import print_function, absolute_import
-import os, sys, warnings, subprocess
+import os
 from Bio import PDB
 from Bio.Blast import NCBIXML
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.Polypeptide import PPBuilder
-import numpy
 import re
 import subprocess
 from modeller import *
@@ -85,34 +84,9 @@ def get_gaps(chainso,Ls):
                 gaps.append(','.join([str(match.span()[0]+L+1)+':'+chains[strcsq_index], str(match.span()[1]+L)+':'+chains[strcsq_index]]))
             else:
                 gaps.append(','.join([str(match.span()[0]+L+1)+':', str(match.span()[1]+L)+':']))
-        #L+=int(Ls[chainso[strcsq_index]][1])
         L+=len(seqsq[strcsq_index])
 
     return gaps
-
-
-
-
-def concatenate_models(pdb,chains):
-
-    openr={}
-
-    for chain in chains:
-        op=open('%s%s_mdl.pdb' % (pdb,chain))
-        openr[chain]=op.readlines()
-        op.close()
-
-
-    w=open('XXX_.pdb', 'w')
-    for chain in chains:
-        for line in openr[chain]:
-            if line[:4]=='ATOM' or line[:3]=='TER':
-                w.write(line)
-
-    w.close()
-
-
-
 
 def build_model(pdb,chains,chainLs):
     '''
@@ -130,8 +104,6 @@ def build_model(pdb,chains,chainLs):
     env = environ()
 
     env.io.atom_files_directory = ['.', '../atom_files']
-    #env.io.hetatm = True
-    #env.io.convert_modres = True
 
     class MyLoop(loopmodel):
         def select_loop_atoms(self):
@@ -178,40 +150,8 @@ def build_model(pdb,chains,chainLs):
 
         os.system('mv %s_X.ini %s_mdl.pdb' % (pdb.lower(), pdb))
         os.system('rm %s_X.*' % (pdb.lower(),))
-        #os.system('mv %s.pdb /netapp/sali/peterc/Undrugabble/PDB/' % (pdb+chains[-1],))
 
     if len(chains)==1:
         mdl  = model(env, file='XXX_mdl')
         mdl.rename_segments(segment_ids='A')
         mdl.write(file='%s_mdl.pdb' % (pdb))
-
-    # Read an alignment for the transfer
-    #aln = alignment(env, file='alignment.pir', align_codes=('XXX', 'xxx_X'))
-    # Read the template and target models:
-    #mdl2 = model(env, file='XXX')
-    #mdl  = model(env, file='XXX_mdl')
-    # Transfer the residue and chain ids and write out the new MODEL:
-    #mdl.res_num_from(mdl2, aln)
-    #mdl.write(file='%s_.pdb' % (pdb))
-
-
-    #mdl  = model(env)
-
-    #for chain in chains:
-    #        mdl.read(file='XXX_', model_format='PDB', model_segment=('FIRST:%s' % chain, 'LAST:%s' % chain))
-    #mdl.rename_segments(segment_ids='A')
-    #mdl.write(file='%s_mdl.pdb' % (pdb))
-
-    #concatenate_models(pdb,chains)
-
-    #os.system('mv %s_.pdb %s_mdl.pdb' % (pdb,pdb))
-
-    #RESMAP={}
-    #mdl  = model(env, file='XXX_mdl')
-    #mdl2 = model(env, file='XXX_')
-    #for indexr,res in enumerate(mdl.residues):
-    #       res2=mdl2.residues[indexr]
-    #       RESMAP[(res.name, res.num, res.chain.name)]=[res2.name, res2.num, res2.chain.name]
-
-
-    #return RESMAP
