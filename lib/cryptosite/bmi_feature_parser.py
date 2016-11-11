@@ -8,7 +8,6 @@ import numpy
 from operator import itemgetter
 import subprocess
 from modeller import *
-import cryptosite.chasa
 import cryptosite.am_bmi
 
 warnings.filterwarnings("ignore")
@@ -17,28 +16,23 @@ parser = PDBParser()
 
 
 
-def get_sas(pdb,prog='CHASA',probe=1.4):
+def get_sas(pdb, probe=1.4):
     '''
-    Calculate accesible surface area using CHASA algorithm.
+    Calculate accessible surface area.
     '''
-    #TODO: add option for calculating that in Modeller with varying rolling sphere radius.
 
-    # do SAS
-    if prog == 'CHASA':
-        cryptosite.chasa.run_CHASA(pdb+'.pdb')
-    elif prog =='MOD':
-        # Read the PDB file
-        env = environ()
-        mdl = model(env)
-        mdl.read(file=pdb+'.pdb')
+    # Read the PDB file
+    env = environ()
+    mdl = model(env)
+    mdl.read(file=pdb+'.pdb')
 
-        # Calculate atomic accessibilities (in Biso) with appropriate probe_radius
-        myedat = energy_data()
-        myedat.radii_factor = 1.6
-        mdl.write_data(edat=myedat, output='PSA ATOMIC_SOL',
-                       psa_integration_step=0.05, probe_radius=probe)
+    # Calculate atomic accessibilities (in Biso) with appropriate probe_radius
+    myedat = energy_data()
+    myedat.radii_factor = 1.6
+    mdl.write_data(edat=myedat, output='PSA ATOMIC_SOL',
+                   psa_integration_step=0.05, probe_radius=probe)
 
-        mdl.write(file=pdb+'.sas')
+    mdl.write(file=pdb+'.sas')
 
     # read SAS
     data = open('%s.sas' % (pdb))
@@ -174,7 +168,7 @@ def gather_features(pdb,PDBChainOrder):
     Gather bioinformatics features (no neighborhood yet).
     '''
 
-    sasa = get_sas(pdb,prog='MOD',probe=3.0)
+    sasa = get_sas(pdb, probe=3.0)
     prta = cryptosite.am_bmi.get_prt(pdb)
     cnca, cncfa = get_cnc(pdb)
     cvxa = cryptosite.am_bmi.get_cvx(pdb)
