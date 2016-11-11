@@ -18,5 +18,31 @@ class Tests(unittest.TestCase):
             self.assertEqual(len(res), 8)
             self.assertEqual(num, ('1', '1'))
 
+    def test_gather_features(self):
+        """Test gather_features() function"""
+        def mocked_get_cnc(apo):
+            residues = {}
+            for i, res in enumerate(('ALA', 'MET', 'GLU', 'ASN', 'PHE', 'GLN',
+                                     'LYS', 'VAL', 'GLU', 'LYS', 'ILE', 'GLY')):
+                residues[(res, i + 1, 'A')] = 42.
+            return residues, ('1', '1')
+        with utils.temporary_working_directory() as tmpdir:
+            shutil.copy(os.path.join(TOPDIR, 'test', 'input', 'pm_XXX.pdb'),
+                        'XXX_mdl.pdb')
+            shutil.copy(os.path.join(TOPDIR, 'test', 'input', 'XXX_mdlA.sqc'),
+                        '.')
+            shutil.copy(os.path.join(TOPDIR, 'test', 'input', 'XXX_mdlA.hcs'),
+                        '.')
+            with utils.mocked_object(bmi_feature_parser, 'get_cnc',
+                                     mocked_get_cnc):
+                bmi_feature_parser.gather_features('XXX_mdl', ['A'])
+            with open('XXX_mdlA.feat') as fh:
+                data = fh.readlines()
+            self.assertEqual(len(data), 96)
+            self.assertEqual(data[0][:116],
+                     'ATOM      1  N   ALA A   1     -17.647  -2.542  37.435  '
+                     '1.00 25.00           N'
+                     '\t12.16\t11.0\t42.0\t18.98\t-\t0.17\t0.0\t2.00')
+
 if __name__ == '__main__':
     unittest.main()
