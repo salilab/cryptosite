@@ -59,9 +59,10 @@ def muscleAlign(qSeq, sSeq, pdb, chain):
     return (strcsq, seqsq)
 
 
-def get_gaps(chainso,Ls):
+def get_gaps(alnfile):
+    """Get a list of all gaps in the given alignment file."""
 
-    data = open('alignment.pir')
+    data = open(alnfile)
     D = data.read().split('>P1;')
     data.close()
 
@@ -95,7 +96,7 @@ def build_model(pdb,chains,chainLs):
     '''
 
     # --- get gaps
-    gaps = get_gaps(chains,chainLs)
+    gaps = get_gaps('alignment.pir')
     out = open('gaps_%s.txt' % pdb,'w')
     out.write(pdb+'_mdl\t'+str(gaps))
     out.close()
@@ -107,7 +108,7 @@ def build_model(pdb,chains,chainLs):
 
     class MyLoop(loopmodel):
         def select_loop_atoms(self):
-            gaps = get_gaps(chains,chainLs)
+            gaps = get_gaps('alignment.pir')
             return selection(self.residue_range(i.split(',')[0], i.split(',')[1]) for i in gaps)
         def special_restraints(self, aln):
             rsr = self.restraints
