@@ -62,18 +62,24 @@ ATOM      6  C   TYR B   3      18.511  -1.416  15.632  1.00  6.84           C
 
     def test_build_model_gaps(self):
         """Test build_model() with gaps"""
+        import modeller.automodel
+        def mocked_loopmodel_make(self):
+            self.loop.outputs.append({'failure':None, 'name':'input.pdb',
+                                      'Normalized DOPE score':-1.})
         with utils.temporary_working_directory() as tmpdir:
             with open('alignment.pir', 'w') as fh:
                 fh.write(">P1;XXX\n")
                 fh.write("structureX:input.pdb:1:A:2:A::::\n")
-                fh.write("A-A*\n")
+                fh.write("A--A*\n")
                 fh.write(">P1;xxx_X\n")
                 fh.write("sequence:input::::::::\n")
-                fh.write("AAA*\n")
+                fh.write("AAAA*\n")
             with open('input.pdb', 'w') as fh:
                 fh.write(pdb_line + '\n')
                 fh.write(pdb_line[:25] + '2' + pdb_line[26:] + '\n')
-            cleaning.build_model('XXX', ['A'])
+            with utils.mocked_object(modeller.automodel.loopmodel, 'make',
+                                     mocked_loopmodel_make):
+                cleaning.build_model('XXX', ['A'])
             os.unlink('XXX_mdl.pdb')
 
 if __name__ == '__main__':
