@@ -87,7 +87,7 @@ def get_gaps(alnfile):
 
     return gaps
 
-def build_model(pdb,chains,chainLs):
+def build_model(pdb,chains):
     '''
     Build model using Modeller, treating residues in the structure as rigid, and
     loop modeling for the rest.

@@ -109,7 +109,7 @@ def main():
     print(PDBChainOrder)
     print(ChainLenghts)
 
-    build_model(pdb, PDBChainOrder, ChainLenghts)
+    build_model(pdb, PDBChainOrder)
 
     # --- Map SeqConservation to new residue numbering calculate HydChrSSE
 
