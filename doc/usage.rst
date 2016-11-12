@@ -14,7 +14,7 @@ Running the basic protocol consists of these steps:
 #. Create a set of input files specifying the structure to probe, and basic
    CryptoSite parameters.
 
-#. Run ``cryptosite mainer_short`` to calculate structural features and
+#. Run ``cryptosite setup`` to calculate structural features and
    prepare input files for
    `AllosMod <https://github.com/salilab/allosmod-lib>`_.
 

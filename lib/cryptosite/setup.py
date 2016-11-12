@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Initial setup and preparation of AllosMod inputs (short version)"""
+"""Initial setup and preparation of AllosMod inputs"""
 
 from __future__ import print_function, absolute_import
 import sys
@@ -12,8 +12,9 @@ import cryptosite.res_parser_bmi
 import cryptosite.patch_mapper
 import os
 import glob
+import optparse
 
-def main():
+def setup(short):
     pdb,chains = 'XXX', ''
     paramdata = open('param.txt')
     params = paramdata.readlines()
@@ -183,12 +184,32 @@ def main():
     os.system('cp %s.pdb %s' % (pdb,pdb))
 
     out1 = open('%s/input.dat' % pdb, 'w')
-    out1.write('rAS=1000\nNRUNS=25\nSCRAPP=True\nMDTemp=SCAN')
+    if short:
+        out1.write('rAS=1000\nNRUNS=25\nSCRAPP=True\nMDTemp=SCAN')
+    else:
+        out1.write('rAS=1000\nNRUNS=50\nSCRAPP=True\nMDTemp=SCAN')
     out1.close()
 
     out2 = open('%s/list' % pdb, 'w')
     out2.write('%s.pdb' % pdb)
     out2.close()
+
+def parse_args():
+    usage = """%prog [opts]
+
+Do initial setup and preparation of AllosMod inputs.
+"""
+    parser = optparse.OptionParser(usage)
+    parser.add_option("--short", action="store_true",
+                      help="run a quicker AllosMod simulation")
+    opts, args = parser.parse_args()
+    if len(args) != 0:
+        parser.error("incorrect number of arguments")
+    return opts.short
+
+def main():
+    short = parse_args()
+    setup(short)
 
 if __name__ == '__main__':
     main()

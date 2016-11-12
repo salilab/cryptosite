@@ -8,7 +8,7 @@ import shutil
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 utils.set_search_paths(TOPDIR)
-import cryptosite.mainer_short
+import cryptosite.setup
 
 # Simply copy pre-built outputs at each step, rather than running BLAST,
 # fpocket, etc. (these are tested elsewhere)
@@ -38,8 +38,17 @@ def mock_res_parser(fil):
     shutil.copy(os.path.join(TOPDIR, 'test', 'input', 'XXX_mdl.bmiftr'), '.')
 
 class Tests(unittest.TestCase):
+    def test_bad(self):
+        """Test wrong arguments to setup"""
+        for args in (['x'],):
+            out = utils.check_output(['cryptosite', 'setup'] + args,
+                                     stderr=subprocess.STDOUT, retcode=2)
+            out = utils.check_output(['python', '-m',
+                                     'cryptosite.setup'] + args,
+                                     stderr=subprocess.STDOUT, retcode=2)
+
     def test_main(self):
-        """Test of complete run of mainer"""
+        """Test of complete run of setup"""
         with utils.temporary_working_directory() as tmpdir:
             shutil.copy(os.path.join(TOPDIR, 'test', 'input', 'test.pdb'),
                         'input.pdb')
@@ -58,7 +67,7 @@ class Tests(unittest.TestCase):
                       mock_gather_features),
                      (cryptosite.res_parser_bmi, 'res_parser',
                       mock_res_parser)]):
-                cryptosite.mainer_short.main()
+                cryptosite.setup.setup(short=True)
             # Verify that AllosMod inputs were created
             os.unlink('XXX/align.ali')
             os.unlink('XXX/XXX.pdb')
