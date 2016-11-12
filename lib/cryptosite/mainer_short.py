@@ -126,7 +126,7 @@ def main():
 
     # --- Map SeqConservation to new residue numbering calculate HydChrSSE
 
-    mchains=map(chr, range(65, 65+len(PDBChainOrder)))
+    mchains=[chr(x) for x in range(65, 65+len(PDBChainOrder))]
 
     L=0
     for chain in PDBChainOrder:
