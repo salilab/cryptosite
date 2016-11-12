@@ -19,9 +19,9 @@ class Tests(unittest.TestCase):
                 shutil.copy(os.path.join(TOPDIR, 'test', 'input', inp), '.')
             res_parser_bmi.res_parser('XXX_mdl')
             with open('XXX_mdl.bmiftr') as fh:
-                data = fh.readlines()
+                data = sorted(fh.readlines())
             self.assertEqual(len(data), 3)
-            self.assertEqual(data[2][:50],
+            self.assertEqual(data[1][:50],
                     'XXX_mdl\tALA\t1\tA\t2.298\t106.4\t-10.77\t0.0\t'
                     'U\t0.17\t0.0\t')
 
