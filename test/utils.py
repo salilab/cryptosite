@@ -53,6 +53,18 @@ def mocked_object(parent, objname, replacement):
     yield
     setattr(parent, objname, oldobj)
 
+@contextlib.contextmanager
+def mocked_objects(objs):
+    """Like mocked_object() but for a list of such tuples."""
+    oldobjs = []
+    for parent, objname, replacement in objs:
+        oldobjs.append(getattr(parent, objname))
+        setattr(parent, objname, replacement)
+    yield
+    for obj, oldobj in zip(objs, oldobjs):
+        parent, objname, replacement = obj
+        setattr(parent, objname, oldobj)
+
 if 'coverage' in sys.modules:
     import atexit
     # Collect coverage information from subprocesses

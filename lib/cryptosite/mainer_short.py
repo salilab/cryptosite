@@ -4,12 +4,12 @@
 
 from __future__ import print_function, absolute_import
 import sys
-from cryptosite.cleaning import *
-from cryptosite.seq_conservation import *
-from cryptosite.hyd_chr_sse import *
-from cryptosite.bmi_feature_parser import *
-from cryptosite.res_parser_bmi import *
-from cryptosite.patch_mapper import *
+import cryptosite.cleaning
+import cryptosite.seq_conservation
+import cryptosite.hyd_chr_sse
+import cryptosite.bmi_feature_parser
+import cryptosite.res_parser_bmi
+import cryptosite.patch_mapper
 import os
 import glob
 
@@ -58,7 +58,7 @@ def main():
     output = open('input.seq','w')
     querySeqs = {}
     for chain in chains:
-        querySeq = get_pdb_seq(pdb+'.pdb', chain)
+        querySeq = cryptosite.cleaning.get_pdb_seq(pdb+'.pdb', chain)
         querySeqs[chain] = querySeq
         output.write('>'+chain+'\n'+querySeq+'\n')
     output.close()
@@ -82,7 +82,8 @@ def main():
         sbjctSeq = querySeq
 
         # --- refine the structure (Modeller)
-        strcsq, seqsq = muscleAlign(querySeq, sbjctSeq, pdb, chain)
+        strcsq, seqsq = cryptosite.cleaning.muscleAlign(querySeq, sbjctSeq,
+                                                        pdb, chain)
         SubjectSeqList[chain] = seqsq
         QuerySeqList[chain] = strcsq
 
@@ -93,11 +94,10 @@ def main():
         output = open('test.seq','w')
         output.write('>%s%sq\n' % (pdb, chain) + sbjctSeq)
         output.close()
-        run_blast(pdb+chain)
+        cryptosite.seq_conservation.run_blast(pdb+chain)
 
-        parse_blast(pdb+chain+'.blast', pdb+chain, sbjctSeq)
-
-
+        cryptosite.seq_conservation.parse_blast(pdb+chain+'.blast', pdb+chain,
+                                                sbjctSeq)
 
     # --- change ali to pir
     out = open('alignment.pir','w')
@@ -122,7 +122,7 @@ def main():
     print(PDBChainOrder)
     print(ChainLenghts)
 
-    build_model(pdb, PDBChainOrder)
+    cryptosite.cleaning.build_model(pdb, PDBChainOrder)
 
     # --- Map SeqConservation to new residue numbering calculate HydChrSSE
 
@@ -143,19 +143,20 @@ def main():
         L+=len(SubjectSeqList[chain])
         seqdat.close()
         # -- hydrophobicity, charge, SSEs
-        HydChrSSE(pdb+'_mdl', mchains[PDBChainOrder.index(chain)])
+        cryptosite.hyd_chr_sse.HydChrSSE(pdb+'_mdl',
+                                         mchains[PDBChainOrder.index(chain)])
 
 
     # --- calculate PatchMap feature
-    patchmap_feature(pdb+'_mdl')
+    cryptosite.patch_mapper.patchmap_feature(pdb+'_mdl')
 
 
     # --- gather residue-based BMI features
-    gather_features(pdb+'_mdl',mchains)
+    cryptosite.bmi_feature_parser.gather_features(pdb+'_mdl',mchains)
 
 
     #for chain in PDBChainOrder:
-    res_parser(pdb+'_mdl')
+    cryptosite.res_parser_bmi.res_parser(pdb+'_mdl')
 
 
     # --- prepare AllosMod file
