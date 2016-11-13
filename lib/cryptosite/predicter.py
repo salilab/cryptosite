@@ -6,6 +6,7 @@ from __future__ import print_function, absolute_import
 import numpy as np
 from scipy import cluster
 import pickle, sys
+import os
 
 from sklearn.cluster import KMeans
 from sklearn.metrics import confusion_matrix
