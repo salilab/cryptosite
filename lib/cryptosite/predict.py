@@ -100,51 +100,20 @@ def predict(inputdata, model='linear'):
     X_learn = np.array(X_learn)
     X_learn = np.vstack(( X_learn[:,0], X_learn[:,2], X_learn[:,1] )).T
 
-    if model=='linear':
+    scaler_pkl = {'linear':'LinearScaler_Final.pkl',
+                  'poly':'PolyScaler_Final.pkl',
+                  'final':'Scaler_Final_Final.pkl'}[model]
+    outmodel_pkl = {'linear':'LinearSVC_FinalModel.pkl',
+                    'poly':'PolySVC_FinalModel.pkl',
+                    'final':'SVM_Final_Final.pkl'}[model]
 
-        print('Scaling ...')
-        out1 = open(os.path.join(cryptosite.config.datadir,
-                                 'LinearScaler_Final.pkl'))
-        scaler = pickle.load(out1)
-        out1.close()
-        X_learn = scaler.transform(X_learn)
+    print('Scaling ...')
+    with open(os.path.join(cryptosite.config.datadir, scaler_pkl)) as fh:
+        scaler = pickle.load(fh)
+    X_learn = scaler.transform(X_learn)
 
-        outmodel = open(os.path.join(cryptosite.config.datadir,
-                                     'LinearSVC_FinalModel.pkl'))
-        learner = pickle.load(outmodel)
-        outmodel.close()
-
-    elif model=='poly':
-
-        print('Scaling ...')
-        out1 = open(os.path.join(cryptosite.config.datadir,
-                                 'PolyScaler_Final.pkl'))
-        scaler = pickle.load(out1)
-        out1.close()
-        X_learn = scaler.transform(X_learn)
-
-        outmodel = open(os.path.join(cryptosite.config.datadir,
-                                     'PolySVC_FinalModel.pkl'))
-        learner = pickle.load(outmodel)
-        outmodel.close()
-
-    elif model=='final':
-        print('Scaling ...')
-        out1 = open(os.path.join(cryptosite.config.datadir,
-                                 'Scaler_Final_Final.pkl'))
-        scaler = pickle.load(out1)
-        out1.close()
-        X_learn = scaler.transform(X_learn)
-
-        outmodel = open(os.path.join(cryptosite.config.datadir,
-                                     'SVM_Final_Final.pkl'))
-        learner = pickle.load(outmodel)
-        outmodel.close()
-
-    else:
-        print('Unknown model: ', model)
-        print(peter)
-
+    with open(os.path.join(cryptosite.config.datadir, outmodel_pkl)) as fh:
+        learner = pickle.load(fh)
 
     print('Predicting ...')
     Y_pred = learner.predict(X_learn)
@@ -169,35 +138,25 @@ def predict(inputdata, model='linear'):
         outn.write( '\t'.join(list(NewIndeces[x])+[str(i) for i in X_learn[x]]+[str(Y_PRED_PROB_ALL[x])])+'\n' )
     outn.close()
 
-    if model=='linear': write_pdb(pdb,model='linear')
-    elif model=='poly' or model=='final': write_pdb(pdb,model='poly')
-    else: print(peter)
+    write_pdb(pdb, model)
 
     print('Done!')
 
 
-def write_pdb(pdb,model='linear'):
+def write_pdb(pdb, model='linear'):
+    suffix = {'linear':'lin', 'poly':'pol', 'final':'pol'}[model]
 
-    if model=='linear':
-        data = open(pdb+'.lin.pred')
+    with open(pdb+'.%s.pred' % suffix) as data:
         D = data.readlines()
-        data.close()
-        out = open('%s.lin.pred.pdb' % pdb, 'w')
-    elif model=='poly':
-        data = open(pdb+'.pol.pred')
-        D = data.readlines()
-        data.close()
-        out = open('%s.pol.pred.pdb' % pdb, 'w')
-    else: print(peter)
+    out = open('%s.%s.pred.pdb' % (pdb, suffix), 'w')
 
     Data = {}
     for d in D:
         d = d.strip().split()
         Data[(d[1],d[2])] = ('0.0',d[-1])
 
-    data = open('%s_mdl.pdb' % pdb.split('/')[-1])
-    D = data.readlines()
-    data.close()
+    with open('%s_mdl.pdb' % pdb.split('/')[-1]) as data:
+        D = data.readlines()
 
     for d in D:
         if 'ATOM'==d[:4]:
