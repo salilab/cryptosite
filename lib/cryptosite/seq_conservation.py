@@ -17,18 +17,11 @@ def run_blast(pdb):
     cmd = ["blastp", "-query", "test.seq", "-db", cryptosite.config.uniprot,
            "-evalue", "0.00001", "-out", pdb+".blast", "-outfmt", "5",
            "-num_alignments", "500"]
-    #os.system(cmd)
 
     print(cmd)
     print("Running BLAST ...")
-
-    prc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    prc.wait()
-
+    subprocess.check_call(cmd)
     print("BLASTing finished!")
-
-
-
 
 def parse_blast(blastOut, pdb, qseq, evalue=0.00001):
     '''

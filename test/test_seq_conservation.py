@@ -4,6 +4,7 @@ import os
 import sys
 import shutil
 import contextlib
+import subprocess
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(TOPDIR, 'lib'))
@@ -41,7 +42,15 @@ with open(outf, 'w') as fh:
 def mock_ucluster(ali, cutoff=0.8):
     return {'G7PIG01':2, 'XXXq':2}
 
+def mock_check_call(args):
+    pass
+
 class Tests(unittest.TestCase):
+    def test_run_blast(self):
+        """Test run_blast() function"""
+        with utils.mocked_object(subprocess, 'check_call', mock_check_call):
+            cryptosite.seq_conservation.run_blast('test')
+
     def test_parse_blast(self):
         """Test parse_blast() function"""
         blast_out = os.path.join(TOPDIR, 'test', 'input', 'XXXA.blast')
