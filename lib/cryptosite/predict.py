@@ -7,6 +7,7 @@ import numpy as np
 from scipy import cluster
 import pickle, sys
 import os
+import optparse
 
 from sklearn.cluster import KMeans
 from sklearn.metrics import confusion_matrix
@@ -230,8 +231,30 @@ def write_pdb(pdb,model='linear'):
         else: out.write(d)
     out.close()
 
+def parse_args():
+    usage = """%prog [opts] <model_name>
+
+Do the final prediction of binding site given all features.
+
+<model_name> should be the name of the model. The model's 3D structure,
+<model_name>_mdl.pdb, and the features file, <model_name>.features,
+are read in from the current directory.
+
+Two files are generated on successful prediction:
+<model_name>.pol.pred: a simple tab-separated file listing the value of
+              the CryptoSite score for each residue.
+<model_name>.pol.pred.pdb: a PDB file with the CryptoSite score in the
+              occupancy column, for visualization.
+"""
+    parser = optparse.OptionParser(usage)
+    opts, args = parser.parse_args()
+    if len(args) != 1:
+        parser.error("incorrect number of arguments")
+    return args[0]
+
 def main():
-    predict(sys.argv[-1]+'.features', model='final')
+    model_name = parse_args()
+    predict(model_name + '.features', model='final')
 
 if __name__ == '__main__':
     main()

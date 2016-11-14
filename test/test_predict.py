@@ -36,6 +36,14 @@ def mock_pickle_load(fh):
         return MockSVM()
 
 class Tests(unittest.TestCase):
+    def test_bad(self):
+        """Test wrong arguments to predict"""
+        for args in (['x', 'y'], []):
+            out = utils.check_output(['cryptosite', 'predict'] + args,
+                                     stderr=subprocess.STDOUT, retcode=2)
+            out = utils.check_output(['python', '-m',
+                                     'cryptosite.predict'] + args,
+                                     stderr=subprocess.STDOUT, retcode=2)
 
     def test_get_matrix(self):
         """Test get_matrix() function"""
