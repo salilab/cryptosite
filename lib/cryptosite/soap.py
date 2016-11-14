@@ -51,7 +51,7 @@ def parse_args():
     usage = """%prog [opts]
 
 Evaluate SOAP-Protein score for each AllosMod model in the current directory.
-A new file SnapList.txt is created which tabluates this score for each model.
+A new file SnapList.txt is created which tabulates this score for each model.
 This file is used as input by 'cryptosite am_bmi' and 'cryptosite pockets'.
 
 Note that the SOAP-Protein potential is not included with MODELLER; it can
