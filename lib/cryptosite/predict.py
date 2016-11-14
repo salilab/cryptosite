@@ -3,28 +3,9 @@
 """Do the final prediction of binding site given all features."""
 
 from __future__ import print_function, absolute_import
-import numpy as np
-from scipy import cluster
-import pickle, sys
+import pickle
 import os
 import optparse
-
-from sklearn.cluster import KMeans
-from sklearn.metrics import confusion_matrix
-from sklearn.naive_bayes import GaussianNB
-from sklearn import svm
-from sklearn.linear_model import SGDClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.decomposition import PCA
-from sklearn import preprocessing
-from itertools import product
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import roc_curve, auc
-from sklearn.linear_model import LogisticRegression
-from operator import itemgetter
 import cryptosite.config
 
 def get_matrix(inputdata, model='linear'):
@@ -94,6 +75,8 @@ def get_matrix(inputdata, model='linear'):
 
 
 def predict(inputdata, model='linear'):
+    import numpy as np
+    from sklearn.metrics import confusion_matrix
 
     print('Reading in the data ...')
     M, Header, Indeces = get_matrix(inputdata, model)
