@@ -28,4 +28,4 @@ Running the basic protocol consists of these steps:
 #. Gather together all features into a single file (``cryptosite gather``).
 
 #. Predict cryptic binding sites with an SVM using the complete set of features
-   as input (``cryptosite predicter``).
+   as input (``cryptosite predict``).

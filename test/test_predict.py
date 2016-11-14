@@ -10,7 +10,7 @@ import numpy
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 utils.set_search_paths(TOPDIR)
-import cryptosite.predicter
+import cryptosite.predict
 
 # Replace the pickled scaler and SVM objects with mocks. These will run
 # faster, and don't require that our test machine has the exact same version
@@ -40,20 +40,20 @@ class Tests(unittest.TestCase):
     def test_get_matrix(self):
         """Test get_matrix() function"""
         fname = os.path.join(TOPDIR, 'test', 'input', 'test.features')
-        m, header, indices = cryptosite.predicter.get_matrix(fname,
-                                                             model='final')
+        m, header, indices = cryptosite.predict.get_matrix(fname,
+                                                           model='final')
         self.assertEqual(len(m), 2)
         self.assertEqual(header, ['SQC', 'PTM', 'CNC_mean_'])
         self.assertEqual(len(indices), 2)
 
     def test_main(self):
-        """Test complete run of predicter"""
+        """Test complete run of predict"""
         indir = os.path.join(TOPDIR, 'test', 'input')
         with utils.temporary_working_directory() as tmpdir:
             shutil.copy(os.path.join(indir, 'XXX.features'), '.')
             shutil.copy(os.path.join(indir, 'XXX_mdl.pdb'), '.')
             with utils.mocked_object(pickle, 'load', mock_pickle_load):
-                cryptosite.predicter.predict('XXX.features', model='final')
+                cryptosite.predict.predict('XXX.features', model='final')
             os.unlink('XXX.pol.pred')
             os.unlink('XXX.pol.pred.pdb')
 
