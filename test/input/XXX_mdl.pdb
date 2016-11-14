@@ -1,0 +1,15 @@
+EXPDTA    THEORETICAL MODEL, MODELLER SVN 2016/11/04 11:18:00
+REMARK   6 MODELLER BEST TEMPLATE % SEQ ID: 100.000
+ATOM      1  N   ALA A   1      16.487 -34.090  31.680  1.00 93.32           N
+ATOM      2  CA  ALA A   1      15.701 -34.268  32.905  1.00 81.11           C
+ATOM      3  CB  ALA A   1      16.463 -33.732  34.091  1.00 87.36           C
+ATOM      4  C   ALA A   1      14.327 -33.595  32.802  1.00 55.39           C
+ATOM      5  O   ALA A   1      13.334 -34.249  32.452  1.00 33.08           O
+ATOM      6  N   MET A   2      14.293 -32.289  33.089  1.00 47.62           N
+ATOM      7  CA  MET A   2      13.090 -31.453  32.936  1.00 34.33           C
+ATOM      8  CB  MET A   2      13.362 -30.043  33.439  1.00 38.81           C
+ATOM      9  CG  MET A   2      13.328 -29.950  34.906  1.00 48.02           C
+ATOM     10  SD  MET A   2      11.951 -30.923  35.534  1.00 82.61           S
+ATOM     11  CE  MET A   2      12.857 -32.363  36.128  1.00 33.93           C
+ATOM     12  C   MET A   2      12.564 -31.340  31.521  1.00 38.93           C
+ATOM     13  O   MET A   2      11.393 -31.008  31.311  1.00 42.85           O
