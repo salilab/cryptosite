@@ -3,10 +3,14 @@ import utils
 import os
 import sys
 import shutil
+import subprocess
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(TOPDIR, 'lib'))
 from cryptosite import bmi_feature_parser
+
+def mock_check_call(args):
+    pass
 
 class Tests(unittest.TestCase):
     def test_get_cnc(self):
@@ -17,6 +21,19 @@ class Tests(unittest.TestCase):
             res, num = bmi_feature_parser.get_cnc('1abc')
             self.assertEqual(len(res), 8)
             self.assertEqual(num, ('1', '1'))
+
+    def test_get_cnc_pockets(self):
+        """Test get_cnc() parsing of pocket information"""
+        with utils.temporary_working_directory() as tmpdir:
+            os.mkdir('test_out')
+            shutil.copy(os.path.join(TOPDIR, 'test', 'input', 'test_out.pdb'),
+                        'test_out')
+            shutil.copy(os.path.join(TOPDIR, 'test', 'input', 'test_info.txt'),
+                        'test_out')
+            with utils.mocked_object(subprocess, 'check_call', mock_check_call):
+                res, num = bmi_feature_parser.get_cnc('test')
+            self.assertAlmostEqual(res[('ALA', 2, 'A')], 0.0, places=1)
+            self.assertAlmostEqual(res[('ALA', 1, 'A')], 0.8, places=1)
 
     def test_gather_features(self):
         """Test gather_features() function"""
