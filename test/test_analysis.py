@@ -5,6 +5,7 @@ import sys
 import re
 import shutil
 import subprocess
+import modeller
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(TOPDIR, 'lib'))
@@ -14,7 +15,52 @@ def touch(fname):
     with open(fname, 'w') as fh:
         pass
 
+class MockAtom(object):
+    def __init__(self, name, x, y, z):
+        self.name = name
+        self.x, self.y, self.z = x, y, z
+
 class Tests(unittest.TestCase):
+
+    def test_get_coordinates_sc(self):
+        """Test get_coordinates_sc() function"""
+        e = modeller.environ()
+        m = modeller.model(e)
+        coord = cryptosite.analysis.get_coordinates_sc(m,
+                os.path.join(TOPDIR, 'test', 'input', 'test_coord.pdb'))
+        self.assertEqual(len(coord), 4)
+        # First residue is a GLY with no CA -> no coordinates
+        self.assertEqual(coord[0], None)
+        # Second residue is a GLY with CA -> coordinates are those of
+        # the GLY (0,0,0)
+        self.assertAlmostEqual(coord[1].x, 0., places=1)
+        self.assertAlmostEqual(coord[1].y, 0., places=1)
+        self.assertAlmostEqual(coord[1].z, 0., places=1)
+        # Third residue is a MET with no sidechain -> no coordinates
+        self.assertEqual(coord[2], None)
+        # Fourth residue is a MET with a sidechain -> mean coordinates returned
+        self.assertAlmostEqual(coord[3].x, 5., places=1)
+        self.assertAlmostEqual(coord[3].y, 10., places=1)
+        self.assertAlmostEqual(coord[3].z, 15., places=1)
+
+    def test_get_distance(self):
+        """Test get_distance() function"""
+        a = MockAtom('CA', 0., 0., 0.)
+        b = MockAtom('CA', 1., 1., 1.)
+        self.assertEqual(cryptosite.analysis.get_distance(a, b), 3.)
+        self.assertEqual(cryptosite.analysis.get_distance(a, None), None)
+        self.assertEqual(cryptosite.analysis.get_distance(None, b), None)
+        self.assertEqual(cryptosite.analysis.get_distance(None, None), None)
+
+    def test_get_qi_bad_num_res(self):
+        """Test get_qi with mismatched numbers of residues"""
+        class MockModel(object):
+            def read(self, file):
+                pass
+        m = MockModel()
+        m.residues = []
+        self.assertRaises(ValueError, cryptosite.analysis.get_qi, m, 50,
+                          None, None, None)
 
     def test_get_energy(self):
         """Test get_energy() function"""
