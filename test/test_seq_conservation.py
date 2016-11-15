@@ -40,7 +40,7 @@ with open(outf, 'w') as fh:
     os.environ['PATH'] = oldpath
 
 def mock_ucluster(ali, cutoff=0.8):
-    return {'G7PIG01':2, 'XXXq':2}
+    return {'G7PIG01':2, 'XXXq':2, 'G7PIG02':2}
 
 def mock_check_call(args):
     pass
