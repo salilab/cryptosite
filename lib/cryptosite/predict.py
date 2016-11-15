@@ -128,9 +128,8 @@ def predict(inputdata, model='linear'):
     Y_PRED_PROB_ALL = list(Y_pred_prob[:, 1])
     Y_TEST_ALL = list(Y_learn)
 
-    if model=='linear': outn = open(pdb+'.lin.pred','w')
-    elif model=='poly' or model=='final': outn = open(pdb+'.pol.pred','w')
-    else: print(peter)
+    suffix = {'linear':'lin', 'poly':'pol', 'final':'pol'}[model]
+    outn = open(pdb+'.%s.pred' % suffix, 'w')
 
     print('Writing output files ...')
     outn.write('\t'.join(['PDBID','Res','ResID']+Header+['CryptositeValue'])+'\n')
