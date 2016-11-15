@@ -7,6 +7,7 @@ import sys
 import os
 import glob
 import math
+import optparse
 
 def _get_subdirectories(dirname):
     """Get all subdirectories of the given directory, as full paths."""
@@ -120,8 +121,22 @@ def get_qioft(landscape, rcut=11.):
                 get_qi(m, len(coord), dist, model, fh)
                 fh.write('\n')
 
+def parse_args():
+    usage = """%prog [opts] <landscape ...>
+
+Analyze AllosMod results. The analysis is done for each passed landscape
+directory, and the generated statistics are written into .dat files in
+each directory. Currently energy and Qi statistics are computed.
+"""
+    parser = optparse.OptionParser(usage)
+    opts, args = parser.parse_args()
+    if len(args) == 0:
+        parser.error("incorrect number of arguments")
+    return args
+
 def main():
-    for landscape in sys.argv[1:]:
+    landscapes = parse_args()
+    for landscape in landscapes:
         get_energy(landscape)
         get_qioft(landscape)
 

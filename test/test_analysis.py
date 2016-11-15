@@ -8,7 +8,7 @@ import subprocess
 import modeller
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(os.path.join(TOPDIR, 'lib'))
+utils.set_search_paths(TOPDIR)
 import cryptosite.analysis
 
 def touch(fname):
@@ -21,6 +21,14 @@ class MockAtom(object):
         self.x, self.y, self.z = x, y, z
 
 class Tests(unittest.TestCase):
+    def test_bad(self):
+        """Test wrong arguments to analysis"""
+        for args in ([],):
+            out = utils.check_output(['cryptosite', 'analysis'] + args,
+                                     stderr=subprocess.STDOUT, retcode=2)
+            out = utils.check_output(['python', '-m',
+                                     'cryptosite.analysis'] + args,
+                                     stderr=subprocess.STDOUT, retcode=2)
 
     def test_get_coordinates_sc(self):
         """Test get_coordinates_sc() function"""
