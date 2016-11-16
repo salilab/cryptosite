@@ -1,6 +1,7 @@
 [![docs](https://readthedocs.org/projects/cryptosite/badge/)](https://cryptosite.readthedocs.org/)
 [![Build Status](https://travis-ci.org/salilab/cryptosite.svg?branch=master)](https://travis-ci.org/salilab/cryptosite)
 [![codecov](https://codecov.io/gh/salilab/cryptosite/branch/master/graph/badge.svg)](https://codecov.io/gh/salilab/cryptosite)
+[![Code Climate](https://codeclimate.com/github/salilab/cryptosite/badges/gpa.svg)](https://codeclimate.com/github/salilab/cryptosite)
 
 CryptoSite is a computational tool for predicting the location of cryptic
 binding sites in proteins and protein complexes.
