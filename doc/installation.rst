@@ -46,7 +46,8 @@ on which CryptoSite currently functions.
 
 * `Biopython <http://biopython.org/>`_.
 
-* `scikit-learn <http://scikit-learn.org/>`_.
+* `scikit-learn <http://scikit-learn.org/>`_. Note that precisely version 0.12
+  is needed - other versions won't work.
 
 * `AllosMod <https://github.com/salilab/allosmod-lib>`_ is needed to run part
   of the protocol.
