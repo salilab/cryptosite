@@ -12,20 +12,14 @@ import cryptosite.res_parser_bmi
 import cryptosite.patch_mapper
 import os
 import glob
+import shutil
 import optparse
 
-def setup(short):
-    pdb,chains = 'XXX', ''
-    paramdata = open('param.txt')
-    params = paramdata.readlines()
-    paramdata.close()
-    chains = params[2].strip().strip(' ').split(',')
+def setup(fname, chains, short):
+    pdb = 'XXX'
 
     # --- get input PDB,input Seq
-    if 'input.pdb' in os.listdir('.'): os.system('cp input.pdb %s.pdb' % (pdb, ))
-    else: os.system('cp *.ent %s.pdb' % (pdb, ))
-
-
+    shutil.copy(fname, '%s.pdb' % pdb)
 
     # --- trim if NMR
 
@@ -195,21 +189,24 @@ def setup(short):
     out2.close()
 
 def parse_args():
-    usage = """%prog [opts]
+    usage = """%prog [opts] <pdb> <chains>
 
 Do initial setup and preparation of AllosMod inputs.
+<pdb> should be the full path to a structure file in PDB format.
+<chains> should be a comma-separated list of chain IDs.
 """
     parser = optparse.OptionParser(usage)
     parser.add_option("--short", action="store_true",
                       help="run a quicker AllosMod simulation")
     opts, args = parser.parse_args()
-    if len(args) != 0:
+    if len(args) != 2:
         parser.error("incorrect number of arguments")
-    return opts.short
+    chains = args[1].strip().strip(' ').split(',')
+    return args[0], chains, opts.short
 
 def main():
-    short = parse_args()
-    setup(short)
+    pdb, chains, short = parse_args()
+    setup(pdb, chains, short)
 
 if __name__ == '__main__':
     main()

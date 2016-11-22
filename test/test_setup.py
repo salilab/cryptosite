@@ -40,7 +40,7 @@ def mock_res_parser(fil):
 class Tests(unittest.TestCase):
     def test_bad(self):
         """Test wrong arguments to setup"""
-        for args in (['x'],):
+        for args in (['x'], ['x']*3):
             out = utils.check_output(['cryptosite', 'setup'] + args,
                                      stderr=subprocess.STDOUT, retcode=2)
             out = utils.check_output(['python', '-m',
@@ -50,10 +50,7 @@ class Tests(unittest.TestCase):
     def test_main(self):
         """Test of complete run of setup"""
         with utils.temporary_working_directory() as tmpdir:
-            shutil.copy(os.path.join(TOPDIR, 'test', 'input', 'test.pdb'),
-                        'input.pdb')
-            with open('param.txt', 'w') as fh:
-                fh.write("dummy\ndummy\nA\n")
+            fname = os.path.join(TOPDIR, 'test', 'input', 'test.pdb')
             with utils.mocked_objects(
                     [(cryptosite.cleaning, 'muscleAlign', mock_muscle_align),
                      (cryptosite.seq_conservation, 'run_blast', mock_run_blast),
@@ -67,7 +64,7 @@ class Tests(unittest.TestCase):
                       mock_gather_features),
                      (cryptosite.res_parser_bmi, 'res_parser',
                       mock_res_parser)]):
-                cryptosite.setup.setup(short=True)
+                cryptosite.setup.setup(fname, ['A'], short=True)
             # Verify that AllosMod inputs were created
             os.unlink('XXX/align.ali')
             os.unlink('XXX/XXX.pdb')
