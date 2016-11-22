@@ -17,8 +17,7 @@ system paths. This may require setting ``PYTHONPATH``, ``PATH`` and/or
 for which all these dependencies are available, and so is the only platform
 on which CryptoSite currently functions.
 
-* `Python <https://www.python.org>`_ 2.6 or 2.7 (the code is not currently
-  tested with Python 3).
+* `Python <https://www.python.org>`_ 2.6 or later (Python 3 should also be OK).
 
 * `MODELLER <https://salilab.org/modeller/>`_ plus the
   `SOAP-Protein library <https://salilab.org/SOAP/>`_.
