@@ -1,6 +1,0 @@
-export amberpath='/netapp/sali/pweinkam/utils/AMBER/amber11/bin'
-export AMBERHOME=/netapp/sali/pweinkam/utils/AMBER/amber11/
-
-export PATH=/usr/sbin:/usr/local/bin:/sbin:/usr/local/lib:/netapp/sali/pweinkam/bin:/bin:/sbin:/usr/bin:/usr/include:/usr/sbin:/usr/local/bin:/usr/local/sbin:/netopt/mpi/mpich2/bin:/diva1/home/modeller/SVN/bin:/netapp/sali/pweinkam/utils/mmtsb_toolset/perl:/netapp/sali/pweinkam/utils/mmtsb_toolset/bin:/netapp/sali/pweinkam/utils/AMBER/amber11/bin:.:$PATH
-
-
