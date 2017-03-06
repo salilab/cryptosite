@@ -179,9 +179,9 @@ def setup(fname, chains, short):
 
     out1 = open('%s/input.dat' % pdb, 'w')
     if short:
-        out1.write('rAS=1000\nNRUNS=25\nMDTemp=SCAN')
+        out1.write('rAS=1000\nNRUNS=25\nMDTemp=SCAN\n')
     else:
-        out1.write('rAS=1000\nNRUNS=50\nMDTemp=SCAN')
+        out1.write('rAS=1000\nNRUNS=50\nMDTemp=SCAN\n')
     out1.close()
 
     out2 = open('%s/list' % pdb, 'w')
