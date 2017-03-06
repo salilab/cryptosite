@@ -49,7 +49,7 @@ def setup(fname, chains, short):
     myfile.close()
 
 
-    # --- write seqeunces
+    # --- write sequences
     output = open('input.seq','w')
     querySeqs = {}
     for chain in chains:
