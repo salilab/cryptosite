@@ -63,7 +63,7 @@ def setup(fname, chains, short):
     print('PDB: ',pdb,'\tCHAIN: ',chains, PDBChainOrder)
     # --- start of for loop going through all chains for sequence features
 
-    ChainLenghts, SubjectSeqList, QuerySeqList = {},{},{}
+    ChainLengths, SubjectSeqList, QuerySeqList = {},{},{}
 
     for chain in PDBChainOrder:
         try: querySeq = querySeqs[chain]
@@ -71,7 +71,7 @@ def setup(fname, chains, short):
             print('CHAIN: ',chain, 'not in the PDB file')
             raise
         print(querySeq, querySeqs[chain])
-        ChainLenghts[chain]=(querySeq[0],len(querySeq),querySeq[-1])
+        ChainLengths[chain]=(querySeq[0],len(querySeq),querySeq[-1])
         sbjctSeq = ''
 
         sbjctSeq = querySeq
@@ -110,12 +110,12 @@ def setup(fname, chains, short):
 
     # --- build model of all the chains
 
-    #RESMAP=build_model(pdb, PDBChainOrder, ChainLenghts)
+    #RESMAP=build_model(pdb, PDBChainOrder, ChainLengths)
 
     print("Printing MODELLER input:")
     print(pdb)
     print(PDBChainOrder)
-    print(ChainLenghts)
+    print(ChainLengths)
 
     cryptosite.cleaning.build_model(pdb, PDBChainOrder)
 
