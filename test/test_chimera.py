@@ -24,6 +24,9 @@ class Tests(unittest.TestCase):
     def test_make_chimera_file(self):
         """Test make_chimera_file() function"""
         cryptosite.chimera.make_chimera_file('url1', 'url2', 'out.chimerax')
+        with open('out.chimerax') as fh:
+            lines = fh.readlines()
+        self.assertEqual(lines[-4], 'open_files("url1", "url2")\n')
         os.unlink('out.chimerax')
 
 if __name__ == '__main__':
