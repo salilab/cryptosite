@@ -29,3 +29,6 @@ Running the basic protocol consists of these steps:
 
 #. Predict cryptic binding sites with an SVM using the complete set of features
    as input (``cryptosite predict``).
+
+#. Optionally visualize the results in
+   `Chimera <https://www.cgl.ucsf.edu/chimera/>`_ (``cryptosite chimera``).

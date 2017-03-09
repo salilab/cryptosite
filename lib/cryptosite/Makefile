@@ -8,7 +8,7 @@ FILES=${PY}/__init__.py ${PY}/cleaning.py \
       ${PY}/hyd_chr_sse.py ${PY}/patch_mapper.py ${PY}/seq_conservation.py \
       ${PY}/predict.py ${PY}/pockets.py ${PY}/am_bmi.py \
       ${PY}/soap.py ${PY}/setup.py \
-      ${PY}/gather.py ${PY}/analysis.py
+      ${PY}/gather.py ${PY}/analysis.py ${PY}/chimera.py
 
 install: ${FILES}
 
