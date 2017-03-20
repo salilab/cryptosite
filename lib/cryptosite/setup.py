@@ -57,15 +57,12 @@ def setup(fname, chains, short):
     PDBChainOrder = extract_chains('%s.pdb' % pdb, chains)
 
     # --- write sequences
-    output = open('input.seq','w')
     querySeqs = {}
-    for chain in chains:
-        querySeq = cryptosite.cleaning.get_pdb_seq(pdb+'.pdb', chain)
-        querySeqs[chain] = querySeq
-        output.write('>'+chain+'\n'+querySeq+'\n')
-    output.close()
-
-
+    with open('input.seq', 'w') as output:
+        for chain in chains:
+            querySeq = cryptosite.cleaning.get_pdb_seq(pdb+'.pdb', chain)
+            querySeqs[chain] = querySeq
+            output.write('>'+chain+'\n'+querySeq+'\n')
 
     print('PDB: ',pdb,'\tCHAIN: ',chains, PDBChainOrder)
     # --- start of for loop going through all chains for sequence features
@@ -93,27 +90,25 @@ def setup(fname, chains, short):
 
         # -- sequence conservation
 
-        output = open('test.seq','w')
-        output.write('>%s%sq\n' % (pdb, chain) + sbjctSeq)
-        output.close()
+        with open('test.seq','w') as output:
+            output.write('>%s%sq\n' % (pdb, chain) + sbjctSeq)
         cryptosite.seq_conservation.run_blast(pdb+chain)
 
         cryptosite.seq_conservation.parse_blast(pdb+chain+'.blast', pdb+chain,
                                                 sbjctSeq)
 
     # --- change ali to pir
-    out = open('alignment.pir','w')
+    with open('alignment.pir', 'w') as out:
+        strcsq = '/'.join([QuerySeqList[chain] for chain in PDBChainOrder])
+        seqsq ='/'.join([SubjectSeqList[chain] for chain in PDBChainOrder])
+        out.write('>P1; %s\nstructure:%s:FIRST    :%s:LAST  :%s:: : :\n'
+                  % (pdb, pdb, PDBChainOrder[0], PDBChainOrder[-1]))
+        out.write(strcsq+'*\n')
 
-    strcsq = '/'.join([QuerySeqList[chain] for chain in PDBChainOrder])
-    seqsq ='/'.join([SubjectSeqList[chain] for chain in PDBChainOrder])
-    out.write('>P1; %s\nstructure:%s:FIRST    :%s:LAST  :%s:: : :\n' % (pdb,pdb,PDBChainOrder[0],PDBChainOrder[-1]))
-    out.write(strcsq+'*\n')
-
-    out.write('\n>P1; %s_X\nsequence:%s_X:    :%s:  :%s:: : :\n' % (pdb.lower(),pdb.lower(),PDBChainOrder[0],PDBChainOrder[-1]))
-    out.write(seqsq+'*\n')
-
-    out.close()
-
+        out.write('\n>P1; %s_X\nsequence:%s_X:    :%s:  :%s:: : :\n'
+                  % (pdb.lower(), pdb.lower(), PDBChainOrder[0],
+                     PDBChainOrder[-1]))
+        out.write(seqsq + '*\n')
 
     # --- build model of all the chains
 
@@ -132,18 +127,18 @@ def setup(fname, chains, short):
 
     L=0
     for chain in PDBChainOrder:
-        seqdat=open(pdb+chain+'.sqc')
-        sqdat=seqdat.readlines()
-        seqdat.close()
+        with open(pdb + chain + '.sqc') as seqdat:
+            sqdat=seqdat.readlines()
 
-        seqdat=open(pdb+'_mdl'+mchains[PDBChainOrder.index(chain)]+'.sqc','w')
-        for sql in sqdat:
-            sql=sql.split()
-            sql[0]=str(int(sql[0])+L)
-            seqdat.write('\t'.join(sql)+'\n')
+        with open(pdb + '_mdl' + mchains[PDBChainOrder.index(chain)]
+                  + '.sqc', 'w') as seqdat:
+            for sql in sqdat:
+                sql=sql.split()
+                sql[0]=str(int(sql[0])+L)
+                seqdat.write('\t'.join(sql)+'\n')
 
-        L+=len(SubjectSeqList[chain])
-        seqdat.close()
+            L+=len(SubjectSeqList[chain])
+
         # -- hydrophobicity, charge, SSEs
         cryptosite.hyd_chr_sse.HydChrSSE(pdb+'_mdl',
                                          mchains[PDBChainOrder.index(chain)])
@@ -164,36 +159,33 @@ def setup(fname, chains, short):
     # --- prepare AllosMod file
 
     f = pdb+'_mdl.bmiftr'
-    data = open(f)
-    F1 = len(data.readlines())
-    data.close()
+    with open(f) as data:
+        F1 = len(data.readlines())
 
-    data = open('alignment.pir')
-    S = data.read()
+    with open('alignment.pir') as data:
+        S = data.read()
     D = S.split(':')[-1].replace('\n','')[:-1].replace('-','')
-    P = '>'+S.split('>')[1].replace(pdb,pdb+'.pdb').replace('structure','structureX')
-    data.close()
+    P = '>'+S.split('>')[1].replace(pdb,pdb+'.pdb') \
+                           .replace('structure','structureX')
 
     os.system('mkdir -p %s' % pdb)
-    out = open('%s/align.ali' % pdb, 'w')
-    out.write( P )
-    out.write(">P1;pm.pdb\n" )
-    out.write("structureX:pm.pdb:1    :%s:%i  :%s::::\n" % (chain,len(D),chain))
-    out.write(D+'*\n')
-    out.close()
+    with open('%s/align.ali' % pdb, 'w') as out:
+        out.write(P)
+        out.write(">P1;pm.pdb\n" )
+        out.write("structureX:pm.pdb:1    :%s:%i  :%s::::\n"
+                  % (chain,len(D),chain))
+        out.write(D+'*\n')
 
     os.system('cp %s.pdb %s' % (pdb,pdb))
 
-    out1 = open('%s/input.dat' % pdb, 'w')
-    if short:
-        out1.write('rAS=1000\nNRUNS=25\nMDTemp=SCAN\n')
-    else:
-        out1.write('rAS=1000\nNRUNS=50\nMDTemp=SCAN\n')
-    out1.close()
+    with open('%s/input.dat' % pdb, 'w') as out1:
+        if short:
+            out1.write('rAS=1000\nNRUNS=25\nMDTemp=SCAN\n')
+        else:
+            out1.write('rAS=1000\nNRUNS=50\nMDTemp=SCAN\n')
 
-    out2 = open('%s/list' % pdb, 'w')
-    out2.write('%s.pdb' % pdb)
-    out2.close()
+    with open('%s/list' % pdb, 'w') as out2:
+        out2.write('%s.pdb' % pdb)
 
 def parse_args():
     usage = """%prog [opts] <pdb> <chains>
