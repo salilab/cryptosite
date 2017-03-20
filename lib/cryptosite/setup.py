@@ -168,7 +168,9 @@ def setup(fname, chains, short):
     P = '>'+S.split('>')[1].replace(pdb,pdb+'.pdb') \
                            .replace('structure','structureX')
 
-    os.system('mkdir -p %s' % pdb)
+    if not os.path.exists(pdb):
+        os.mkdir(pdb)
+
     with open('%s/align.ali' % pdb, 'w') as out:
         out.write(P)
         out.write(">P1;pm.pdb\n" )
@@ -176,7 +178,7 @@ def setup(fname, chains, short):
                   % (chain,len(D),chain))
         out.write(D+'*\n')
 
-    os.system('cp %s.pdb %s' % (pdb,pdb))
+    shutil.copy('%s.pdb' % pdb, pdb)
 
     with open('%s/input.dat' % pdb, 'w') as out1:
         if short:
