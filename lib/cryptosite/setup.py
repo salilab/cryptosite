@@ -15,6 +15,28 @@ import glob
 import shutil
 import optparse
 
+def extract_chains(fname, chains):
+    """Extract the named chains from the file.
+       Return a list of chains in the order they appear in the file,
+       and modify the file in place to contain only these chains."""
+    PDBChainOrder=[]
+    with open(fname,'r') as myfile:
+        data = myfile.read().split('ENDMDL')[0] # trim mulitple models
+        file=data.split('\n')
+
+    with open(fname, 'w') as myfile:
+        for line in file:
+            if line[:5]=='ATOM ' or line[:3]=='TER':
+                if len(line)<60: continue
+                if line[21] in chains:
+                    if len(line)>77 and (line[77] =='D' or line[77]=='H'):
+                        continue
+                    line=line.strip('/n')
+                    myfile.write("%s\n" % line)
+                    if line[21] not in PDBChainOrder:
+                        PDBChainOrder.append(line[21])
+    return PDBChainOrder
+
 def setup(fname, chains, short):
     pdb = 'XXX'
 
@@ -25,29 +47,7 @@ def setup(fname, chains, short):
 
 
     # --- delete unused chains from pdb + extract PDBChainOrder
-
-    PDBChainOrder=[]
-    myfile = open('%s.pdb' % pdb,'r')
-    data = myfile.read().split('ENDMDL')[0] # trim mulitple models
-    file=data.split('\n')
-    myfile.close()
-
-
-
-
-    myfile=open('%s.pdb' % pdb,'w')
-    for line in file:
-        if line[:5]=='ATOM ' or line[:3]=='TER':
-            if len(line)<60: continue
-            if line[21] in chains:
-                if len(line)>77 and (line[77] =='D' or line[77]=='H'): continue
-                line=line.strip('/n')
-                myfile.write("%s\n" % line)
-                if line[21] not in PDBChainOrder:
-                    PDBChainOrder.append(line[21])
-
-    myfile.close()
-
+    PDBChainOrder = extract_chains('%s.pdb' % pdb, chains)
 
     # --- write sequences
     output = open('input.seq','w')

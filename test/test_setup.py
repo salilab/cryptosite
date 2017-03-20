@@ -47,6 +47,15 @@ class Tests(unittest.TestCase):
                                      'cryptosite.setup'] + args,
                                      stderr=subprocess.STDOUT, retcode=2)
 
+    def test_extract_chains(self):
+        """Test extract_chains()"""
+        fname = os.path.join(TOPDIR, 'test', 'input', 'test.pdb')
+        with utils.temporary_working_directory() as tmpdir:
+            tmp_pdb = os.path.join(tmpdir, 'test.pdb')
+            shutil.copy(fname, tmp_pdb)
+            chains = cryptosite.setup.extract_chains(tmp_pdb, ['B', 'A'])
+        self.assertEqual(chains, ['A', 'B'])
+
     def test_main(self):
         """Test of complete run of setup"""
         with utils.temporary_working_directory() as tmpdir:
