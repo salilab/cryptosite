@@ -15,6 +15,9 @@ import glob
 import shutil
 import optparse
 
+class MissingChainsError(Exception):
+    pass
+
 def extract_chains(fname, chains):
     """Extract the named chains from the file.
        Return a list of chains in the order they appear in the file,
@@ -35,6 +38,10 @@ def extract_chains(fname, chains):
                     myfile.write("%s\n" % line)
                     if line[21] not in PDBChainOrder:
                         PDBChainOrder.append(line[21])
+    missing_chains = set(chains) - set(PDBChainOrder)
+    if missing_chains:
+        raise MissingChainsError("The following chains were not found in the "
+                              "input PDB file: %s" % ", ".join(missing_chains))
     return PDBChainOrder
 
 def setup(fname, chains, short):

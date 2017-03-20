@@ -56,6 +56,16 @@ class Tests(unittest.TestCase):
             chains = cryptosite.setup.extract_chains(tmp_pdb, ['B', 'A'])
         self.assertEqual(chains, ['A', 'B'])
 
+    def test_extract_chains_missing(self):
+        """Test extract_chains() with missing chains"""
+        fname = os.path.join(TOPDIR, 'test', 'input', 'test.pdb')
+        with utils.temporary_working_directory() as tmpdir:
+            tmp_pdb = os.path.join(tmpdir, 'test.pdb')
+            shutil.copy(fname, tmp_pdb)
+            self.assertRaises(cryptosite.setup.MissingChainsError,
+                              cryptosite.setup.extract_chains,
+                              tmp_pdb, ['A', 'C', 'D'])
+
     def test_main(self):
         """Test of complete run of setup"""
         with utils.temporary_working_directory() as tmpdir:
