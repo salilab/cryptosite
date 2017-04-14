@@ -45,6 +45,8 @@ on which CryptoSite currently functions.
 
 * `Biopython <http://biopython.org/>`_.
 
+* `NumPy <http://www.numpy.org/>`_ and `SciPy <https://scipy.org/scipylib/>`_.
+
 * `scikit-learn <http://scikit-learn.org/>`_. Note that precisely version 0.12
   is needed - other versions won't work.
 
