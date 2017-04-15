@@ -83,7 +83,8 @@ def _coverage_cleanup(c):
 atexit.register(_coverage_cleanup, _cov)
 """ % os.getcwd())
 
-    os.environ['PYTHONPATH'] = __site_tmpdir
+    os.environ['PYTHONPATH'] = __site_tmpdir + ':' \
+                               + os.environ.get('PYTHONPATH', '')
 
     def __cleanup(d):
         shutil.rmtree(d, ignore_errors=True)
