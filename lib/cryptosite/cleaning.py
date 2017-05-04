@@ -1,28 +1,19 @@
 from __future__ import print_function, absolute_import
 import os
-from Bio import PDB
-from Bio.Blast import NCBIXML
-from Bio.PDB.PDBParser import PDBParser
-from Bio.PDB.Polypeptide import PPBuilder
 import re
 import subprocess
 from operator import itemgetter
 
-
-parser = PDBParser()
-
-
 def get_pdb_seq(pdb, chain):
     '''
-    Read a PDB[pdb] input and outputs a sequence of a desired chain(s)[chain].
+    Read a PDB[pdb] input and outputs a sequence of a desired chain[chain].
     '''
-    #TODO: implement for a set of chains
+    import modeller
 
-    structure = parser.get_structure("protein", pdb)
-
-    ppb = PPBuilder()
-    ss = ppb.build_peptides(structure[0][chain])
-    return ''.join([str(i.get_sequence()) for i in ss])
+    e = modeller.environ()
+    m = modeller.model(e, file=pdb,
+                       model_segment=('FIRST:'+chain, 'LAST:'+chain))
+    return "".join(r.code for r in m.residues)
 
 def muscleAlign(qSeq, sSeq, pdb, chain):
     '''
