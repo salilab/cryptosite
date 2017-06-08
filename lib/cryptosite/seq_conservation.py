@@ -31,29 +31,29 @@ def parse_blast(blastOut, pdb, qseq, evalue=0.00001):
       - qseq:   query sequence as a string
     '''
 
-    blast_record = NCBIXML.read(open(blastOut))
+    with open(blastOut) as fh:
+        blast_record = NCBIXML.read(fh)
     A = numpy.zeros((len(qseq),21))
     q = ['A','C','D','E','F','G','H','I','K','L','M','N','P','R','S','T','V','Y','W','Q','-']
 
-    out = open(pdb+'.ali','w')
-    out.write('>%sq\n' % pdb)
-    out.write(qseq+'\n')
+    with open(pdb+'.ali', 'w') as out:
+        out.write('>%sq\n' % pdb)
+        out.write(qseq+'\n')
 
-    Seqs = {pdb+'q':qseq}
-    for alignment in blast_record.alignments:
+        Seqs = {pdb+'q':qseq}
+        for alignment in blast_record.alignments:
 
-        for hsp in alignment.hsps:
-            if float(hsp.expect) > evalue: continue
-            sseq = alignment.title.split('|')[-2]
-            if sseq not in Seqs:
-                Seqs[sseq] = 1
-                out.write('>'+sseq+'1'+'\n')
-                out.write(hsp.sbjct+'\n')
-            else:
-                Seqs[sseq] += 1
-                out.write('>'+sseq+str(Seqs[sseq])+'\n')
-                out.write(hsp.sbjct+'\n')
-    out.close()
+            for hsp in alignment.hsps:
+                if float(hsp.expect) > evalue: continue
+                sseq = alignment.title.split('|')[-2]
+                if sseq not in Seqs:
+                    Seqs[sseq] = 1
+                    out.write('>'+sseq+'1'+'\n')
+                    out.write(hsp.sbjct+'\n')
+                else:
+                    Seqs[sseq] += 1
+                    out.write('>'+sseq+str(Seqs[sseq])+'\n')
+                    out.write(hsp.sbjct+'\n')
     # --- get A matrix
     Clusters = ucluster(pdb+'.ali')
     M = len(Clusters)
@@ -95,18 +95,15 @@ def parse_blast(blastOut, pdb, qseq, evalue=0.00001):
 
     # --- re-weight the A matrix, correct for lambda factor
     lmbd = Meff
-    out = open(pdb+'.sqc','w')
-    for i in range(len(A)):
-        Si = 0
-        Fa = sum(A[i])
-        for j in range(len(q)):
-            si = (1./(Meff+lmbd)) * ( (lmbd/len(q)) + A[i,j] ) #A[i,j]/Fa
-            A[i,j] = si
-            if si>0.: Si -= si*numpy.log(si)
-        out.write('\t'.join([str(i+1), qseq[i], str(Si)]) + '\n')
-    out.close()
-
-
+    with open(pdb+'.sqc', 'w') as out:
+        for i in range(len(A)):
+            Si = 0
+            Fa = sum(A[i])
+            for j in range(len(q)):
+                si = (1./(Meff+lmbd)) * ( (lmbd/len(q)) + A[i,j] ) #A[i,j]/Fa
+                A[i,j] = si
+                if si>0.: Si -= si*numpy.log(si)
+            out.write('\t'.join([str(i+1), qseq[i], str(Si)]) + '\n')
 
 def ucluster(ali, cutoff=0.8):
     '''
