@@ -57,6 +57,10 @@ class Tests(unittest.TestCase):
         with utils.temporary_working_directory() as tmpdir:
             with utils.mocked_object(cryptosite.seq_conservation, 'ucluster',
                                      mock_ucluster):
+                # Should get a ValueError if the sequences don't match
+                self.assertRaises(ValueError,
+                         cryptosite.seq_conservation.parse_blast,
+                         blast_out, 'XXX', 'CC')
                 cryptosite.seq_conservation.parse_blast(blast_out, 'XXX',
                                                         'AMENFQKVEKIGEGTYGVVYKARNKLTGEVVALKKIRVPSTAIREISLLKELNHPNIVKLLDVIHTENKLYLVFEFLHQDLKKFMDASALTGIPLPLIKSYLFQLLQGLAFCHSHRVLHRDLKPQNLLINTEGAIKLADFGLARAEVVTLWYRAPEILLGCKYYSTAVDIWSLGCIFAEMVTRRALFPGDSEIDQLFRIFRTLGTPDEVVWPGVTSMPDYKPSFPKWARQDFSKVVPPLDEDGRSLLSQMLHYDPNKRISAKAALAHPFFQDVTKPVPHLRL')
             os.unlink('XXX.ali')

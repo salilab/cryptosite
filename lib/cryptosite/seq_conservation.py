@@ -79,9 +79,9 @@ def parse_blast(blastOut, pdb, qseq, evalue=0.00001):
             for i in range(len(hquery)):
                 if hquery[i] != '-':
                     if hquery[i]!=qseq[qi]:
-                        print('Some Error in alignment!')
-                        print(hquery[i],qseq[qi],hquery[i]==qseq[qi])
-                        print(peter)
+                        raise ValueError(
+                                "Mismatch in alignment sequence at position "
+                                "%d: %s %s" % (i+1, hquery[i], qseq[qi]))
                     if hsbjct[i] in q: A[qi,q.index(hsbjct[i])] += ma #1.
                     else: pass
                     qi += 1
