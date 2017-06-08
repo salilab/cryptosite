@@ -4,6 +4,9 @@ import re
 import subprocess
 from operator import itemgetter
 
+class InvalidResiduesError(Exception):
+    pass
+
 def get_pdb_seq(pdb, chain):
     '''
     Read a PDB[pdb] input and outputs a sequence of a desired chain[chain].
@@ -13,7 +16,23 @@ def get_pdb_seq(pdb, chain):
     e = modeller.environ()
     m = modeller.model(e, file=pdb,
                        model_segment=('FIRST:'+chain, 'LAST:'+chain))
+    # BLAST will get confused if the PDB file contains non-standard ATOM
+    # records (e.g. HIE rather than HIS)
+    _detect_invalid_residue_types(m)
     return "".join(r.code for r in m.residues)
+
+def _detect_invalid_residue_types(m):
+    """Raise an error if the Modeller model contains any invalid restypes."""
+    bad_res_types = {}
+    for r in m.residues:
+        if r.code == '.': # BLK residue
+            bad_res_types[r.pdb_name] = None
+    if bad_res_types:
+        raise InvalidResiduesError(
+               "Your PDB file contains the following invalid residue "
+               "types: %s. Please either remove them or convert them to the "
+               "closest equivalent standard PDB residue type."
+               % ", ".join(bad_res_types.keys()))
 
 def muscleAlign(qSeq, sSeq, pdb, chain):
     '''

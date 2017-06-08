@@ -2,6 +2,7 @@ import unittest
 import utils
 import os
 import sys
+import modeller
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(TOPDIR, 'lib'))
@@ -27,6 +28,34 @@ ATOM      6  C   TYR B   3      18.511  -1.416  15.632  1.00  6.84           C
 """)
             seq = cleaning.get_pdb_seq(fname, 'A')
             self.assertEqual(seq, 'CG')
+
+    def test_detect_invalid_residue_types_ok(self):
+        """Test _detect_invalid_residue_types() with OK sequence"""
+        with utils.temporary_directory() as tmpdir:
+            fname = os.path.join(tmpdir, 'test.pdb')
+            with open(fname, 'w') as fh:
+                fh.write(pdb_line + '\n')
+            e = modeller.environ()
+            m = modeller.model(e, file=fname)
+        cleaning._detect_invalid_residue_types(m)
+
+    def test_detect_invalid_residue_types_bad(self):
+        """Test _detect_invalid_residue_types() with bad sequence"""
+        with utils.temporary_directory() as tmpdir:
+            fname = os.path.join(tmpdir, 'test.pdb')
+            with open(fname, 'w') as fh:
+                fh.write("""
+ATOM      1  N   CYS A   1      18.511  -1.416  15.632  1.00  6.84           C
+ATOM      2  C   CYS A   1      18.511  -1.416  15.632  1.00  6.84           C
+ATOM      3  N   HIE A   2      18.511  -1.416  15.632  1.00  6.84           C
+ATOM      4  C   HIE A   2      18.511  -1.416  15.632  1.00  6.84           C
+ATOM      5  N   HSD B   3      18.511  -1.416  15.632  1.00  6.84           C
+ATOM      6  C   HSD B   3      18.511  -1.416  15.632  1.00  6.84           C
+""")
+            e = modeller.environ()
+            m = modeller.model(e, file=fname)
+        self.assertRaises(cleaning.InvalidResiduesError,
+                          cleaning._detect_invalid_residue_types, m)
 
     def test_muscle_align(self):
         """Test muscleAlign()"""
