@@ -112,8 +112,8 @@ def ucluster(ali, cutoff=0.8):
       - cutoff: a distance cutoff to form sequence clusters.
     '''
 
-    cmd = ["usearch", "--cluster", ali, "--uc", "results.uc", "--id",
-           str(cutoff), "--usersort"]
+    cmd = ["usearch", "--cluster_smallmem", ali, "--uc", "results.uc", "--id",
+           str(cutoff), "--sortedby", "other"]
     prc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     prc.wait()
 

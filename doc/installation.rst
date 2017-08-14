@@ -41,7 +41,7 @@ on which CryptoSite currently functions.
   and ``uniprot_sprot.fasta.gz`` files available from the UniProt website
   and combine them into a single ``uniprot`` text file.
 
-* `USEARCH <http://drive5.com/usearch/download.html>`_.
+* `USEARCH <http://drive5.com/usearch/download.html>`_ version 8.1 or later.
 
 * `Biopython <http://biopython.org/>`_.
 
