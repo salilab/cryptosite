@@ -54,7 +54,10 @@ fi
 
 # DSSP
 if [ ! -e ${bin_dir}/mkdssp ]; then
-  wget ftp://ftp.cmbi.ru.nl/pub/software/dssp/dssp-2.0.4-linux-amd64
+  # This is a Sali-lab-maintained mirror, since the "official" DSSP FTP
+  # server is often down (which will cause our Travis builds to fail)
+  wget https://salilab.org/dssp/dssp-2.0.4-linux-amd64
+# wget ftp://ftp.cmbi.ru.nl/pub/software/dssp/dssp-2.0.4-linux-amd64
   chmod a+x dssp-2.0.4-linux-amd64
   mv dssp-2.0.4-linux-amd64 ${bin_dir}/mkdssp
 fi
