@@ -10,4 +10,4 @@ install:
 	${MAKE} -C lib/cryptosite/config install
 
 test:
-	cd test && nosetests
+	nosetests --processes=-1 test
