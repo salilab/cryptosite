@@ -116,6 +116,11 @@ def predict(inputdata, model='linear'):
         learner = pickle.load(fh)
 
     print('Predicting ...')
+
+    # Set _gamma explicitly (earlier versions of cryptosite relied on a hacked
+    # local copy of sklearn that did this)
+    learner._gamma = 1.0 / X_learn.shape[1]
+
     Y_pred = learner.predict(X_learn)
     CM = confusion_matrix(Y_learn,Y_pred)
     print()
