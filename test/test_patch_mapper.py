@@ -18,24 +18,24 @@ def mock_patch_dock_lig_score():
     os.mkdir(subdir)
     fname = os.path.join(subdir, 'patch_dock.Linux')
     with open(fname, 'w') as fh:
-        fh.write("""#!/usr/bin/env python
+        fh.write("""#!%s
 with open('ligands.ids') as fh:
     ligands = [l.rstrip('\\r\\n') for l in fh.readlines()]
 for i, lig in enumerate(ligands):
-    with open('test.pdb%d.res' % i, 'w') as fh:
+    with open('test.pdb%%d.res' %% i, 'w') as fh:
         fh.write("receptorPdb     (Str)   test.pdb\\n")
-        fh.write("ligandPdb     (Str)   %s\\n" % lig)
+        fh.write("ligandPdb     (Str)   %%s\\n" %% lig)
         fh.write(" # | score | pen.  | Area    | as1   | as2   | as12  | ACE     | hydroph | Energy  |cluster| dist. || Ligand Transformation\\n")
         if i == 13:
             fh.write("   1 |   684 | -0.61 |   72.40 |     0 |     0 |     0 |  -63.66 |    0.00 |    0.00 |     0 | 0.00 || -0.21078 -0.07140 0.71339 1.12228 -7.44875 0.86045\\n")
         fh.write("Best Rmsd Result: 100000000.00 rank -1\\n")
         fh.write("Best Rank Result: 100000000.00 rank 100000\\n")
-""")
+""" % sys.executable)
     os.chmod(fname, 0o755)
 
     fname = os.path.join(subdir, 'ligand_score_multiple')
     with open(fname, 'w') as fh:
-        fh.write("""#!/usr/bin/env python
+        fh.write("""#!%s
 import sys, os
 pdb, ligand, trans = sys.argv[1:]
 if not os.path.exists(pdb) or not os.path.exists(ligand):
@@ -45,7 +45,7 @@ with open(trans) as fh:
 with open('mol2_score.res', 'w') as fh:
     if tr:
         fh.write("Score for ISB.pdb trans 0 is -0.41\\n")
-""")
+""" % sys.executable)
     os.chmod(fname, 0o755)
 
     oldpath = os.environ['PATH']

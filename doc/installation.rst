@@ -63,6 +63,8 @@ will get all of these dependencies.
 Building
 ========
 
+Use ``make PYTHON=python3`` or ``make PYTHON=python2`` to build the library
+(depending on which version of Python you want to use).
 Use ``make test`` to test the library, and ``make install`` to install it.
 In most cases you will need to tell ``make`` where to install (if running on
 a Linux cluster, CryptoSite will need to be installed on a network-accessible

@@ -41,7 +41,7 @@ class Tests(unittest.TestCase):
         for args in (['x', 'y'], []):
             out = utils.check_output(['cryptosite', 'predict'] + args,
                                      stderr=subprocess.STDOUT, retcode=2)
-            out = utils.check_output(['python', '-m',
+            out = utils.check_output([sys.executable, '-m',
                                      'cryptosite.predict'] + args,
                                      stderr=subprocess.STDOUT, retcode=2)
 

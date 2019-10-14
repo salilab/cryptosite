@@ -17,7 +17,7 @@ def mock_usearch():
     os.mkdir(subdir)
     fname = os.path.join(subdir, 'usearch')
     with open(fname, 'w') as fh:
-        fh.write("""#!/usr/bin/env python
+        fh.write("""#!%s
 import sys
 outf = sys.argv[4]
 with open(outf, 'w') as fh:
@@ -31,7 +31,7 @@ with open(outf, 'w') as fh:
                          'EX70_12567', '*\\n']))
     fh.write('\\t'.join(['H', '1', '292', '98.2', '+', '0', '0', '292M',
                          'AH70_12410', 'EX70_12567\\n']))
-""")
+""" % sys.executable)
     os.chmod(fname, 0o755)
 
     oldpath = os.environ['PATH']

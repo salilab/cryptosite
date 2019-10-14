@@ -15,7 +15,7 @@ class Tests(unittest.TestCase):
         for args in (['x'],):
             out = utils.check_output(['cryptosite', 'am_bmi'] + args,
                                      stderr=subprocess.STDOUT, retcode=2)
-            out = utils.check_output(['python', '-m',
+            out = utils.check_output([sys.executable, '-m',
                                      'cryptosite.am_bmi'] + args,
                                      stderr=subprocess.STDOUT, retcode=2)
 

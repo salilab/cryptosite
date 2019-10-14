@@ -43,7 +43,7 @@ class Tests(unittest.TestCase):
         for args in (['x'], ['x']*3):
             out = utils.check_output(['cryptosite', 'setup'] + args,
                                      stderr=subprocess.STDOUT, retcode=2)
-            out = utils.check_output(['python', '-m',
+            out = utils.check_output([sys.executable, '-m',
                                      'cryptosite.setup'] + args,
                                      stderr=subprocess.STDOUT, retcode=2)
 
