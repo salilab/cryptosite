@@ -16,6 +16,7 @@ install:
   - export PATH=$HOME/deps/bin:$PATH
   - source $HOME/miniconda/bin/activate python$TRAVIS_PYTHON_VERSION
   - python -V
+  - make
 script:
   - nosetests --with-coverage --cover-branches
 after_success:
