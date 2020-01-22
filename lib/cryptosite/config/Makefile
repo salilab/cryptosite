@@ -12,4 +12,4 @@ ${CONFIG}::
 	@if [ ! -e ${UNIPROT} ]; then echo "Cannot find UniProt database as ${UNIPROT}; set the make UNIPROT variable to its location"; exit 1; fi
 	echo "datadir=r'${DATADIR}'" > $@
 	echo "uniprot=r'${UNIPROT}'" >> $@
-	python -m py_compile $@
+	${PYTHON} -m py_compile $@
