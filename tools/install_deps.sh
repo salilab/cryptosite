@@ -4,15 +4,14 @@
 # there already. This is mainly intended for use by Travis CI
 # (see ../.travis.yml)
 
-if [ $# -ne 4 ]; then
-  echo "Usage: $0 top_directory conda_dir python_version modeller_license_file"
+if [ $# -ne 3 ]; then
+  echo "Usage: $0 top_directory conda_dir python_version"
   exit 1
 fi
 
 top_dir=$1
 conda_dir=$2
 python_version=$3
-modeller_license_file=$4
 bin_dir=${top_dir}/bin
 lib_dir=${top_dir}/lib
 temp_dir=`mktemp -d`
@@ -40,7 +39,6 @@ fi
 bash miniconda.sh -b -p ${conda_dir}
 export PATH=${conda_dir}/bin:$PATH
 conda update --yes -q conda
-export KEY_MODELLER=`cat ${modeller_license_file}`
 conda create --yes -q -n python${python_version} -c salilab python=${python_version} pip biopython scikit-learn scipy modeller nose
 source activate python${python_version}
 pip install coverage
