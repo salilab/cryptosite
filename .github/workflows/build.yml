@@ -18,7 +18,7 @@ jobs:
       env:
         KEY_MODELLER: ${{ secrets.KEY_MODELLER }}
       run: |
-        tools/install_deps.h ~/deps ~/miniconda ${{ matrix.python-version }}
+        tools/install_deps.sh ~/deps ~/miniconda ${{ matrix.python-version }}
     - name: Test
       run: |
         export PATH=~/deps/bin:$PATH
