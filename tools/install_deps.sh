@@ -20,9 +20,9 @@ cd ${temp_dir}
 mkdir -p ${bin_dir} ${lib_dir}
 
 conda update --yes -q conda
-conda create --yes -q -n python${python_version} -c salilab python=${python_version} pip biopython scikit-learn scipy modeller nose
+conda create --yes -q -n python${python_version} -c salilab python=${python_version} pip biopython scikit-learn scipy modeller
 conda activate python${python_version}
-pip install coverage
+pip install coverage pytest-cov pytest-flake8
 
 # MUSCLE
 if [ ! -e ${bin_dir}/muscle ]; then

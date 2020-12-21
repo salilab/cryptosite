@@ -24,7 +24,5 @@ jobs:
         export PATH=~/deps/bin:$PATH
         conda activate python${{ matrix.python-version }}
         make
-        nosetests --with-coverage --cover-branches
-    - name: Upload coverage to codecov
-      run: |
-        bash <(curl -s https://codecov.io/bash)
+        py.test --cov=. --cov-branch --cov-report=xml -v .
+    - uses: codecov/codecov-action@v1
