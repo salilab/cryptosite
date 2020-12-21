@@ -18,11 +18,11 @@ jobs:
       env:
         KEY_MODELLER: ${{ secrets.KEY_MODELLER }}
       run: |
-        tools/install_deps.sh ~/deps ~/miniconda ${{ matrix.python-version }}
+        tools/install_deps.sh ~/deps ${{ matrix.python-version }}
     - name: Test
       run: |
         export PATH=~/deps/bin:$PATH
-        source ~/miniconda/bin/activate python${{ matrix.python-version }}
+        conda activate python${{ matrix.python-version }}
         make
         nosetests --with-coverage --cover-branches
     - name: Upload coverage to codecov

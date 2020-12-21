@@ -4,14 +4,13 @@
 # there already. This is mainly intended for use by Travis CI
 # (see ../.travis.yml)
 
-if [ $# -ne 3 ]; then
-  echo "Usage: $0 top_directory conda_dir python_version"
+if [ $# -ne 2 ]; then
+  echo "Usage: $0 top_directory python_version"
   exit 1
 fi
 
 top_dir=$1
-conda_dir=$2
-python_version=$3
+python_version=$2
 bin_dir=${top_dir}/bin
 lib_dir=${top_dir}/lib
 temp_dir=`mktemp -d`
@@ -20,27 +19,9 @@ cd ${temp_dir}
 
 mkdir -p ${bin_dir} ${lib_dir}
 
-rm -rf ${top_dir}/miniconda
-# Use miniconda Python rather than the Travis environment (we do this because
-# the latter has terrible support for scipy, while the former trivially supports
-# both it and Sali lab packages like Modeller).
-# Note that we don't cache this install. Since the packages are binary,
-# installation is quite rapid, and so in fact caching the entire miniconda
-# directory slows things down.
-
-# Clean up after a potential previous install failure
-rm -rf ${conda_dir}
-# Save on some downloading if the version is the same
-if [ "${python_version}" == "2.7" ]; then
-  wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh
-else
-  wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
-fi
-bash miniconda.sh -b -p ${conda_dir}
-export PATH=${conda_dir}/bin:$PATH
 conda update --yes -q conda
 conda create --yes -q -n python${python_version} -c salilab python=${python_version} pip biopython scikit-learn scipy modeller nose
-source activate python${python_version}
+conda activate python${python_version}
 pip install coverage
 
 # MUSCLE
