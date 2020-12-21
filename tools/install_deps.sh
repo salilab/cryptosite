@@ -21,6 +21,7 @@ mkdir -p ${bin_dir} ${lib_dir}
 
 conda update --yes -q conda
 conda create --yes -q -n python${python_version} -c salilab python=${python_version} pip biopython scikit-learn scipy modeller
+eval "$(conda shell.bash hook)"
 conda activate python${python_version}
 pip install coverage pytest-cov pytest-flake8
 
