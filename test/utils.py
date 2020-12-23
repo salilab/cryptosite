@@ -5,12 +5,15 @@ import shutil
 import contextlib
 import subprocess
 
+
 def set_search_paths(topdir):
-    """Set search paths so that we can run binaries and import Python modules"""
+    """Set search paths so that we can run binaries and
+       import Python modules"""
     os.environ['PATH'] = os.path.join(topdir, 'bin') + ':' + os.environ['PATH']
-    os.environ['PYTHONPATH'] = os.path.join(topdir, 'lib') + ':' \
-                               + os.environ.get('PYTHONPATH', '')
+    os.environ['PYTHONPATH'] = \
+        os.path.join(topdir, 'lib') + ':' + os.environ.get('PYTHONPATH', '')
     sys.path.append(os.path.join(topdir, 'lib'))
+
 
 def check_output(args, stderr=None, retcode=0, input=None, *other, **keys):
     """Run a subprocess and return its output.
@@ -29,11 +32,13 @@ def check_output(args, stderr=None, retcode=0, input=None, *other, **keys):
                       % (" ".join(args), p.returncode, stdout))
     return stdout
 
+
 @contextlib.contextmanager
 def temporary_directory():
     _tmpdir = tempfile.mkdtemp()
     yield _tmpdir
     shutil.rmtree(_tmpdir, ignore_errors=True)
+
 
 @contextlib.contextmanager
 def temporary_working_directory():
@@ -44,6 +49,7 @@ def temporary_working_directory():
     os.chdir(_olddir)
     shutil.rmtree(_tmpdir, ignore_errors=True)
 
+
 @contextlib.contextmanager
 def mocked_object(parent, objname, replacement):
     """Temporarily replace parent.objname with replacement.
@@ -52,6 +58,7 @@ def mocked_object(parent, objname, replacement):
     setattr(parent, objname, replacement)
     yield
     setattr(parent, objname, oldobj)
+
 
 @contextlib.contextmanager
 def mocked_objects(objs):
@@ -64,6 +71,7 @@ def mocked_objects(objs):
     for obj, oldobj in zip(objs, oldobjs):
         parent, objname, replacement = obj
         setattr(parent, objname, oldobj)
+
 
 if 'coverage' in sys.modules:
     import atexit
@@ -83,8 +91,8 @@ def _coverage_cleanup(c):
 atexit.register(_coverage_cleanup, _cov)
 """ % os.getcwd())
 
-    os.environ['PYTHONPATH'] = __site_tmpdir + ':' \
-                               + os.environ.get('PYTHONPATH', '')
+    os.environ['PYTHONPATH'] = \
+        __site_tmpdir + ':' + os.environ.get('PYTHONPATH', '')
 
     def __cleanup(d):
         shutil.rmtree(d, ignore_errors=True)

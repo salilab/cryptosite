@@ -2,13 +2,13 @@ import unittest
 import utils
 import os
 import sys
-import shutil
 import contextlib
 import subprocess
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(TOPDIR, 'lib'))
 import cryptosite.seq_conservation
+
 
 @contextlib.contextmanager
 def mock_usearch():
@@ -39,11 +39,14 @@ with open(outf, 'w') as fh:
     yield
     os.environ['PATH'] = oldpath
 
+
 def mock_ucluster(ali, cutoff=0.8):
-    return {'G7PIG01':2, 'XXXq':2, 'G7PIG02':2}
+    return {'G7PIG01': 2, 'XXXq': 2, 'G7PIG02': 2}
+
 
 def mock_check_call(args):
     pass
+
 
 class Tests(unittest.TestCase):
     def test_run_blast(self):
@@ -54,24 +57,30 @@ class Tests(unittest.TestCase):
     def test_parse_blast(self):
         """Test parse_blast() function"""
         blast_out = os.path.join(TOPDIR, 'test', 'input', 'XXXA.blast')
-        with utils.temporary_working_directory() as tmpdir:
+        with utils.temporary_working_directory():
             with utils.mocked_object(cryptosite.seq_conservation, 'ucluster',
                                      mock_ucluster):
                 # Should get a ValueError if the sequences don't match
-                self.assertRaises(ValueError,
-                         cryptosite.seq_conservation.parse_blast,
-                         blast_out, 'XXX', 'CC')
-                cryptosite.seq_conservation.parse_blast(blast_out, 'XXX',
-                                                        'AMENFQKVEKIGEGTYGVVYKARNKLTGEVVALKKIRVPSTAIREISLLKELNHPNIVKLLDVIHTENKLYLVFEFLHQDLKKFMDASALTGIPLPLIKSYLFQLLQGLAFCHSHRVLHRDLKPQNLLINTEGAIKLADFGLARAEVVTLWYRAPEILLGCKYYSTAVDIWSLGCIFAEMVTRRALFPGDSEIDQLFRIFRTLGTPDEVVWPGVTSMPDYKPSFPKWARQDFSKVVPPLDEDGRSLLSQMLHYDPNKRISAKAALAHPFFQDVTKPVPHLRL')
+                self.assertRaises(
+                    ValueError, cryptosite.seq_conservation.parse_blast,
+                    blast_out, 'XXX', 'CC')
+                cryptosite.seq_conservation.parse_blast(
+                    blast_out, 'XXX',
+                    'AMENFQKVEKIGEGTYGVVYKARNKLTGEVVALKKIRVPSTAIREISLLKELNHPNI'
+                    'VKLLDVIHTENKLYLVFEFLHQDLKKFMDASALTGIPLPLIKSYLFQLLQGLAFCHS'
+                    'HRVLHRDLKPQNLLINTEGAIKLADFGLARAEVVTLWYRAPEILLGCKYYSTAVDIW'
+                    'SLGCIFAEMVTRRALFPGDSEIDQLFRIFRTLGTPDEVVWPGVTSMPDYKPSFPKWA'
+                    'RQDFSKVVPPLDEDGRSLLSQMLHYDPNKRISAKAALAHPFFQDVTKPVPHLRL')
             os.unlink('XXX.ali')
             os.unlink('XXX.sqc')
 
     def test_ucluster(self):
         """Test ucluster() function"""
-        with utils.temporary_working_directory() as tmpdir:
+        with utils.temporary_working_directory():
             with mock_usearch():
                 clusters = cryptosite.seq_conservation.ucluster('dummy.ali')
             self.assertEqual(len(clusters), 4)
+
 
 if __name__ == '__main__':
     unittest.main()

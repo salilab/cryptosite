@@ -11,6 +11,7 @@ from cryptosite import cleaning
 pdb_line = "ATOM      2  CA  ALA A   1     -17.308  -2.623  35.999  " \
            "1.00 25.00           C"
 
+
 class Tests(unittest.TestCase):
 
     def test_get_pdb_seq(self):
@@ -76,7 +77,7 @@ ATOM      6  C   HSD B   3      18.511  -1.416  15.632  1.00  6.84           C
 
     def test_build_model_no_gaps(self):
         """Test build_model() with no gaps"""
-        with utils.temporary_working_directory() as tmpdir:
+        with utils.temporary_working_directory():
             with open('alignment.pir', 'w') as fh:
                 fh.write(">P1;XXX\n")
                 fh.write("structureX:input.pdb:1:A:1:A::::\n")
@@ -92,10 +93,11 @@ ATOM      6  C   HSD B   3      18.511  -1.416  15.632  1.00  6.84           C
     def test_build_model_gaps(self):
         """Test build_model() with gaps"""
         import modeller.automodel
+
         def mocked_loopmodel_make(self):
-            self.loop.outputs.append({'failure':None, 'name':'input.pdb',
-                                      'Normalized DOPE score':-1.})
-        with utils.temporary_working_directory() as tmpdir:
+            self.loop.outputs.append({'failure': None, 'name': 'input.pdb',
+                                      'Normalized DOPE score': -1.})
+        with utils.temporary_working_directory():
             with open('alignment.pir', 'w') as fh:
                 fh.write(">P1;XXX\n")
                 fh.write("structureX:input.pdb:1:A:2:A::::\n")
@@ -110,6 +112,7 @@ ATOM      6  C   HSD B   3      18.511  -1.416  15.632  1.00  6.84           C
                                      mocked_loopmodel_make):
                 cleaning.build_model('XXX', ['A'])
             os.unlink('XXX_mdl.pdb')
+
 
 if __name__ == '__main__':
     unittest.main()

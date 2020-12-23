@@ -2,14 +2,13 @@ import unittest
 import utils
 import os
 import sys
-import re
-import subprocess
 import shutil
 import contextlib
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(TOPDIR, 'lib'))
 import cryptosite.patch_mapper
+
 
 @contextlib.contextmanager
 def mock_patch_dock_lig_score():
@@ -25,9 +24,14 @@ for i, lig in enumerate(ligands):
     with open('test.pdb%%d.res' %% i, 'w') as fh:
         fh.write("receptorPdb     (Str)   test.pdb\\n")
         fh.write("ligandPdb     (Str)   %%s\\n" %% lig)
-        fh.write(" # | score | pen.  | Area    | as1   | as2   | as12  | ACE     | hydroph | Energy  |cluster| dist. || Ligand Transformation\\n")
+        fh.write(" # | score | pen.  | Area    | as1   | as2   | as12  "
+                 "| ACE     | hydroph | Energy  |cluster| dist. |"
+                 "| Ligand Transformation\\n")
         if i == 13:
-            fh.write("   1 |   684 | -0.61 |   72.40 |     0 |     0 |     0 |  -63.66 |    0.00 |    0.00 |     0 | 0.00 || -0.21078 -0.07140 0.71339 1.12228 -7.44875 0.86045\\n")
+            fh.write("   1 |   684 | -0.61 |   72.40 |     0 |     0 "
+                     "|     0 |  -63.66 |    0.00 |    0.00 |     0 "
+                     "| 0.00 || -0.21078 -0.07140 0.71339 1.12228 "
+                     "-7.44875 0.86045\\n")
         fh.write("Best Rmsd Result: 100000000.00 rank -1\\n")
         fh.write("Best Rank Result: 100000000.00 rank 100000\\n")
 """ % sys.executable)
@@ -53,6 +57,7 @@ with open('mol2_score.res', 'w') as fh:
     yield
     os.environ['PATH'] = oldpath
 
+
 class Tests(unittest.TestCase):
 
     def test_make_ligand_file(self):
@@ -71,7 +76,7 @@ class Tests(unittest.TestCase):
 
     def test_read_ligand_data(self):
         """Test read_ligand_data() function"""
-        with utils.temporary_working_directory() as tmpdir:
+        with utils.temporary_working_directory():
             cryptosite.patch_mapper.make_ligand_file('ligands.ids')
             xyz, ligands = cryptosite.patch_mapper.read_ligand_data()
             self.assertEqual(len(xyz), 16)
@@ -79,7 +84,7 @@ class Tests(unittest.TestCase):
 
     def test_patchmap_feature(self):
         """Test patchmap_feature() function"""
-        with utils.temporary_working_directory() as tmpdir:
+        with utils.temporary_working_directory():
             shutil.copy(os.path.join(TOPDIR, 'test', 'input', 'test.pdb'), '.')
             with mock_patch_dock_lig_score():
                 cryptosite.patch_mapper.patchmap_feature('test')
@@ -105,6 +110,7 @@ protLib /chem.lib
 ligandSeg 5.0 15.0 0.5 1 1 0 5
 clusterParams 0.1 3 1.0 2.0
 """)
+
 
 if __name__ == '__main__':
     unittest.main()

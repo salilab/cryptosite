@@ -2,7 +2,6 @@ import unittest
 import utils
 import os
 import sys
-import re
 import shutil
 import subprocess
 import modeller
@@ -11,31 +10,34 @@ TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 utils.set_search_paths(TOPDIR)
 import cryptosite.analysis
 
+
 def touch(fname):
-    with open(fname, 'w') as fh:
+    with open(fname, 'w'):
         pass
+
 
 class MockAtom(object):
     def __init__(self, name, x, y, z):
         self.name = name
         self.x, self.y, self.z = x, y, z
 
+
 class Tests(unittest.TestCase):
     def test_bad(self):
         """Test wrong arguments to analysis"""
         for args in ([],):
-            out = utils.check_output(['cryptosite', 'analysis'] + args,
-                                     stderr=subprocess.STDOUT, retcode=2)
-            out = utils.check_output([sys.executable, '-m',
-                                     'cryptosite.analysis'] + args,
-                                     stderr=subprocess.STDOUT, retcode=2)
+            _ = utils.check_output(['cryptosite', 'analysis'] + args,
+                                   stderr=subprocess.STDOUT, retcode=2)
+            _ = utils.check_output([sys.executable, '-m',
+                                   'cryptosite.analysis'] + args,
+                                   stderr=subprocess.STDOUT, retcode=2)
 
     def test_get_coordinates_sc(self):
         """Test get_coordinates_sc() function"""
         e = modeller.environ()
         m = modeller.model(e)
-        coord = cryptosite.analysis.get_coordinates_sc(m,
-                os.path.join(TOPDIR, 'test', 'input', 'test_coord.pdb'))
+        coord = cryptosite.analysis.get_coordinates_sc(
+            m, os.path.join(TOPDIR, 'test', 'input', 'test_coord.pdb'))
         self.assertEqual(len(coord), 4)
         # First residue is a GLY with no CA -> no coordinates
         self.assertEqual(coord[0], None)
@@ -84,11 +86,12 @@ class Tests(unittest.TestCase):
             e = cryptosite.analysis.get_energy(tmpdir)
             with open(os.path.join(subdir, 'energy.dat')) as fh:
                 e = fh.readlines()
-            self.assertEqual(e,
-                    ['   1000      13478.55371   0.0280   0.0836       '
-                     '3374.72437        499.52283\n',
-                     '   1000      13580.25098   0.0279   0.0794       '
-                     '3332.75293        493.31027\n'])
+            self.assertEqual(
+                e,
+                ['   1000      13478.55371   0.0280   0.0836       '
+                 '3374.72437        499.52283\n',
+                 '   1000      13580.25098   0.0279   0.0794       '
+                 '3332.75293        493.31027\n'])
 
     def test_get_qioft(self):
         """Test get_qioft() function"""
@@ -102,8 +105,10 @@ class Tests(unittest.TestCase):
             cryptosite.analysis.get_qioft(tmpdir)
             with open(os.path.join(subdir, 'qioft_pm_XXX.pdb_11sc.dat')) as fh:
                 e = fh.readlines()
-            self.assertEqual(e, ['0.2205 0.3422 0.5290 0.3791 0.2468 '
-                         '0.4816 0.3841 0.5149 0.4896 0.0971 0.3187 0.0189 \n'])
+            self.assertEqual(
+                e, ['0.2205 0.3422 0.5290 0.3791 0.2468 '
+                    '0.4816 0.3841 0.5149 0.4896 0.0971 0.3187 0.0189 \n'])
+
 
 if __name__ == '__main__':
     unittest.main()

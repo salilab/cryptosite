@@ -1,12 +1,11 @@
 import unittest
 import utils
 import os
-import sys
-import re
-import subprocess
+
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 utils.set_search_paths(TOPDIR)
+
 
 class Tests(unittest.TestCase):
 
@@ -29,7 +28,8 @@ class Tests(unittest.TestCase):
     def test_unknown_command(self):
         """Check 'cryptosite' with an unknown command"""
         for args in (['bad-command'], ['help', 'bad-command']):
-            out = utils.check_output(['cryptosite'] + args, retcode=1)
+            _ = utils.check_output(['cryptosite'] + args, retcode=1)
+
 
 if __name__ == '__main__':
     unittest.main()

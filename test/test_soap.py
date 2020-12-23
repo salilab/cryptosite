@@ -12,14 +12,17 @@ TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 utils.set_search_paths(TOPDIR)
 import cryptosite.soap
 
+
 # Mock the soap_protein_od.Scorer class, so a) we can test it without having
 # the SOAP potentials installed (even if we do have them, they are slow to
 # read in and use a lot of memory) and b) we can make sure any exceptions
 # are handled properly by the soap script
 class MockScorer(energy_term):
     name = 'MockScorer'
+
     def __init__(self):
         self.count = 0
+
     def _assess(self, atmsel, schedule_scale=None, **vars):
         self.count += 1
         if self.count == 1:
@@ -29,15 +32,16 @@ class MockScorer(energy_term):
         elif self.count == 3:
             raise modeller.ModellerError("SOAP error")
 
+
 class Tests(unittest.TestCase):
     def test_bad(self):
         """Test wrong arguments to soap"""
         for args in (['x'],):
-            out = utils.check_output(['cryptosite', 'soap'] + args,
-                                     stderr=subprocess.STDOUT, retcode=2)
-            out = utils.check_output([sys.executable, '-m',
-                                     'cryptosite.soap'] + args,
-                                     stderr=subprocess.STDOUT, retcode=2)
+            _ = utils.check_output(['cryptosite', 'soap'] + args,
+                                   stderr=subprocess.STDOUT, retcode=2)
+            _ = utils.check_output([sys.executable, '-m',
+                                   'cryptosite.soap'] + args,
+                                   stderr=subprocess.STDOUT, retcode=2)
 
     def test_soap_module(self):
         """Test soap script as a module"""
@@ -55,8 +59,8 @@ ATOM      1  N   CYS A   1      18.511  -1.416  15.632  1.00  6.84           C
                 data = fh.readlines()
             # don't know glob order
             self.assertEqual(len(data), 2)
-            self.assertTrue(re.match('pm\.pdb\d\.pdb\t10\.0', data[0]))
-            self.assertTrue(re.match('pm\.pdb\d\.pdb\t20\.0', data[1]))
+            self.assertTrue(re.match(r'pm\.pdb\d\.pdb\t10\.0', data[0]))
+            self.assertTrue(re.match(r'pm\.pdb\d\.pdb\t20\.0', data[1]))
 
     def test_soap_subproc(self):
         """Test soap script as a subprocess"""
@@ -64,6 +68,7 @@ ATOM      1  N   CYS A   1      18.511  -1.416  15.632  1.00  6.84           C
         pypath = os.path.join(TOPDIR, 'test', 'mock')
         env['PYTHONPATH'] = pypath + ':' + env.get('PYTHONPATH', '')
         subprocess.check_call(['cryptosite', 'soap'], env=env)
+
 
 if __name__ == '__main__':
     unittest.main()
