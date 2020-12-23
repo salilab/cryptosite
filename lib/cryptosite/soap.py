@@ -6,6 +6,7 @@ from __future__ import print_function, absolute_import
 import glob
 import optparse
 
+
 def soap_score():
     import modeller
     from modeller.scripts import complete_pdb
@@ -19,7 +20,7 @@ def soap_score():
     # around, since reading in the potential from disk can take a long time).
     sp = soap_protein_od.Scorer()
 
-    out = open('SnapList.txt','w')
+    out = open('SnapList.txt', 'w')
 
     cnt = 0
     files = [i for i in glob.glob('pm.pdb*.pdb')
@@ -36,16 +37,18 @@ def soap_score():
             # Assess with the above Scorer
             try:
                 score = atmsel.assess(sp)
-                out.write(fil+'\t'+str(score)+'\n')
+                out.write(fil + '\t' + str(score) + '\n')
             except modeller.ModellerError:
                 print("The SOAP-Protein-OD library file is not included "
                       "with MODELLER.")
                 print("Please get it from https://salilab.org/SOAP/.")
         # Was 'except: pass' but this will hide genuine errors. Replace with
         # a more specific list of exceptions (and test)
-        except: raise
+        except Exception:
+            raise
 
     out.close()
+
 
 def parse_args():
     usage = """%prog [opts]
@@ -62,9 +65,11 @@ be downloaded separately from https://salilab.org/SOAP/.
     if len(args) != 0:
         parser.error("incorrect number of arguments")
 
+
 def main():
     parse_args()
     soap_score()
+
 
 if __name__ == '__main__':
     main()

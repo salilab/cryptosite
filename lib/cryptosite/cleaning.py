@@ -85,7 +85,7 @@ def get_gaps(alnfile):
     seqsq = seqsq.split('/')
     strcsq = strcsq.split('/')
     chains = [chr(x) for x in range(65, 65+len(strcsq))]
-    gap_reg = re.compile('\W-*\W')
+    gap_reg = re.compile(r'\W-*\W')
     for strcsq_index, strcsq_part in enumerate(strcsq):
         iterator = gap_reg.finditer(strcsq_part)
         for match in iterator:

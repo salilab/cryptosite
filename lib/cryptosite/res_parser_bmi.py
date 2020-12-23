@@ -16,19 +16,20 @@ def res_packing(pdb, res_list, radius=4.):
     D = data.readlines()
     data.close()
 
-    RIDs = dict([(i[1],i[0]) for i in res_list.keys()])
+    RIDs = dict([(i[1], i[0]) for i in res_list.keys()])
 
     RRR = {}
     XYZ = []
     for d in D:
-        if 'ATOM'==d[:4]:
-            if d[17:20]!= 'HOH':
-                res, rsid = d[17:20],int(d[22:26])
+        if 'ATOM' == d[:4]:
+            if d[17:20] != 'HOH':
+                res, rsid = d[17:20], int(d[22:26])
                 x,y,z = float(d[30:38]), float(d[38:46]), float(d[46:54])
-                XYZ.append(numpy.array([x,y,z]))
+                XYZ.append(numpy.array([x, y, z]))
     XYZ = numpy.array(XYZ)
     for r in res_list:
-        if r not in RRR: RRR[r]=0
+        if r not in RRR:
+            RRR[r] = 0
         ZZZ = []
         for a in res_list[r]:
             distances = numpy.sqrt(numpy.sum((XYZ-numpy.array(a))**2,axis=1))
