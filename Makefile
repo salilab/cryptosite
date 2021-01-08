@@ -16,4 +16,4 @@ install: bin
 	${MAKE} -C lib/cryptosite/config install
 
 test: bin
-	nosetests --processes=-1 test
+	pytest --flake8 -v .

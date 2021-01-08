@@ -7,8 +7,10 @@ import optparse
 import os
 import cryptosite.config
 
+
 def make_chimera_file(pdb_url, feature_url, chimera_file):
-    with open(os.path.join(cryptosite.config.datadir, 'script.chimerax')) as fh:
+    with open(os.path.join(cryptosite.config.datadir,
+                           'script.chimerax')) as fh:
         chimera_session = fh.read()
 
     chimera_session += """
@@ -19,6 +21,7 @@ open_files("%s", "%s")
 
     with open(chimera_file, 'w') as out:
         out.write(chimera_session)
+
 
 def parse_args():
     usage = """%prog [opts] <pdb_url> <feature_url> <chimera_file>
@@ -37,9 +40,11 @@ output.
         parser.error("incorrect number of arguments")
     return args
 
+
 def main():
     pdb_url, feature_url, chimera_file = parse_args()
     make_chimera_file(pdb_url, feature_url, chimera_file)
+
 
 if __name__ == '__main__':
     main()
