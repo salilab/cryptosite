@@ -25,5 +25,5 @@ jobs:
         eval "$(conda shell.bash hook)"
         conda activate python${{ matrix.python-version }}
         make
-        py.test --cov=. --cov-branch --cov-report=xml -v .
+        pytest --cov=. --cov-branch --cov-report=xml --flake8 -v .
     - uses: codecov/codecov-action@v1
