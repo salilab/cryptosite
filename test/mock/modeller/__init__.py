@@ -1,6 +1,6 @@
 import sys
 
 
-class environ(object):
+class Environ(object):
     def __init__(self):
         sys.exit(0)

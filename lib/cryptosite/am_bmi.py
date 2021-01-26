@@ -11,12 +11,12 @@ def get_sas(pdb, probe):
     import modeller
 
     # Read the PDB file
-    env = modeller.environ()
-    mdl = modeller.model(env)
+    env = modeller.Environ()
+    mdl = modeller.Model(env)
     mdl.read(file=pdb)
 
     # Calculate atomic accessibilities (in Biso) with appropriate probe_radius
-    myedat = modeller.energy_data()
+    myedat = modeller.EnergyData()
     myedat.radii_factor = 1.6
     mdl.write_data(edat=myedat, output='PSA ATOMIC_SOL',
                    psa_integration_step=0.05, probe_radius=probe)

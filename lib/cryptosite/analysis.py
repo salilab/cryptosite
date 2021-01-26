@@ -111,9 +111,9 @@ def get_qioft(landscape, rcut=11.):
     """Calculate Qi for all models in a landscape."""
     import modeller
     modeller.log.none()
-    e = modeller.environ()
+    e = modeller.Environ()
     e.io.hetatm = False
-    m = modeller.model(e)
+    m = modeller.Model(e)
 
     for dirname in _get_subdirectories(landscape):
         with open(os.path.join(dirname, 'list')) as fh:

@@ -36,8 +36,8 @@ ATOM      6  C   TYR B   3      18.511  -1.416  15.632  1.00  6.84           C
             fname = os.path.join(tmpdir, 'test.pdb')
             with open(fname, 'w') as fh:
                 fh.write(pdb_line + '\n')
-            e = modeller.environ()
-            m = modeller.model(e, file=fname)
+            e = modeller.Environ()
+            m = modeller.Model(e, file=fname)
         cleaning._detect_invalid_residue_types(m)
 
     def test_detect_invalid_residue_types_bad(self):
@@ -53,8 +53,8 @@ ATOM      4  C   HIE A   2      18.511  -1.416  15.632  1.00  6.84           C
 ATOM      5  N   HSD B   3      18.511  -1.416  15.632  1.00  6.84           C
 ATOM      6  C   HSD B   3      18.511  -1.416  15.632  1.00  6.84           C
 """)
-            e = modeller.environ()
-            m = modeller.model(e, file=fname)
+            e = modeller.Environ()
+            m = modeller.Model(e, file=fname)
         self.assertRaises(cleaning.InvalidResiduesError,
                           cleaning._detect_invalid_residue_types, m)
 
@@ -108,7 +108,7 @@ ATOM      6  C   HSD B   3      18.511  -1.416  15.632  1.00  6.84           C
             with open('input.pdb', 'w') as fh:
                 fh.write(pdb_line + '\n')
                 fh.write(pdb_line[:25] + '2' + pdb_line[26:] + '\n')
-            with utils.mocked_object(modeller.automodel.loopmodel, 'make',
+            with utils.mocked_object(modeller.automodel.LoopModel, 'make',
                                      mocked_loopmodel_make):
                 cleaning.build_model('XXX', ['A'])
             os.unlink('XXX_mdl.pdb')

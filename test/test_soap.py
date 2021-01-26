@@ -6,7 +6,7 @@ import re
 import modeller
 import subprocess
 from modeller import soap_protein_od
-from modeller.terms import energy_term
+from modeller.terms import EnergyTerm
 
 TOPDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 utils.set_search_paths(TOPDIR)
@@ -17,7 +17,7 @@ import cryptosite.soap
 # the SOAP potentials installed (even if we do have them, they are slow to
 # read in and use a lot of memory) and b) we can make sure any exceptions
 # are handled properly by the soap script
-class MockScorer(energy_term):
+class MockScorer(EnergyTerm):
     name = 'MockScorer'
 
     def __init__(self):

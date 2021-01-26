@@ -34,8 +34,8 @@ class Tests(unittest.TestCase):
 
     def test_get_coordinates_sc(self):
         """Test get_coordinates_sc() function"""
-        e = modeller.environ()
-        m = modeller.model(e)
+        e = modeller.Environ()
+        m = modeller.Model(e)
         coord = cryptosite.analysis.get_coordinates_sc(
             m, os.path.join(TOPDIR, 'test', 'input', 'test_coord.pdb'))
         self.assertEqual(len(coord), 4)

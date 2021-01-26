@@ -15,8 +15,8 @@ def get_pdb_seq(pdb, chain):
     '''
     import modeller
 
-    e = modeller.environ()
-    m = modeller.model(e, file=pdb,
+    e = modeller.Environ()
+    m = modeller.Model(e, file=pdb,
                        model_segment=('FIRST:' + chain, 'LAST:' + chain))
     # BLAST will get confused if the PDB file contains non-standard ATOM
     # records (e.g. HIE rather than HIS)
@@ -111,7 +111,7 @@ def build_model(pdb, chains):
     and loop modeling for the rest.
     '''
     import modeller
-    from modeller.automodel import loopmodel, automodel, assess
+    from modeller.automodel import LoopModel, AutoModel, assess
 
     # --- get gaps
     gaps = get_gaps('alignment.pir')
@@ -119,21 +119,21 @@ def build_model(pdb, chains):
         out.write(pdb + '_mdl\t' + str(gaps))
 
     # --- set up modeling
-    env = modeller.environ()
+    env = modeller.Environ()
 
     env.io.atom_files_directory = ['.', '../atom_files']
 
-    class MyLoop(loopmodel):
+    class MyLoop(LoopModel):
         def select_loop_atoms(self):
             gaps = get_gaps('alignment.pir')
-            return modeller.selection(
+            return modeller.Selection(
                 self.residue_range(i.split(',')[0], i.split(',')[1])
                 for i in gaps)
 
         def special_restraints(self, aln):
             rsr = self.restraints
-            wholeSel = modeller.selection(self) - self.select_loop_atoms()
-            r = modeller.rigid_body(wholeSel)
+            wholeSel = modeller.Selection(self) - self.select_loop_atoms()
+            r = modeller.RigidBody(wholeSel)
             rsr.rigid_bodies.append(r)
 
     if len(gaps) > 0:
@@ -164,7 +164,7 @@ def build_model(pdb, chains):
         os.system('rm %s_X.*' % (pdb.lower(),))
 
     else:
-        a = automodel(env, alnfile='alignment.pir',
+        a = AutoModel(env, alnfile='alignment.pir',
                       knowns=pdb, sequence=pdb.lower() + '_X',
                       assess_methods=(assess.DOPE,))
         a.very_fast()
@@ -176,6 +176,6 @@ def build_model(pdb, chains):
         os.system('rm %s_X.*' % (pdb.lower(),))
 
     if len(chains) == 1:
-        mdl = modeller.model(env, file='XXX_mdl')
+        mdl = modeller.Model(env, file='XXX_mdl')
         mdl.rename_segments(segment_ids='A')
         mdl.write(file='%s_mdl.pdb' % (pdb))
