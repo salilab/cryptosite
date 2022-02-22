@@ -39,7 +39,9 @@ on which CryptoSite currently functions.
   plus a local copy of the `UniProt database <ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/>`_ for it to search against.
   To make this local database, ``gunzip`` the ``uniprot_trembl.fasta.gz``
   and ``uniprot_sprot.fasta.gz`` files available from the UniProt website
-  and combine them into a single ``uniprot`` text file.
+  and combine them into a single ``uniprot`` text file. This then needs to be
+  formatted for BLAST using the ``formatdb`` or ``makeblastdb`` tools in the
+  BLAST software library.
 
 * `USEARCH <http://drive5.com/usearch/download.html>`_ version 8.1 or later.
 
