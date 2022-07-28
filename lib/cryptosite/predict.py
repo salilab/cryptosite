@@ -5,8 +5,16 @@
 from __future__ import print_function, absolute_import
 import pickle
 import os
+import sys
 import optparse
 import cryptosite.config
+
+
+if sys.version_info[0] == 2:
+    load_py2_pickle = pickle.load
+else:
+    def load_py2_pickle(fh):
+        return pickle.load(fh, encoding='latin1')
 
 
 def get_matrix(inputdata, model='linear'):
@@ -98,6 +106,7 @@ def get_matrix(inputdata, model='linear'):
 
 def predict(inputdata, model='linear'):
     import numpy as np
+    import sklearn
     from sklearn.metrics import confusion_matrix
 
     print('Reading in the data ...')
@@ -129,18 +138,25 @@ def predict(inputdata, model='linear'):
                     'final': 'SVM_Final_Final.pkl'}[model]
 
     print('Scaling ...')
-    with open(os.path.join(cryptosite.config.datadir, scaler_pkl)) as fh:
-        scaler = pickle.load(fh)
+    with open(os.path.join(cryptosite.config.datadir, scaler_pkl), 'rb') as fh:
+        scaler = load_py2_pickle(fh)
     X_learn = scaler.transform(X_learn)
 
-    with open(os.path.join(cryptosite.config.datadir, outmodel_pkl)) as fh:
-        learner = pickle.load(fh)
+    with open(os.path.join(cryptosite.config.datadir,
+                           outmodel_pkl), 'rb') as fh:
+        learner = load_py2_pickle(fh)
 
     print('Predicting ...')
 
     # Set _gamma explicitly (earlier versions of cryptosite relied on a hacked
     # local copy of sklearn that did this)
     learner._gamma = 1.0 / X_learn.shape[1]
+
+    # Our pickles are for sklearn 0.12. If using 0.14.1,
+    # add necessary attributes
+    if sklearn.__version__ == '0.14.1':
+        learner._impl = learner.impl
+        learner._label = learner.classes_ = learner.class_weight_label_
 
     Y_pred = learner.predict(X_learn)
     CM = confusion_matrix(Y_learn, Y_pred)

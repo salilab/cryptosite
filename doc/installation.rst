@@ -50,7 +50,7 @@ on which CryptoSite currently functions.
 * `NumPy <http://www.numpy.org/>`_ and `SciPy <https://scipy.org/scipylib/>`_.
 
 * `scikit-learn <http://scikit-learn.org/>`_. Note that precisely version 0.12
-  is needed - other versions won't work.
+  or version 0.14.1 are needed - other versions won't work.
 
 * `AllosMod <https://github.com/salilab/allosmod-lib>`_ is needed to run part
   of the protocol.

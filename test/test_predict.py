@@ -31,8 +31,8 @@ class MockSVM(object):
                             [0.98243048, 0.01756952]])
 
 
-def mock_pickle_load(fh):
-    if 'Scaler' in fh.read():
+def mock_pickle_load(fh, encoding=None):
+    if b'Scaler' in fh.read():
         return MockScaler()
     else:
         return MockSVM()
