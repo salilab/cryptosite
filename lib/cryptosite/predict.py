@@ -11,7 +11,8 @@ import cryptosite.config
 
 
 if sys.version_info[0] == 2:
-    load_py2_pickle = pickle.load
+    def load_py2_pickle(fh):
+        return pickle.load(fh)
 else:
     def load_py2_pickle(fh):
         return pickle.load(fh, encoding='latin1')
