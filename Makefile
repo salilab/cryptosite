@@ -16,4 +16,5 @@ install: bin
 	${MAKE} -C lib/cryptosite/config install
 
 test: bin
-	pytest --flake8 -v .
+	pytest -v .
+	flake8 --ignore=E402,W503,W504 --exclude=doc/conf.py

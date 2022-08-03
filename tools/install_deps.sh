@@ -23,7 +23,7 @@ conda update --yes -q conda
 conda create --yes -q -n python${python_version} -c salilab python=${python_version} pip biopython scikit-learn scipy modeller
 eval "$(conda shell.bash hook)"
 conda activate python${python_version}
-pip install coverage pytest-cov 'pytest-flake8<1.1'
+pip install coverage pytest-cov flake8
 
 # MUSCLE
 if [ ! -e ${bin_dir}/muscle ]; then
