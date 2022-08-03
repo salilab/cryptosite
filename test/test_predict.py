@@ -63,8 +63,8 @@ class Tests(unittest.TestCase):
         self.assertEqual(header, ['SQC', 'PTM', 'CNC_mean_'])
         self.assertEqual(len(indices), 2)
 
-    def test_main(self):
-        """Test complete run of predict"""
+    def test_main_mocked(self):
+        """Test complete run of predict (with mocked sklearn)"""
         indir = os.path.join(TOPDIR, 'test', 'input')
         with utils.temporary_working_directory():
             shutil.copy(os.path.join(indir, 'XXX.features'), '.')
@@ -73,6 +73,33 @@ class Tests(unittest.TestCase):
                 cryptosite.predict.predict('XXX.features', model='final')
             os.unlink('XXX.pol.pred')
             os.unlink('XXX.pol.pred.pdb')
+
+    def test_main_real(self):
+        """Test complete run of predict (with real sklearn)"""
+        indir = os.path.join(TOPDIR, 'test', 'input')
+        with utils.temporary_working_directory():
+            shutil.copy(os.path.join(indir, 'XXX.features'), '.')
+            shutil.copy(os.path.join(indir, 'XXX_mdl.pdb'), '.')
+            cryptosite.predict.predict('XXX.features', model='final')
+            with open('XXX.pol.pred') as fh:
+                lines = fh.readlines()
+            lines = sorted(line for line in lines
+                           if not line.startswith('PDBID'))
+            scores = [line.rstrip('\r\n').split('\t') for line in lines]
+            os.unlink('XXX.pol.pred')
+            os.unlink('XXX.pol.pred.pdb')
+        # Compare scores against known-good values
+        sqc, ptm, cnc, crypt = [float(x) for x in scores[0][3:]]
+        self.assertAlmostEqual(sqc, -1.4850, delta=1e-4)
+        self.assertAlmostEqual(ptm, -0.9806, delta=1e-4)
+        self.assertAlmostEqual(cnc, -0.3579, delta=1e-4)
+        self.assertAlmostEqual(crypt, 0.0205, delta=1e-4)
+
+        sqc, ptm, cnc, crypt = [float(x) for x in scores[1][3:]]
+        self.assertAlmostEqual(sqc, -0.4486, delta=1e-4)
+        self.assertAlmostEqual(ptm, -0.9049, delta=1e-4)
+        self.assertAlmostEqual(cnc, -0.1571, delta=1e-4)
+        self.assertAlmostEqual(crypt, 0.0176, delta=1e-4)
 
 
 if __name__ == '__main__':

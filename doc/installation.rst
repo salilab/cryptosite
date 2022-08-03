@@ -49,8 +49,10 @@ on which CryptoSite currently functions.
 
 * `NumPy <http://www.numpy.org/>`_ and `SciPy <https://scipy.org/scipylib/>`_.
 
-* `scikit-learn <http://scikit-learn.org/>`_. Note that precisely version 0.12
-  or version 0.14.1 are needed - other versions won't work.
+* `scikit-learn <http://scikit-learn.org/>`_. CryptoSite has been tested with
+  versions 0.12, 0.14.1, 0.21.3, and 1.0.2 of scikit-learn. We can't guarantee
+  correct SVM results with other versions; at a minimum you should ensure that
+  ``test/test_predict.py`` runs successfully.
 
 * `AllosMod <https://github.com/salilab/allosmod-lib>`_ is needed to run part
   of the protocol.
