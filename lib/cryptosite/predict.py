@@ -11,11 +11,11 @@ import cryptosite.config
 
 
 if sys.version_info[0] == 2:
-    def load_py2_pickle(fh):
-        return pickle.load(fh)
+    def load_py2_pickle(data):
+        return pickle.loads(data)
 else:
-    def load_py2_pickle(fh):
-        return pickle.load(fh, encoding='latin1')
+    def load_py2_pickle(data):
+        return pickle.loads(data, encoding='latin1')
 
 
 def get_matrix(inputdata, model='linear'):
@@ -108,6 +108,8 @@ def get_matrix(inputdata, model='linear'):
 def predict(inputdata, model='linear'):
     import numpy as np
     import sklearn
+    import sklearn.preprocessing
+    import sklearn.svm
     from sklearn.metrics import confusion_matrix
 
     print('Reading in the data ...')
@@ -140,12 +142,30 @@ def predict(inputdata, model='linear'):
 
     print('Scaling ...')
     with open(os.path.join(cryptosite.config.datadir, scaler_pkl), 'rb') as fh:
-        scaler = load_py2_pickle(fh)
+        data = fh.read()
+    # Our pickle is for 0.12 and uses Scaler, but this was replaced with
+    # StandardScaler in 0.14
+    if hasattr(sklearn.preprocessing, "StandardScaler"):
+        data = data.replace(b'Scaler', b'StandardScaler')
+    scaler = load_py2_pickle(data)
+    # Add attributes needed by later sklearn versions
+    scaler.scale_ = scaler.std_
     X_learn = scaler.transform(X_learn)
 
     with open(os.path.join(cryptosite.config.datadir,
                            outmodel_pkl), 'rb') as fh:
-        learner = load_py2_pickle(fh)
+        data = fh.read()
+    # Modify pickle if needed for later sklearn versions to adapt to
+    # attributes being replaced by properties, or classes being moved
+    if hasattr(sklearn.svm, '_classes'):
+        data = data.replace(b'sklearn.svm.classes', b'sklearn.svm._classes')
+    if hasattr(sklearn.svm.SVC, 'n_support_'):
+        data = data.replace(b"'n_support_'", b"'_n_support'")
+    if hasattr(sklearn.svm.SVC, 'probA_'):
+        data = data.replace(b"'probA_'", b"'_probA'")
+    if hasattr(sklearn.svm.SVC, 'probB_'):
+        data = data.replace(b"'probB_'", b"'_probB'")
+    learner = load_py2_pickle(data)
 
     print('Predicting ...')
 
@@ -153,11 +173,12 @@ def predict(inputdata, model='linear'):
     # local copy of sklearn that did this)
     learner._gamma = 1.0 / X_learn.shape[1]
 
-    # Our pickles are for sklearn 0.12. If using 0.14.1,
+    # Our pickles are for sklearn 0.12. If using a later version,
     # add necessary attributes
-    if sklearn.__version__ == '0.14.1':
-        learner._impl = learner.impl
-        learner._label = learner.classes_ = learner.class_weight_label_
+    learner._impl = learner.impl
+    learner._label = learner.classes_ = learner.class_weight_label_
+    learner._dual_coef_ = learner.dual_coef_
+    learner.break_ties = False
 
     Y_pred = learner.predict(X_learn)
     CM = confusion_matrix(Y_learn, Y_pred)

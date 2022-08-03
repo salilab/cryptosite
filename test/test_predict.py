@@ -17,12 +17,18 @@ import cryptosite.predict
 # of sklearn as the production machine (pickles aren't portable to different
 # versions of sklearn).
 class MockScaler(object):
+    std_ = None
+
     def transform(self, inp):
         return numpy.array([[-1.48500907, -0.98061114, -0.3578966],
                             [-0.4486418, -0.90488697, -0.1571045]])
 
 
 class MockSVM(object):
+    impl = None
+    class_weight_label_ = None
+    dual_coef_ = None
+
     def predict(self, inp):
         return numpy.array([0., 0.])
 
@@ -31,8 +37,8 @@ class MockSVM(object):
                             [0.98243048, 0.01756952]])
 
 
-def mock_pickle_load(fh, encoding=None):
-    if b'Scaler' in fh.read():
+def mock_pickle_loads(data, encoding=None):
+    if b'Scaler' in data:
         return MockScaler()
     else:
         return MockSVM()
@@ -63,7 +69,7 @@ class Tests(unittest.TestCase):
         with utils.temporary_working_directory():
             shutil.copy(os.path.join(indir, 'XXX.features'), '.')
             shutil.copy(os.path.join(indir, 'XXX_mdl.pdb'), '.')
-            with utils.mocked_object(pickle, 'load', mock_pickle_load):
+            with utils.mocked_object(pickle, 'loads', mock_pickle_loads):
                 cryptosite.predict.predict('XXX.features', model='final')
             os.unlink('XXX.pol.pred')
             os.unlink('XXX.pol.pred.pdb')
