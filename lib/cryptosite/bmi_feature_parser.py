@@ -12,8 +12,12 @@ def get_cnc(apo):
 
     subprocess.check_call(["fpocket", "-f", apo + '.pdb'])
 
-    with open('%s_out/%s_out.pdb' % (apo, apo)) as data:
-        D = data.readlines()
+    try:
+        with open('%s_out/%s_out.pdb' % (apo, apo)) as data:
+            D = data.readlines()
+    except FileNotFoundError:
+        # If fpocket finds no pockets, it does not create the output directory
+        return {}, ('1', '1')
 
     Pockets = {}
     for d in D:

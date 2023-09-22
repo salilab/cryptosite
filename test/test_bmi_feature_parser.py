@@ -24,6 +24,15 @@ class Tests(unittest.TestCase):
             self.assertEqual(len(res), 8)
             self.assertEqual(num, ('1', '1'))
 
+    def test_get_cnc_no_pockets(self):
+        """Test get_cnc() function with PDB containing no pockets"""
+        with utils.temporary_working_directory():
+            shutil.copy(os.path.join(TOPDIR, 'test', 'input',
+                                     'test-no-pockets.pdb'), '1abc.pdb')
+            res, num = bmi_feature_parser.get_cnc('1abc')
+            self.assertEqual(len(res), 0)
+            self.assertEqual(num, ('1', '1'))
+
     def test_get_cnc_pockets(self):
         """Test get_cnc() parsing of pocket information"""
         with utils.temporary_working_directory():
