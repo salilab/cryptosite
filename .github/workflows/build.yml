@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Install dependencies
       env:
         KEY_MODELLER: ${{ secrets.KEY_MODELLER }}
@@ -27,4 +27,6 @@ jobs:
         make
         pytest --cov=. --cov-branch --cov-report=xml -v .
         flake8 --ignore=E402,W503,W504 --exclude=doc/conf.py
-    - uses: codecov/codecov-action@v1
+    - uses: codecov/codecov-action@v4
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
