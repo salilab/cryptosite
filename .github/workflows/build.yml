@@ -1,5 +1,7 @@
 name: build
 
+permissions: read-all
+
 on: [push, pull_request]
 
 jobs:
@@ -9,7 +11,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.7, 3.8, 3.9, '3.10', '3.11', '3.12']
+        python-version: [3.8, 3.9, '3.10', '3.11', '3.12', '3.13']
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -27,6 +29,6 @@ jobs:
         make
         pytest --cov=. --cov-branch --cov-report=xml -v .
         flake8 --ignore=E402,W503,W504 --exclude=doc/conf.py
-    - uses: codecov/codecov-action@v4
+    - uses: codecov/codecov-action@v5
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
