@@ -14,6 +14,7 @@ python_version=$2
 bin_dir=${top_dir}/bin
 lib_dir=${top_dir}/lib
 temp_dir=`mktemp -d`
+cp "$(dirname $0)/fpocket2-gcc.patch" ${temp_dir}
 
 cd ${temp_dir}
 
@@ -46,7 +47,7 @@ fi
 if [ ! -e ${bin_dir}/fpocket ]; then
   wget http://downloads.sourceforge.net/project/fpocket/fpocket2.tar.gz
   tar -xzf fpocket2.tar.gz
-  (cd fpocket2 && sed -e 's/\$(LFLAGS) \$^/\$^ \$(LFLAGS)/' makefile > makefile.new && mv makefile.new makefile && make bin/fpocket && cp bin/fpocket ${bin_dir})
+  (cd fpocket2 && patch -p1 < ${temp_dir}/fpocket2-gcc.patch && sed -e 's/\$(LFLAGS) \$^/\$^ \$(LFLAGS)/' makefile > makefile.new && mv makefile.new makefile && make bin/fpocket && cp bin/fpocket ${bin_dir})
 fi
 
 # PatchDock

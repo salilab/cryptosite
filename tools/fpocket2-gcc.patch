@@ -1,0 +1,22 @@
+diff -Nur orig/fpocket2/src/fpout.c new/fpocket2/src/fpout.c
+--- orig/fpocket2/src/fpout.c	2010-07-06 04:25:35.000000000 -0700
++++ new/fpocket2/src/fpout.c	2025-01-21 22:02:19.083694490 -0800
+@@ -103,7 +103,8 @@
+ 			return ;
+ 		}*/
+ 		
+-		sprintf(out_path, "%s/%s", out_path, pdb_code) ;
++		strcat(out_path, "/");
++		strcat(out_path, pdb_code);
+ 		sprintf(pdb_out_path, "%s_out.pdb", out_path) ;
+ 		
+ 	/* Write vmd and pymol scripts */
+@@ -126,7 +127,7 @@
+ 		if(strlen(pdb_path) > 0) sprintf(out_path, "%s/%s_out", pdb_path, pdb_code) ;
+ 		else sprintf(out_path, "%s_out", pdb_code) ;
+ 		
+-		sprintf(out_path, "%s/pockets", out_path) ;
++		strcat(out_path, "/pockets");
+ 		sprintf(command, "mkdir %s", out_path) ;
+ 		status = system(command) ;
+ 		/*if(status != 0) {
