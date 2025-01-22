@@ -5,6 +5,12 @@ import subprocess
 import cryptosite.am_bmi
 
 
+def _one_to_three(res):
+    """Convert one-letter to three-letter residue code"""
+    ind = PDB.Polypeptide.one_to_index(res)
+    return PDB.Polypeptide.index_to_three(ind)
+
+
 def get_cnc(apo):
     '''
     Find pockets using Fpocket algorithm.
@@ -94,7 +100,7 @@ def get_hcs(apo, achain):
                 res, resid = 'UNK', int(d[0])
             else:
                 try:
-                    res, resid = PDB.Polypeptide.one_to_three(d[1]), d[0]
+                    res, resid = _one_to_three(d[1]), d[0]
                 except KeyError:
                     res, resid = DIC[str(int(d[0])) + achain], d[0]
             Hcs[(res, resid)] = (d[2], float(d[3]), float(d[4]))
@@ -116,7 +122,7 @@ def get_sqc(apo, achain):
             if d[1] == 'X':
                 res, resid = 'UNK', int(d[0])
             else:
-                res, resid = PDB.Polypeptide.one_to_three(d[1]), int(d[0])
+                res, resid = _one_to_three(d[1]), int(d[0])
             Sqc[(res, resid)] = float(d[2])
 
     return Sqc
