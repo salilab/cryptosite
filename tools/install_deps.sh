@@ -47,7 +47,7 @@ fi
 if [ ! -e ${bin_dir}/fpocket ]; then
   wget http://downloads.sourceforge.net/project/fpocket/fpocket2.tar.gz
   tar -xzf fpocket2.tar.gz
-  (cd fpocket2 && patch -p1 < ${temp_dir}/fpocket2-gcc.patch && sed -e 's/\$(LFLAGS) \$^/\$^ \$(LFLAGS)/' makefile > makefile.new && mv makefile.new makefile && make bin/fpocket && cp bin/fpocket ${bin_dir})
+  (cd fpocket2 && patch -p2 < ${temp_dir}/fpocket2-gcc.patch && sed -e 's/\$(LFLAGS) \$^/\$^ \$(LFLAGS)/' makefile > makefile.new && mv makefile.new makefile && make bin/fpocket && cp bin/fpocket ${bin_dir})
 fi
 
 # PatchDock
