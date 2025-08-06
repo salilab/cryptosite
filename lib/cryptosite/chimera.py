@@ -1,8 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Make a Chimera script to display the output."""
 
-from __future__ import print_function, absolute_import
 import optparse
 import os
 import cryptosite.config

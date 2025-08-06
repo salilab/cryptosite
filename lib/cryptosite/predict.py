@@ -1,21 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Do the final prediction of binding site given all features."""
 
-from __future__ import print_function, absolute_import
 import pickle
 import os
-import sys
 import optparse
 import cryptosite.config
 
 
-if sys.version_info[0] == 2:
-    def load_py2_pickle(data):
-        return pickle.loads(data)
-else:
-    def load_py2_pickle(data):
-        return pickle.loads(data, encoding='latin1')
+def load_py2_pickle(data):
+    return pickle.loads(data, encoding='latin1')
 
 
 def get_matrix(inputdata, model='linear'):

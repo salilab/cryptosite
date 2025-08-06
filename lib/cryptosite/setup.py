@@ -1,8 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Initial setup and preparation of AllosMod inputs"""
 
-from __future__ import print_function, absolute_import
 import cryptosite.cleaning
 import cryptosite.seq_conservation
 import cryptosite.hyd_chr_sse

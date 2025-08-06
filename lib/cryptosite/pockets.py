@@ -1,8 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Add features relating to pockets detected by fpocket."""
 
-from __future__ import print_function, absolute_import
 import glob
 from numpy import array, argwhere
 from scipy import spatial

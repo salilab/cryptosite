@@ -1,6 +1,6 @@
 PREFIX=/usr/local
 DATADIR=${PREFIX}/share/data/cryptosite
 BINDIR=${PREFIX}/bin
-PYTHON=python
+PYTHON=python3
 PYTHONDIR=${PREFIX}/python
 UNIPROT=/usr/share/databases/uniprot

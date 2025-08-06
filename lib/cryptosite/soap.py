@@ -1,8 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Evaluate SOAP score for each AllosMod model."""
 
-from __future__ import print_function, absolute_import
 import glob
 import optparse
 

@@ -1,8 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Gather all feature information into a single file."""
 
-from __future__ import print_function, absolute_import
 import glob
 import numpy as np
 import os

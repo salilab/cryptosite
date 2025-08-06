@@ -1,8 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Calculate bioinformatics features for AllosMod models."""
 
-from __future__ import print_function, absolute_import
 import numpy
 import optparse
 

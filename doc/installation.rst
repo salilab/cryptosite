@@ -17,7 +17,7 @@ system paths. This may require setting ``PYTHONPATH``, ``PATH`` and/or
 for which all these dependencies are available, and so is the only platform
 on which CryptoSite currently functions.
 
-* `Python <https://www.python.org>`_ 2.7 or later (Python 3 should also be OK).
+* `Python <https://www.python.org>`_ 3.6 or later.
 
 * `MODELLER <https://salilab.org/modeller/>`_ plus the
   `SOAP-Protein library <https://salilab.org/SOAP/>`_.
@@ -67,8 +67,7 @@ will get all of these dependencies.
 Building
 ========
 
-Use ``make PYTHON=python3`` or ``make PYTHON=python2`` to build the library
-(depending on which version of Python you want to use).
+Use ``make`` to build the library.
 Use ``make test`` to test the library, and ``make install`` to install it.
 In most cases you will need to tell ``make`` where to install (if running on
 a Linux cluster, CryptoSite will need to be installed on a network-accessible

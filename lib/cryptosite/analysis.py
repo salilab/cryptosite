@@ -1,8 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Analyze AllosMod results."""
 
-from __future__ import print_function, absolute_import
 import os
 import glob
 import math
@@ -35,7 +34,7 @@ def get_energy(landscape):
             energy.write(''.join(energy_lines[-nmodels:]))
 
 
-class _AveragedAtom(object):
+class _AveragedAtom:
     """A fake atom whose coordinates are the average of other atoms."""
     def __init__(self, atoms):
         self.x = self.y = self.z = 0.
