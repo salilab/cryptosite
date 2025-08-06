@@ -20,7 +20,9 @@ cd ${temp_dir}
 
 mkdir -p ${bin_dir} ${lib_dir}
 
-conda update --yes -q conda
+# get conda-forge, not main, packages
+conda config --remove channels defaults || :
+conda config --add channels conda-forge
 conda create --yes -q -n python${python_version} -c salilab python=${python_version} pip biopython scikit-learn scipy modeller
 eval "$(conda shell.bash hook)"
 conda activate python${python_version}
