@@ -20,6 +20,9 @@ import cryptosite.soap
 class MockScorer(EnergyTerm):
     name = 'MockScorer'
 
+    class _Metric(object):
+        name = 'MockScorer'
+
     def __init__(self):
         self.count = 0
 
