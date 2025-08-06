@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
 # Install all dependencies under the provided directory, if they're not
-# there already. This is mainly intended for use by Travis CI
-# (see ../.travis.yml)
+# there already. This is mainly intended for use by GitHub Actions
+# (see ../.github/workflows/build.yml)
 
 if [ $# -ne 2 ]; then
   echo "Usage: $0 top_directory python_version"
